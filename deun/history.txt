@@ -1,0 +1,5 @@
+= 2 = 
+* Add deun.get(svc-name) -- allows you to get a service by name, to presumably do some method calling on it.
+
+= 1 =
+* Initial release

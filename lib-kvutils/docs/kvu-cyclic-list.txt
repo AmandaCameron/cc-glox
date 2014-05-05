@@ -1,0 +1,10 @@
+
+kvu-cyclic-list
+---------------
+
+_kvu-cyclic-list_ is a list that can only contain up to X items, where X is passed to the constructor.
+
+  * *Methods*
+    * :clear() -- Clears the list.
+    * :add(item) -- Adds item to the list.
+    * :iter() -- Iterates the items.

@@ -1,0 +1,10 @@
+Description: Various utility classes for kidven, made for funsies.
+Dependency: lib-kidven
+Library: kvutils/
+Library: kvutils/objects/
+Library: base => kvutils/kvutils
+Library: objects/set => kvutils/objects/set
+Library: objects/cyclic-list => kvutils/objects/cyclic-list
+Docs: lib-kvutils
+Docs: kvu-set
+Docs: kvu-cyclic-list

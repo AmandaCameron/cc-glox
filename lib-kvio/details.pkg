@@ -1,0 +1,16 @@
+Description: Input/Output kidven classes for funsies.
+Executable: kvio-bundle
+Library: kvio/
+Library: base => kvio/kvio
+Library: kvio/objects/
+Library: network/channel => kvio/objects/channel
+Library: network/rednet-channel => kvio/objects/rednet-channel
+Library: network/modem-channel => kvio/objects/modem-channel
+Library: network/modem => kvio/objects/modem
+Library: network/rednet => kvio/objects/rednet
+Library: network/protocols/tror/source => kvio/objects/tror-source
+Library: network/protocols/tror/sink => kvio/objects/tror-sink
+Library: files/bundle => kvio/objects/bundle
+Library: files/memory-reader => kvio/objects/memory-reader
+Library: files/memory-writer => kvio/objects/memory-writer
+Dependency: lib-kvutils

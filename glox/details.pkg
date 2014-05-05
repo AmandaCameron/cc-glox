@@ -1,0 +1,34 @@
+Name: glox
+Description: A Windowing shell system for Computer Craft.
+Dependency: huaxn
+Dependency: lib-agui
+Dependency: lib-kvutils
+Dependency: highbeam
+Dependency: ciiah
+Dependency: craftos-shims
+Dependency: deun
+Executable: glox-settings
+Library: glox/
+Library: theme => glox/theme
+Library: base => glox/glox
+Library: glox/objects/
+Library: objects/glox-app => glox/objects/glox-app
+Library: objects/glox-pool => glox/objects/glox-pool
+Library: objects/glox-process => glox/objects/glox-process
+Library: objects/mb-plugin => glox/objects/mb-plugin
+Library: objects/glox-settings => glox/objects/glox-settings
+Library: glox/widgets/
+Library: widgets/glox-desktop => glox/widgets/glox-desktop
+Library: widgets/app-window => glox/widgets/app-window
+Library: widgets/app-container => glox/widgets/app-container
+Library: widgets/app-screen => glox/widgets/app-screen
+Library: widgets/glox-menubar => glox/widgets/glox-menubar
+Library: widgets/glox-rundialog => glox/widgets/glox-rundialog
+Library: widgets/glox-hb-result => glox/widgets/glox-hb-result
+Library: widgets/glox-program-picker => glox/widgets/glox-program-picker
+Library: glox/menu-plugins/
+Library: menu-plugins/search => glox/menu-plugins/search
+Library: menu-plugins/free-disk => glox/menu-plugins/free-disk
+Library: menu-plugins/highbeam-status => glox/menu-plugins/highbeam-status
+Startup: 90-glox-service
+Docs: glox

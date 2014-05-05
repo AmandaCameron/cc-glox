@@ -1,0 +1,26 @@
+Description: Spotlight-like library for ComputerCraft.
+Dependency: lib-kidven
+Dependency: lib-thread
+Dependency: lib-kvio
+Dependency: lib-file-ident
+Dependency: deun
+Executable: hb-scan
+Executable: hb-search
+Executable: hb-show
+Library: highbeam/
+Library: base => highbeam/highbeam
+Library: highbeam/objects/
+Library: objects/env => highbeam/objects/env
+Library: objects/database => highbeam/objects/database
+Library: objects/db-transaction => highbeam/objects/db-transaction
+Library: objects/importer => highbeam/objects/importer
+Library: objects/indexer => highbeam/objects/indexer
+Library: objects/connection => highbeam/objects/connection
+Library: highbeam/importers/
+Library: importers/help => highbeam/importers/help
+Library: importers/programs => highbeam/importers/programs
+Library: importers/user-files => highbeam/importers/user-files
+Library: highbeam/indexers/
+Library: indexers/basic => highbeam/indexers/basic
+Library: indexers/images => highbeam/indexers/images
+Startup: 80-highbeam-service

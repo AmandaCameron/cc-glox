@@ -1,0 +1,1 @@
+_agui-shell_ is a graphical shell replacement for ComputerCraft. It is written ontop of the _lib-agui_ toolkit, and supports the _term.newWindow_ protocol I have previously defined. It's pretty beta right now, so use at your own risk. It's only been tested on advanced computers, but in thory it should run on normal computers as well.

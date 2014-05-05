@@ -1,0 +1,6 @@
+Description: FS Layer for adding lua-powered mount-points.
+Library: huaxn/
+Library: base => huaxn/huaxn
+Library: huaxn/filesystems/
+Library: filesystems/web => huaxn/filesystems/web
+Library: filesystems/bind => huaxn/filesystems/bind

@@ -1,0 +1,9 @@
+deun::2::A Services framework, powered by lib-thread and lib-event from Project Veek
+huaxn::1::VFS Layer for allowing virtual filesystems.
+ciiah::1::Package implementing the Default Programs spec.
+highbeam::1::A utility to mimic OS X's SpotLight feature.
+glox::1::A graphical window thing.
+lib-kvutils::1::Random kidven-based utility classes.
+lib-kvio::1::I/O Stuff for Kidven-based applications
+lib-file-ident::1::File identification Library.
+craftos-shims::1::Package implementing shims for the varius APIs and stuff we add ontop.

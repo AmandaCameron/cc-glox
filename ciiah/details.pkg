@@ -1,0 +1,3 @@
+Description: My implementation of a default program manager.
+Library: ciiah/
+Library: base => ciiah/ciiah

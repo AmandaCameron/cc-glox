@@ -1,0 +1,4 @@
+Protocol: help
+Mime: text/x-craftos-help
+Name: CraftOS Help Viewer
+Format: help %h

@@ -1,0 +1,1 @@
+Glox is a graphical shell for ComputerCraft. It is built on-top of Project Veek and provides a lot of stuff.

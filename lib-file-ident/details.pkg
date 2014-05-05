@@ -1,0 +1,7 @@
+Description: Identifies various ComputerCraft files.
+Dependency: lib-kvio
+Library: file-ident/
+Library: base => file-ident/file_ident
+Library: file-ident/magic/
+Library: magic/images => file-ident/magic/images
+Library: magic/text => file-ident/magic/text

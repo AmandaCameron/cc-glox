@@ -1,0 +1,10 @@
+Description: Server "OS" based off lib-kidven and friends.
+Library: deun/
+Library: base => deun/deun
+Library: deun/objects/
+Library: objects/service => deun/objects/service
+Libaray: object/rednet-service => deun/objects/rednet-service
+Startup: 99-deun-run
+Dependency: lib-thread
+Dependency: lib-event
+Dependency: lib-kvutils
