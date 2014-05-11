@@ -47,7 +47,7 @@ function Object:init(disp, shell)
     end
   end)
 
-  self.event_loop:subscribe('event.glox_ipc',
+  self.event_loop:subscribe('event.glox-ipc',
   function(_, call)
     if call == "settings_changed" then
       self.settings:load()

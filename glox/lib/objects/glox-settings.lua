@@ -17,7 +17,7 @@ function Object:init(app)
 end
 
 function Object:load()
-  local f = fs.open('__CFG__/agui-shell/settings', 'r')
+  local f = fs.open('__CFG__/glox/settings', 'r')
 
   if f then
     local data = textutils.unserialize(f.readAll())
@@ -38,11 +38,11 @@ function Object:load()
 end
 
 function Object:save()
-  if not fs.exists("__CFG__/agui-shell") then
-    fs.makeDir("__CFG__/agui-shell")
+  if not fs.exists("__CFG__/glox") then
+    fs.makeDir("__CFG__/glox")
   end
 
-  local f = fs.open('__CFG__/agui-shell/settings', 'w')
+  local f = fs.open('__CFG__/glox/settings', 'w')
 
   f.write(textutils.serialize(self.data))
 
@@ -52,7 +52,7 @@ function Object:save()
     self.app:trigger('glox.settings.commit')
   end
 
-  os.queueEvent("glox_rpc", "settings_changed")
+  os.queueEvent("glox-rpc", "settings_changed")
 end
 
 -- Getters

@@ -1,6 +1,6 @@
 -- Settings program for agui-shell
 
-os.loadAPI("__LIB__/agui-shell/gloxhell")
+os.loadAPI("__LIB__/glox/glox")
 
 local app = kidven.new('agui-app')
 
@@ -103,7 +103,7 @@ function update_plugins()
 
     local plugins = {}
 
-    for _, plug in ipairs(gloxhell.get_plugins('menubar')) do
+    for _, plug in ipairs(glox.get_plugins('menubar')) do
       plugins[plug] = false
     end
 
@@ -113,9 +113,9 @@ function update_plugins()
 
     for plug, enabl in pairs(plugins) do
       if enabl then
-	plugs_enabled:add(kidven.new('agui-list-item', plug))
+	      plugs_enabled:add(kidven.new('agui-list-item', plug))
       else
-	plugs_disabled:add(kidven.new('agui-list-item', plug))
+      	plugs_disabled:add(kidven.new('agui-list-item', plug))
       end
     end
   end
