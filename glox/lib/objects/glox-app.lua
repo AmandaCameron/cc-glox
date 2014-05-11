@@ -101,24 +101,24 @@ function Object:init(disp, shell)
 end
 
 function Object:init_picker()
-  self.picker_window = new('agui-window', "Select App", 10, 16)
+  self.picker_window = new('agui-window', "Select App", 14, 16)
 
-  local label = new("agui-textbox", 2, 2, 8, 2, "Select the program to open this with")
+  local label = new("agui-textbox", 2, 2, 12, 2, "Select the program to open this with.")
 
   self.picker_window:add(label)
 
-  self.picker_list = new('agui-list', 2, 6, 8, 10)
+  self.picker_list = new('agui-list', 2, 6, 12, 10)
 
   self.picker_window:add(self.picker_list)
 
   self.picker_window.flags.closable = true
 
-  local ok = new('agui-button', 5, 15, "Ok")
+  local ok = new('agui-button', 8, 15, "Ok")
 
   self.picker_window:add(ok)
 
   self:subscribe('gui.window.closed', function(_, id)
-    if id == window.agui_widget.id then
+    if id == self.picker_window.agui_widget.id then
       self:remove(self.picker_window)
     end
   end)
@@ -143,7 +143,7 @@ function Object:open(uri, mime)
 
   if #programs == 1 then
     self:launch(programs[1].command)
-  else
+  elseif #programs > 0 then
     self.picker_list:clear()
 
     for _, program in ipairs(programs) do
@@ -152,6 +152,8 @@ function Object:open(uri, mime)
 
     self:add(self.picker_window)
     self:select(self.picker_window)
+  else
+    -- TODO: Show something proper here.""
   end
 end
 
