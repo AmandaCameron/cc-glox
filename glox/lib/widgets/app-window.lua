@@ -3,10 +3,10 @@
 
 _parent = 'agui-window'
 
-function Widget:init(app, colour, cmdLine, width, height)
+function Widget:init(app, cmdLine, width, height)
   self.agui_window:init(cmdLine, width, height)
   
-  self.screen = new('app-container', app, colour, cmdLine, width, height)
+  self.screen = new('app-container', app, cmdLine, width, height)
   
   self:add(self.screen)
   

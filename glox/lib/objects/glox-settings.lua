@@ -10,7 +10,8 @@ function Object:init(app)
     favourites = {
       { 'Shell', 'shell' },
       { 'Settings', 'glox-settings' }
-    }
+    },
+    background = "__LIB__/glox/res/backgrounds/cats.background",
   }
 
   self.app = app
@@ -73,7 +74,16 @@ function Object:get_favourites()
   return self.data.favourites
 end
 
+function Object:get_background()
+  return self.data.background
+end
+
 -- Setters
+
+function Object:set_background(value)
+  self.data.background = value
+  self:save()
+end
 
 function Object:set_lob(value)
   self.data.enable_lob = value

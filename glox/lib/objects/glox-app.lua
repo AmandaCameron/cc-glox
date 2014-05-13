@@ -11,7 +11,11 @@ function Object:init(disp, shell)
   self.settings = new('glox-settings', self)
 
   -- Load in our spedeshal theme.
-  self.agui_app:load_theme("__LIB__/glox/theme")
+  if disp.isColour() then
+    self.agui_app:load_theme("__LIB__/glox/theme")
+  else
+    self.agui_app:load_theme("__LIB__/glox/mono-theme")
+  end
 
   self.agui_app.pool = new('glox-pool')
 
@@ -77,6 +81,25 @@ function Object:init(disp, shell)
       active.screen.proc:queue_event("terminate")
     end
   end)
+
+
+  self.event_loop:subscribe("event.key", function(_, key)
+    if key == keys.leftCtrl or key == keys.rightCtrl then
+      self.ctrl_count = self.ctrl_count + 1
+
+      if self.ctrl_count == 2 then
+        self.menu:show_menu()
+      elseif self.ctrl_count == 1 then
+        self.pool:new(function()
+          sleep(0.25)
+          
+          self.ctrl_count = 0
+        end)
+      end
+    end
+  end)
+
+  self.ctrl_count = 0
 
 
   self.app_db = new('ciiah-database')
@@ -158,7 +181,7 @@ function Object:open(uri, mime)
 end
 
 function Object:launch(cmdLine)
-  local window = new('app-window', self, true, cmdLine, 30, 10)
+  local window = new('app-window', self, cmdLine, 30, 10)
   window.agui_widget.x = 4
   window.agui_widget.y = 3
 

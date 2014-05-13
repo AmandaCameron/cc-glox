@@ -10,6 +10,7 @@ Dependency: deun
 Executable: glox-settings
 Library: glox/
 Library: theme => glox/theme
+Library: mono-theme => glox/mono-theme
 Library: base => glox/glox
 Library: glox/objects/
 Library: objects/glox-app => glox/objects/glox-app

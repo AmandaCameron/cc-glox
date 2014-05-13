@@ -261,6 +261,28 @@ function Widget:show_menu()
 
   self.launcher_menu:add_seperator()
 
+  self.launcher_menu:add("Expand", function()
+    self:expand()
+
+    self.launcher_menu:hide()
+  end)
+
+  if self.window and pocket then
+    self.launcher_menu:add("Close", function()
+      self.app:close(self.window)
+
+      self.launcher_menu:hide()
+    end)
+  elseif self.window then
+    self.launcher_menu:add("Unmaximise", function()
+      self.app:unembiggen(self.window)
+
+      self.launcher_menu:hide()
+    end)
+  end
+
+  self.launcher_menu:add_seperator()
+
   self.launcher_menu:add("Run...", 
   function()
     local window = new('glox-rundialog', self.app)
@@ -271,8 +293,6 @@ function Widget:show_menu()
     self.app:add(window)
     self.app:select(window)
   end)
-
-  --self.launcher_menu:add("Exit AGS", function() self.app:quit() end)
 
   self.launcher_menu:add("Restart", 
   function()
