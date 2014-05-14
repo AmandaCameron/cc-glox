@@ -31,5 +31,8 @@ Library: glox/menu-plugins/
 Library: menu-plugins/search => glox/menu-plugins/search
 Library: menu-plugins/free-disk => glox/menu-plugins/free-disk
 Library: menu-plugins/highbeam-status => glox/menu-plugins/highbeam-status
+Library: glox/res/
+Library: glox/res/backgrounds/
+Library: res/backgrounds/cats.background => glox/res/backgrounds/cats.background
 Startup: 90-glox-service
 Docs: glox

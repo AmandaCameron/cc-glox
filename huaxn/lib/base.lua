@@ -53,14 +53,21 @@ end
 function open(path, mode)
   local best, path = find_best(path)
 
+
   local obj = mounts[best].open(path:sub(#best + 1), mode)
+
+  if not obj then
+    return nil
+  end
+
+  os.queueEvent("huaxn-ipc", "file-open", fs.combine(best, path))
 
   local orig_close = obj.close
 
   function obj.close()
     orig_close()
 
-    os.queueEvent("huaxn-ipc", "file-change", path)
+    os.queueEvent("huaxn-ipc", "file-close", fs.combine(best, path))
   end
 
   return obj
@@ -72,8 +79,8 @@ function list(path)
   local entries = mounts[best].list(path:sub(#best + 1))
 
   for m_path, _ in pairs(mounts) do
-    if m_path:sub(1, #path) == path and m_path ~= "" then
-      table.insert(entries, m_path:sub(#path + 1)) -- FIXME: This will not handle sub-directories right.
+    if m_path:sub(1, #m_path - #fs.getName(m_path) - 1) == path and m_path ~= "" then
+      table.insert(entries, m_path:sub(#path + 2))
     end
   end
 
@@ -135,18 +142,32 @@ function getFreeSpace(path)
   return mounts[best].free(path:sub(#best + 1))
 end
 
+local function do_copy(old, new)
+  if isDir(old) then
+    if not isDir(new) then
+      makeDir(new)
+    end
+    
+    for _, file in ipairs(list(old)) do
+      do_copy(combine(old, file), combine(new, file))
+    end
+  else
+    local o = open(old, "r")
+    local n = open(new, "w")
+
+    n.write(o.readAll())
+    
+    o.close()
+    n.close()
+  end
+end
+
 function copy(old, new)
   if isReadOnly(new) then
     error("Target is Read-Only", 2)
   end
-  
-  local o = open(old, "r")
-  local n = open(new, "w")
 
-  n.write(o.readAll())
-  
-  o.close()
-  n.close()
+  do_copy(old, new)
 end
 
 function move(old, new)
@@ -158,7 +179,7 @@ function move(old, new)
     error("Source is Read-Only", 2)
   end
 
-  copy(old, new)
+  do_copy(old, new)
   delete(old)
 end
 
@@ -205,5 +226,5 @@ end
 if huaxn then
   mounts = huaxn._get_state()
 else
-  mount('', bind.new(''))
+  mounts[''] = bind.new('')
 end
