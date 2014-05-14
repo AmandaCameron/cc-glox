@@ -61,12 +61,14 @@ end
 
 function Widget:focus()
   self.agui_container:focus()
+  self.agui_widget:focus()
 
   self:add_flag('focused')
 end
 
 function Widget:blur()
   self.agui_container:blur()
+  self.agui_widget:blur()
 
   if self.agui_window.flags.modal then
     local n_w = self.app.agui_app.main_window.gooey:get_focus()

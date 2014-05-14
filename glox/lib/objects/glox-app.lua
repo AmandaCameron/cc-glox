@@ -73,8 +73,7 @@ function Object:init(disp, shell)
   -- Clear out the agui event loop killer, replace it with something sane for a multitasking "OS"
   self.event_loop["event.terminate"] = {}
   
-  self.event_loop:subscribe("event.terminate",
-  function(evt)
+  self.event_loop:subscribe("event.terminate", function(evt)
     local active = self.agui_app.main_window.gooey:get_focus()
 
     if active:is_a("app-window") then
@@ -87,14 +86,28 @@ function Object:init(disp, shell)
     if key == keys.leftCtrl or key == keys.rightCtrl then
       self.ctrl_count = self.ctrl_count + 1
 
-      if self.ctrl_count == 2 then
-        self.menu:show_menu()
-      elseif self.ctrl_count == 1 then
+      if self.ctrl_count == 1 then
         self.pool:new(function()
-          sleep(0.25)
+          sleep(0.75)
           
           self.ctrl_count = 0
         end)
+      end
+    elseif key == keys.leftAlt or key == keys.rightAlt then
+      self.menu:show_menu()
+    elseif self.ctrl_count == 2 then
+      self.ctrl_count = 0
+
+      if self.menu:ctrl_macro(key) then
+        -- Menu handled it.
+      elseif key == keys.x then
+        local focus = self.agui_app.main_window.gooey:get_focus()
+
+        if focus:is_a('app-window') then
+          self:close(focus)
+        end
+      elseif key == keys.tab then
+        self.agui_app.main_window.gooey:focus_next()
       end
     end
   end)

@@ -53,7 +53,7 @@ function Object:save()
     self.app:trigger('glox.settings.commit')
   end
 
-  os.queueEvent("glox-rpc", "settings_changed")
+  os.queueEvent("glox-ipc", "settings_changed")
 end
 
 -- Getters

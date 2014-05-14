@@ -33,10 +33,17 @@ function Object:details()
   return "Override me."
 end
 
+-- Input
+
 function Object:clicked(button)
 	-- Called on a click.
 end
 
 function Object:scrolled(dir)
 	-- Called on a scroll event.
+end
+
+function Object:macro(key)
+  -- Called when a ctrl-ctrl-<key> event is triggered.
+  -- Or when the shade is open.
 end

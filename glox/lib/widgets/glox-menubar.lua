@@ -261,28 +261,6 @@ function Widget:show_menu()
 
   self.launcher_menu:add_seperator()
 
-  self.launcher_menu:add("Expand", function()
-    self:expand()
-
-    self.launcher_menu:hide()
-  end)
-
-  if self.window and pocket then
-    self.launcher_menu:add("Close", function()
-      self.app:close(self.window)
-
-      self.launcher_menu:hide()
-    end)
-  elseif self.window then
-    self.launcher_menu:add("Unmaximise", function()
-      self.app:unembiggen(self.window)
-
-      self.launcher_menu:hide()
-    end)
-  end
-
-  self.launcher_menu:add_seperator()
-
   self.launcher_menu:add("Run...", 
   function()
     local window = new('glox-rundialog', self.app)
@@ -369,4 +347,24 @@ end
 
 function Widget:blur()
   self:collapse()
+end
+
+function Widget:ctrl_macro(k)
+  if k == keys.d then
+    if self:is_expanded() then
+      self:collapse()
+    else
+      self:expand()
+    end
+
+    return true
+  else
+    for _, plugin in ipairs(self.plugins) do
+      if plugin:macro(k) then
+        return true
+      end
+    end
+
+    return false
+  end
 end
