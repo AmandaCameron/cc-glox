@@ -226,5 +226,5 @@ end
 if huaxn then
   mounts = huaxn._get_state()
 else
-  mount('', bind.new(''))
+  mounts[''] = bind.new('')
 end
