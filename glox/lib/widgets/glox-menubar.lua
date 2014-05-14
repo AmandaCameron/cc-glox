@@ -176,18 +176,8 @@ function Widget:draw_collapsed(c)
   c:set_fg('glox-menubar-launcher-fg')
   c:set_bg('glox-menubar-launcher-bg')
   c:write("%")
-
-  if #self.app.minimised > 0 then
-    c:set_fg('glox-menubar-expand-drawer-fg')
-    c:set_bg('glox-menubar-expand-drawer-bg')
-  else
-    c:set_fg('glox-menubar-drawer-fg')
-    c:set_bg('glox-menubar-drawer-bg')
-  end
-
-  c:write("v")
   
-  if self.window then
+  if self.window and not self.window.agui_window.flags["glox.fullscreen"] then
     offset = offset - 4
 
     c:set_fg('glox-menubar-controls-fg')
@@ -205,7 +195,7 @@ function Widget:draw_collapsed(c)
       -- On !Pocket, show the un-embiggen button
       c:move(self.agui_widget.width - 1, 1)
       c:set_fg('window-maximise-bg')
-      c:set_bg('age-menubar-controls-bg')
+      c:set_bg('glox-menubar-controls-bg')
       c:write("-")
     end
   end
