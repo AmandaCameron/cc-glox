@@ -12,33 +12,29 @@ function Widget:init(app, cmdLine, width, height)
   
   self.app = app
   
-  app:subscribe('gui.window.closed', 
-  function(_, id)
+  app:subscribe('gui.window.closed', function(_, id)
     if id == self.agui_widget.id then
       app:close(self.screen.proc, self)
     end
   end)
 
-  app:subscribe('gui.window.resize',
-  function(_, id)
+  app:subscribe('gui.window.resize', function(_, id)
     if id == self.agui_widget.id then
       if self.fullscreen then
-	self.screen:resize(self.agui_widget.width, self.agui_widget.height)
+      	self.screen:resize(self.agui_widget.width, self.agui_widget.height)
       else
-	self.screen:resize(self.agui_widget.width - 2, self.agui_widget.height - 2)
+      	self.screen:resize(self.agui_widget.width - 2, self.agui_widget.height - 2)
       end
     end
   end)
 
-  app:subscribe('gui.window.minimised', 
-  function(_, id)
+  app:subscribe('gui.window.minimised', function(_, id)
     if id == self.agui_widget.id then
       app:minimise(self)
     end
   end)
 
-  app:subscribe('gui.window.maximised',
-  function(_, id)
+  app:subscribe('gui.window.maximised', function(_, id)
     if id == self.agui_widget.id then
       app:embiggen(self)
       
