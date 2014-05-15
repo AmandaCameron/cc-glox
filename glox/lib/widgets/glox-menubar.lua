@@ -230,7 +230,7 @@ function Widget:draw_collapsed(c)
       txt = txt:sub(1, offset - 6) .. "..."
     end
 
-    c:move(4, 1)
+    c:move(3, 1)
     c:write(txt)
   end
 end
@@ -251,8 +251,7 @@ function Widget:show_menu()
 
   self.launcher_menu:add_seperator()
 
-  self.launcher_menu:add("Run...", 
-  function()
+  self.launcher_menu:add("Run...", function()
     local window = new('glox-rundialog', self.app)
 
     window.agui_widget.x = 1
@@ -264,13 +263,11 @@ function Widget:show_menu()
 
   --self.launcher_menu:add("Exit AGS", function() self.app:quit() end)
 
-  self.launcher_menu:add("Restart", 
-  function()
+  self.launcher_menu:add("Restart", function()
     os.reboot()
   end)
 
-  self.launcher_menu:add("Shutdown",
-  function()
+  self.launcher_menu:add("Shutdown", function()
     os.shutdown()
   end)
 
@@ -299,14 +296,12 @@ function Widget:clicked(x, y, btn)
       self.plugin_offsets:clicked(btn)
     elseif self.minimised_offset > 0 and y > self.minimised_offset then
       if self.app.minimised[y - self.minimised_offset] then
-	self.app:restore(self.app.minimised[y - self.minimised_offset])
+	     self.app:restore(self.app.minimised[y - self.minimised_offset])
       end
     end
   else
     if x == 1 then
       self:show_menu()
-    elseif x == 2 then
-      self:expand()
     elseif self.window then
       if x == self.agui_widget.width - 1 then
 	-- Acts as a close button when on Pocket
