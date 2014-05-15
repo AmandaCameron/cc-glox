@@ -57,6 +57,16 @@ function Widget:draw(canvas)
   end
 end
 
+-- Eat the f10 thing.
+
+function Widget:key(key)
+  if self.fullscreen then
+    return self.agui_container:key(key)
+  end
+
+  return self.agui_window:key(key)
+end
+
 -- Focused flag
 
 function Widget:focus()

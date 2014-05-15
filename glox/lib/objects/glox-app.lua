@@ -103,8 +103,8 @@ function Object:init(disp, shell)
       elseif key == keys.x then
         local focus = self.agui_app.main_window.gooey:get_focus()
 
-        if focus:is_a('app-window') then
-          self:close(focus)
+        if focus and focus:is_a('app-window') then
+          self:close(focus.screen.proc, focus)
         end
       elseif key == keys.tab then
         self.agui_app.main_window.gooey:focus_next()
