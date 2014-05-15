@@ -59,7 +59,7 @@ function Widget:draw(c)
 
         f:close()
 
-        self.image = agsimage.load(".tmp-background")
+        self.image = agimages.load(".tmp-background")
 
         fs.delete(".tmp-background")
       end
