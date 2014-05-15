@@ -1,4 +1,6 @@
--- Runs a search through the HighBeam Databse.
+-- @Name: HighBeam Search
+-- @Description: Searches the database for the given arguments.
+-- @Author: Amanda Cameron
 
 os.loadAPI("__LIB__/highbeam/highbeam")
 

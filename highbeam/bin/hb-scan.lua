@@ -1,4 +1,6 @@
--- Scans the HighBeam database..
+-- @Name: HighBeam Scan Utility
+-- @Description: Schedules or preforms a scan for HighBeam
+-- @Author: Amanda Cameron
 
 local args = { ... }
 
