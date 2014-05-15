@@ -18,6 +18,10 @@ function Object:query(input)
   return self.database:query(input)
 end
 
+function Object:get(uri)
+  return self.database:get(uri)
+end
+
 function Object:scan()
   return self.database:scan()
 end

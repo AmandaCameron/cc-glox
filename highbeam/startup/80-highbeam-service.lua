@@ -54,6 +54,10 @@ function Service:query(input)
   return self.database:query(input)
 end
 
+function Service:get(uri)
+  return self.database:get(uri)
+end
+
 function Service:scan(scope)
   -- Fire an event that we listen to so we can do
   -- the scanning in the background,

@@ -234,6 +234,20 @@ function Object:query(input)
   return results
 end
 
+function Object:get(uri)
+  for id, data in pairs(self.data) do
+    if data.uri == uri then
+      return {
+        id = id,
+        uri = uri,
+        meta = data.meta,
+      }
+    end
+  end
+
+  return nil
+end
+
 -- Private Data Manupulation.
 
 function Object:_insert(id, entry)
