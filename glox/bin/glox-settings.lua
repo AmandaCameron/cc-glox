@@ -1,3 +1,7 @@
+-- @Name: Glox Settings
+-- @Description: Settings program for Glox.
+-- @Author: Amanda Cameron
+
 -- Settings program for agui-shell
 
 os.loadAPI("__LIB__/glox/glox")
@@ -20,19 +24,63 @@ end
 
 -- General Settings.
 
---[[
-local system_settings = new_tab('System')
+local general_settings = new_tab('General')
 
-local label = kidven.new('agui-label', 2, 2, 'Todo')
+local computer_id = kidven.new('agui-label', 1, 1, 'ID: ' .. os.getComputerID())
 
-system_settings:add(label)
+general_settings:add(computer_id)
+general_settings:add_anchor(computer_id, 'left', 'left', -1, 1)
+general_settings:add_anchor(computer_id, 'top', 'top', -1, 1)
+general_settings:add_anchor(computer_id, 'right', 'right', -1, 1)
 
-system_settings:add_anchor(label, 'right', 'right', -1, 1)
+local computer_label = kidven.new('agui-label', 1, 1, 'Label: None.')
 
-function update_system()
-  -- TODO.
+if os.getComputerLabel() then
+  computer_label.text = 'Label: ' .. os.getComputerLabel()
 end
+
+general_settings:add(computer_label)
+general_settings:add_anchor(computer_label, 'left', 'left', -1, 1)
+general_settings:add_anchor(computer_label, 'top', 'bottom', computer_id, 0)
+general_settings:add_anchor(computer_label, 'right', 'right', -1, 1)
+
+
+local background_label = kidven.new('agui-label', 1, 1, 'BG: Loading...')
+
+general_settings:add(background_label)
+general_settings:add_anchor(background_label, 'left', 'left', -1, 1)
+general_settings:add_anchor(background_label, 'top', 'bottom', -1, -1)
+general_settings:add_anchor(background_label, 'right', 'right', -1, 4)
+
+--[[
+-- TODO: Implement a pop-up dialog for this.
+
+local background = kidven.new('agui-button', 1, 1, '=', 3)
+
+general_settings:add(background)
+general_settings:add_anchor(background, 'left', 'right', background_label, 1)
+general_settings:add_anchor(background, 'top', 'top', background_label, 0)
 ]]--
+
+general_settings:reflow()
+
+function update_general()
+  local bg_file = kidven.new('kvio-bundle', settings:get_background())
+  bg_file:load()
+
+  local meta = bg_file:open("metadata", "r")
+  background_label.text = 'BG: ' .. fs.getName(settings:get_background())
+
+  for line in meta:lines() do
+    local name, value = line:match("^([^:]+): (.+)$")
+
+    if name == "Name" then
+      background_label.text = 'BG: ' .. value
+    end
+  end
+
+  meta:close()
+end
 
 -- Plugins!
 
@@ -47,8 +95,8 @@ plugin_settings:add_anchor(enable_plugins, 'left', 'left', -1, 1)
 local plugs_disabled = kidven.new('agui-list', 2, 4, 1, 1)
 local plugs_enabled = kidven.new('agui-list', 1, 1, 1, 1)
 
-local plug_enable = kidven.new('agui-button', 1, 4, '<')
-local plug_disable = kidven.new('agui-button', 1, 1, '>')
+local plug_enable = kidven.new('agui-button', 1, 4, '<', 3)
+local plug_disable = kidven.new('agui-button', 1, 1, '>', 3)
 
 plugin_settings:add(plugs_enabled)
 
@@ -59,8 +107,8 @@ plugin_settings:add(plugs_disabled)
 
 plugin_settings:add_anchor(plugs_enabled, 'top', 'bottom', enable_plugins, 1)
 plugin_settings:add_anchor(plugs_enabled, 'left', 'left', -1, 1)
-plugin_settings:add_anchor(plugs_enabled, 'bottom', 'bottom', -1, -1)
-plugin_settings:add_anchor(plugs_enabled, 'right', 'middle', -1, 1)
+plugin_settings:add_anchor(plugs_enabled, 'bottom', 'bottom', -1, 0)
+plugin_settings:add_anchor(plugs_enabled, 'right', 'middle', -1, 2)
 
 plugin_settings:add_anchor(plug_enable, 'left', 'right', plugs_enabled, 1)
 plugin_settings:add_anchor(plug_enable, 'top', 'top', -1, 4)
@@ -71,7 +119,7 @@ plugin_settings:add_anchor(plug_disable, 'top', 'bottom', -1, -2)
 plugin_settings:add_anchor(plugs_disabled, 'top', 'top', plugs_enabled, 0)
 plugin_settings:add_anchor(plugs_disabled, 'left', 'right', plug_enable, 1)
 plugin_settings:add_anchor(plugs_disabled, 'right', 'right', -1, 1)
-plugin_settings:add_anchor(plugs_disabled, 'bottom', 'bottom', -1, -1)
+plugin_settings:add_anchor(plugs_disabled, 'bottom', 'bottom', -1, 0)
 
 plugin_settings:reflow()
 
@@ -127,8 +175,8 @@ local app_settings = new_tab('Apps')
 
 local favourites_list = kidven.new('agui-list', 2, 2, 1, 1)
 
-local add_button = kidven.new('agui-button', 2, 1, '+')
-local rem_button = kidven.new('agui-button', 3, 1, '-')
+local add_button = kidven.new('agui-button', 2, 1, '+', 3)
+local rem_button = kidven.new('agui-button', 3, 1, '-', 3)
 
 app_settings:add(favourites_list)
 
@@ -143,14 +191,14 @@ app_settings:add(fav_command)
 
 app_settings:add_anchor(favourites_list, 'left', 'left', -1, 2)
 app_settings:add_anchor(favourites_list, 'top', 'top', -1, 2)
-app_settings:add_anchor(favourites_list, 'bottom', 'bottom', -1, -3)
+app_settings:add_anchor(favourites_list, 'bottom', 'bottom', -1, -1)
 app_settings:add_anchor(favourites_list, 'right', 'middle', -1, 5)
 
 app_settings:add_anchor(add_button, 'top', 'bottom', favourites_list, 0)
 app_settings:add_anchor(add_button, 'left', 'left', favourites_list, 0)
 
 app_settings:add_anchor(rem_button, 'top', 'bottom', favourites_list, 0)
-app_settings:add_anchor(rem_button, 'left', 'left', favourites_list, 1)
+app_settings:add_anchor(rem_button, 'left', 'left', favourites_list, 3)
 
 app_settings:add_anchor(fav_label, 'left', 'right', favourites_list, 2)
 app_settings:add_anchor(fav_label, 'right', 'right', -1, -1)
@@ -237,31 +285,30 @@ end)
 
 app:add(main_window)
 
-app:subscribe('glox.settings.commit',
-function(_)
---  update_system()
+app:subscribe('glox.settings.commit', function(_)
+  update_general()
   update_plugins()
   update_app()
  end)
 
-app:subscribe("gui.input.changed",
-function(_, id, value)
+app:subscribe("gui.input.changed", function(_, id, value)
   if id == enable_plugins.agui_widget.id then
     settings:set_plugins_enabled(value)
+  elseif id == show_tips.agui_widget.id then
+    settings:set_show_tips(value)
   end
 end)
 
-app:subscribe('gui.resized',
-function()
+app:subscribe('gui.resized', function()
   main_window:resize(term.getSize())
 
-  --system_settings.container:resize(main_window.agui_widget.width, main_window.agui_widget.height - 1)
+  general_settings.container:resize(main_window.agui_widget.width, main_window.agui_widget.height - 1)
   plugin_settings.container:resize(main_window.agui_widget.width, main_window.agui_widget.height - 1)
   app_settings.container:resize(main_window.agui_widget.width, main_window.agui_widget.height - 1)
 
   -- Re-flow the panes.
 
-  --sytem_settings:reflow()
+  general_settings:reflow()
   plugin_settings:reflow()
   app_settings:reflow()
 end)

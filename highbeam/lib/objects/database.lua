@@ -216,8 +216,8 @@ function Object:query(input)
   for result, words in pairs(matches) do
     local full_match = true
 
-    for _, match in pairs(words) do
-      if not match then
+    for _, match in ipairs(query) do
+      if not words[match] then
         full_match = false
       end
     end

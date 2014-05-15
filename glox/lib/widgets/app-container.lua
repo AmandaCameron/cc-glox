@@ -1,7 +1,7 @@
 _parent = "app-screen"
 
-function Widget:init(app, colour, cmdLine, w, h)
-  self.app_screen:init(colour, w, h)
+function Widget:init(app, cmdLine, w, h)
+  self.app_screen:init(w, h)
 
   self.agui_widget.main = app
 

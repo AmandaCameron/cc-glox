@@ -11,7 +11,11 @@ function Object:init(disp, shell)
   self.settings = new('glox-settings', self)
 
   -- Load in our spedeshal theme.
-  self.agui_app:load_theme("__LIB__/glox/theme")
+  if disp.isColour() then
+    self.agui_app:load_theme("__LIB__/glox/theme")
+  else
+    self.agui_app:load_theme("__LIB__/glox/mono-theme")
+  end
 
   self.agui_app.pool = new('glox-pool')
 
@@ -68,14 +72,46 @@ function Object:init(disp, shell)
   -- Clear out the agui event loop killer, replace it with something sane for a multitasking "OS"
   self.event_loop["event.terminate"] = {}
   
-  self.event_loop:subscribe("event.terminate",
-  function(evt)
+  self.event_loop:subscribe("event.terminate", function(evt)
     local active = self.agui_app.main_window.gooey:get_focus()
 
     if active:is_a("app-window") then
       active.screen.proc:queue_event("terminate")
     end
   end)
+
+
+  self.event_loop:subscribe("event.key", function(_, key)
+    if key == keys.leftCtrl or key == keys.rightCtrl then
+      self.ctrl_count = self.ctrl_count + 1
+
+      if self.ctrl_count == 1 then
+        self.pool:new(function()
+          sleep(0.75)
+          
+          self.ctrl_count = 0
+        end)
+      end
+    elseif key == keys.leftAlt or key == keys.rightAlt then
+      self.menu:show_menu()
+    elseif self.ctrl_count == 2 then
+      self.ctrl_count = 0
+
+      if self.menu:ctrl_macro(key) then
+        -- Menu handled it.
+      elseif key == keys.x then
+        local focus = self.agui_app.main_window.gooey:get_focus()
+
+        if focus and focus:is_a('app-window') then
+          self:close(focus.screen.proc, focus)
+        end
+      elseif key == keys.tab then
+        self.agui_app.main_window.gooey:focus_next()
+      end
+    end
+  end)
+
+  self.ctrl_count = 0
 
 
   self.app_db = new('ciiah-database')
@@ -160,7 +196,7 @@ function Object:open(uri, mime)
 end
 
 function Object:launch(cmdLine)
-  local window = new('app-window', self, true, cmdLine, 30, 10)
+  local window = new('app-window', self, cmdLine, 30, 10)
   window.agui_widget.x = 4
   window.agui_widget.y = 3
 

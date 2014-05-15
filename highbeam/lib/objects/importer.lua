@@ -33,14 +33,18 @@ end
 
 -- Helpers for scanning common formats.
 
-function Object:scan_text(trans, id, fname)
-  local f = fs.open(fname, "r")
-  local all = f.readAll()
-  f.close()
-
+function Object:scan(trans, id, all)
   for word in all:gmatch("[^\n \t]+") do
     if not banned_words[word:lower()] then
       trans:add_keyword(id, word:lower())
     end
   end
+end
+
+function Object:scan_file(trans, id, fname)
+  local f = fs.open(fname, "r")
+  local all = f.readAll()
+  f.close()
+
+  self:scan(trans, id, all)
 end

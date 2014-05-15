@@ -11,6 +11,7 @@ function Object:init(app)
       { 'Shell', 'shell' },
       { 'Settings', 'glox-settings' },
     },
+    background = "__LIB__/glox/res/backgrounds/cats.background",
     first_run = true,
   }
 
@@ -78,12 +79,22 @@ function Object:is_first_run()
   return self.data.first_run
 end
 
+function Object:get_background()
+  return self.data.background
+end
+
 -- Setters
 
 function Object:set_onboarded(value)
   self.data.first_run = not value
-  
   self:save()
+end
+
+function Object:set_background(value)
+  self.data.background = value
+  self:save()
+end
+
 end
 
 function Object:set_plugins_enabled(value)

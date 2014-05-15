@@ -1,4 +1,6 @@
--- Shows information for a given URI
+-- @Name: HighBeam Info Show
+-- @Description: Shows information for a given URI
+-- @Author: Amanda Cameron
 
 local uri = ...
 
