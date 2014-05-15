@@ -2,7 +2,7 @@
 
 {
   colours = {
-    ['glox-desktop-fg'] = 'white',
+    ['glox-desktop-fg'] = 'black',
     ['glox-desktop-bg'] = 'pink',
 
     -- Menu Bar.
