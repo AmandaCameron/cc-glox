@@ -48,7 +48,7 @@ function make_settings()
     layout:add_anchor(label, 'left', 'left', -1, 0)
     layout:add_anchor(label, 'right', 'right', -1, 0)
 
-    layout:add_anchor(input, 'top', 'bottom', label, 1)
+    layout:add_anchor(input, 'top', 'bottom', label, 0)
     layout:add_anchor(input, 'left', 'left', label, 0)
     layout:add_anchor(input, 'right', 'right', label, 0)
   else
@@ -61,9 +61,9 @@ function make_settings()
     layout:add_anchor(input, 'right', 'right', -1, 0)
   end
 
-  layout:add(error_lbl, 'top', 'top', -1, 1)
-  layout:add(error_lbl, 'left', 'left', -1, 0)
-  layout:add(error_lbl, 'right', 'right', -1, 0)
+  layout:add_anchor(error_lbl, 'top', 'top', -1, 1)
+  layout:add_anchor(error_lbl, 'left', 'left', -1, 0)
+  layout:add_anchor(error_lbl, 'right', 'right', -1, 0)
 
   local w, h = term.getSize()
   pane:resize(w - 2, h - 5)
@@ -81,6 +81,9 @@ function make_settings()
     return false
   end
 
+  pane.agui_widget.bg = 'window-bg'
+  pane.agui_widget.fg = 'window-fg'
+
   return pane, verify
 end
 
@@ -89,29 +92,29 @@ local tutorial = {
   { title = "Welcome to Glox!",
     body = [[This program is here to help you get started with the Glox Graphical Shell.
 
-To start, do you see the % in the top-left corner? Clicking that (Keyboard: Alt/Option) opens the Launch Menu. 
-You can use the Launch Menu to launch your apps, and also shutdown / restart your ComputerCraft device.
+So, let's get started. Press the "Next" button below. If you are on a normal computer, press tab until the Next button has {}s around it, instead of []s.]] },
+  { title = "Launch Menu",
+    body = [[Clicking the % (KB: Alt) in the top-left corner opens the Launch Menu. 
 
-Press the next button for more.]]},
+You can use the Launch Menu to launch your apps, as well as shutdown / restart your ComputerCraft device.]] },
   { title = "The Drawer",
-    body = [[Now, you're probably wondering where your minimised apps disappear to. They are placed in a special part of the UI called "The Drawer".
+    body = [[The Drawer is a a UI element hidden in the menubar on top. In order to open it, you can drag down with the mouse. (KB: ctrl-ctrl-d)
 
-The Drawer also contains an expanded version of some of your MenuBar items, such as the HighBeam Indexing indicator.
-
-In order to open the drawer, you can drag the menubar down on a colour device, or use The Drawer's keyboard shortcut, ctrl-ctrl-d.
-Try it now!]] },
+The Drawer contains your minimised apps, as well as some expanded information on some of the menu bar items.]] },
   { title = "Customisability",
     body = [[With the Glox Settings app (glox-settings) You can edit the programs that appear in the Launch Menu.
 
-You can also change what MenuBar plugins are currently active using this tool.]] },
+You can also change what plugins are currently active using this tool.]] },
   { title = "Highbeam Search",
-    body = [[Next, do you see the ? in the top-right? Clicking (Keyboard: ctrl-ctrl-space) that allows you to search your ComputerCraft Device.
+    body = [[Next, do you see the ? in the top-right? Clicking (KB: ctrl-ctrl-space) that allows you to search your ComputerCraft Device.
 
-If there's a spinning line next to it, that means it's currently indexing your device, and you should wait until that's finished.]] },
+A spinning line next to it means that it is currently indexing your device.]] },
+  { title = "Just a few questions...",
+    body = [[Next, we're going to ask you some questions to help you get your device setup.]] },
   { title = "Computer Settings",
     content = make_settings },
   { title = "That's it!", 
-    body = [[If at any time you wish to re-run this programs, just click "Run..." in the Launch Menu and type "glox-onboarding"
+    body = [[If at any time you wish to re-run this setup, just select "Run..." in the Launch Menu and type "glox-onboarding"
 
 Have fun with Glox, and please remember to report any bugs you find!
 
