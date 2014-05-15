@@ -164,11 +164,13 @@ function Object:exists(path)
 end
 
 function Object:get_prop(path, prop)
-  return self.index[path].props[prop]
+  if self:exists(path) then 
+    return self.data[self.index[path]].props[prop]
+  end
 end
 
 function Object:set_prop(path, prop)
-  return self.index[path].props[prop]
+  return self.data[self.index[path]].props[prop]
 end
 
 -- Current version of the data format does not support directories.
