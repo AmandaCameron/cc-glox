@@ -18,6 +18,8 @@ function Widget:init(app, width, height)
   self.plugin_offsets = {}
   self.minimised_offset = -1
 
+  self.min_selected = 0
+
   self.app.event_loop:subscribe('glox.settings.commit', 
   function()
     self.plugins = {}
@@ -40,22 +42,13 @@ function Widget:collapse()
 end
 
 function Widget:expand()
+  self.app:select(self)
   self:resize(self.agui_widget.width, self.drawer_height)
 end
 
 -- Render Functions
 function Widget:draw_expanded(c)
-  c:set_fg('glox-drawer-title-fg')
-  c:set_bg('glox-drawer-title-bg')
-  c:move(1, 1)
-  c:write((" "):rep(c.width))
-
-  local msg = 'agui-shell'
-
-  c:move(c.width / 2 - #msg / 2, 1)
-  c:write(msg)
-  
-  local offset = 2
+  local offset = 1
 
   self.plugin_offsets = {}
 
@@ -85,23 +78,23 @@ function Widget:draw_expanded(c)
       sub:move(1, 1)
 
       if plugin:is_graphical() then
-	plugin:draw(sub)
+      	plugin:draw(sub)
       else
-	local old
+      	local old
 
-	if term.current then
-	  old = term.current()
-	end
+      	if term.current then
+      	  old = term.current()
+      	end
 
-	term.redirect(sub:as_redirect())
-	
-	print(plugin:details())
-	
-	if term.current then
-	  term.redirect(old)
-	else
-	  term.restore()
-	end
+      	term.redirect(sub:as_redirect())
+      	
+      	print(plugin:details())
+      	
+      	if term.current then
+      	  term.redirect(old)
+      	else
+      	  term.restore()
+      	end
       end
 
       offset = offset + 3
@@ -113,48 +106,43 @@ function Widget:draw_expanded(c)
     c:set_fg('glox-drawer-title-fg')
     c:set_bg('glox-drawer-title-bg')
     c:write(" ")
-    c:write(("-"):rep(c.width))
+    c:write(("-"):rep(c.width - 2))
     c:write(" ")
     
     if pocket then
-      msg = "Running Programs"
+      msg = " Running Programs "
     else
-      msg = "Minimised"
+      msg = " Minimised "
     end
 
     c:move(c.width / 2 - #msg / 2, offset)
     c:write(msg)
-
 
     self.minimised_offset = offset
 
     offset = offset + 1
 
-    for _, win in ipairs(self.app.minimised) do
+    c:set_fg('glox-drawer-minimised-fg')
+    c:set_bg('glox-drawer-minimised-bg')
+
+    for i, win in ipairs(self.app.minimised) do
       c:move(1, offset)
+
+      if i == self.min_selected then
+        c:write('> ')
+      else
+        c:write('  ')
+      end
+
       c:write(win:cast('agui-window').title)
+      c:write(string.rep(' ', c.width - c.x))
 
       offset = offset + 1
     end
   else
-    if pocket then
-      msg = "No other apps"
-    else
-      msg = "No apps minimised"
-    end
-
-    c:move(c.width / 2 - #msg / 2, offset)
-
-    c:set_fg('glox-drawer-minimised-fg')
-    c:set_bg('glox-drawer-minimised-bg')
-    c:write(msg)
-
-    offset = offset + 1
-
     self.minimised_offset = -1
   end
 
-  -- TODO: Make this themeable.
   c:set_fg('glox-drawer-handle-fg')
   c:set_bg('glox-drawer-handle-bg')
 
@@ -163,7 +151,7 @@ function Widget:draw_expanded(c)
   c:write(("-"):rep(c.width - 2))
   c:write(" ")
 
-  msg = " " .. os.version() .. " "
+  msg = "[ Glox Shell ]"
   c:move(c.width / 2 - #msg / 2, c.height)
   c:write(msg)
 end
@@ -272,8 +260,6 @@ function Widget:show_menu()
     self.app:select(window)
   end)
 
-  --self.launcher_menu:add("Exit AGS", function() self.app:quit() end)
-
   self.launcher_menu:add("Restart", 
   function()
     os.reboot()
@@ -349,4 +335,52 @@ end
 
 function Widget:blur()
   self:collapse()
+end
+
+function Widget:key(k)
+  if not self:is_expanded() then
+    return false
+  end
+
+  if k == keys.up then
+    if self.min_selected > 1 then
+      self.min_selected = self.min_selected - 1
+    else
+      self.min_selected = #self.app.minimised
+    end
+  elseif k == keys.down then
+    if self.min_selected < #self.app.minimised then
+      self.min_selected = self.min_selected + 1
+    else
+      self.min_selected = 1
+    end
+  elseif k == keys.enter then
+    if self.app.minimised[self.min_selected] then
+      self.app:restore(self.app.minimised[self.min_selected])
+    end
+  else
+    return false
+  end
+
+  return true
+end
+
+function Widget:ctrl_macro(k)
+  if k == keys.d then
+    if self:is_expanded() then
+      self:collapse()
+    else
+      self:expand()
+    end
+
+    return true
+  else
+    for _, plugin in ipairs(self.plugins) do
+      if plugin:macro(k) then
+        return true
+      end
+    end
+
+    return false
+  end
 end

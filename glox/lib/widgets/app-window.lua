@@ -3,42 +3,38 @@
 
 _parent = 'agui-window'
 
-function Widget:init(app, colour, cmdLine, width, height)
+function Widget:init(app, cmdLine, width, height)
   self.agui_window:init(cmdLine, width, height)
   
-  self.screen = new('app-container', app, colour, cmdLine, width, height)
+  self.screen = new('app-container', app, cmdLine, width, height)
   
   self:add(self.screen)
   
   self.app = app
   
-  app:subscribe('gui.window.closed', 
-  function(_, id)
+  app:subscribe('gui.window.closed', function(_, id)
     if id == self.agui_widget.id then
       app:close(self.screen.proc, self)
     end
   end)
 
-  app:subscribe('gui.window.resize',
-  function(_, id)
+  app:subscribe('gui.window.resize', function(_, id)
     if id == self.agui_widget.id then
       if self.fullscreen then
-	self.screen:resize(self.agui_widget.width, self.agui_widget.height)
+      	self.screen:resize(self.agui_widget.width, self.agui_widget.height)
       else
-	self.screen:resize(self.agui_widget.width - 2, self.agui_widget.height - 2)
+      	self.screen:resize(self.agui_widget.width - 2, self.agui_widget.height - 2)
       end
     end
   end)
 
-  app:subscribe('gui.window.minimised', 
-  function(_, id)
+  app:subscribe('gui.window.minimised', function(_, id)
     if id == self.agui_widget.id then
       app:minimise(self)
     end
   end)
 
-  app:subscribe('gui.window.maximised',
-  function(_, id)
+  app:subscribe('gui.window.maximised', function(_, id)
     if id == self.agui_widget.id then
       app:embiggen(self)
       
@@ -57,16 +53,28 @@ function Widget:draw(canvas)
   end
 end
 
+-- Eat the f10 thing.
+
+function Widget:key(key)
+  if self.fullscreen then
+    return self.agui_container:key(key)
+  end
+
+  return self.agui_window:key(key)
+end
+
 -- Focused flag
 
 function Widget:focus()
   self.agui_container:focus()
+  self.agui_widget:focus()
 
   self:add_flag('focused')
 end
 
 function Widget:blur()
   self.agui_container:blur()
+  self.agui_widget:blur()
 
   if self.agui_window.flags.modal then
     local n_w = self.app.agui_app.main_window.gooey:get_focus()

@@ -1,9 +1,9 @@
 _parent = "agui-widget"
 
-function Widget:init(colour, width, height)
+function Widget:init(width, height)
   local width = width or 10
   local height = height or 10
-  local colour = colour or term.isColour()
+  local colour = term.isColour()
 
   self.agui_widget:init(1, 1, width, height)
 
