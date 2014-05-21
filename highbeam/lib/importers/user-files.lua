@@ -1,4 +1,6 @@
--- Imports user-filea and identifies them using lib-file-ident
+-- Imports user-files and identifies them using lib-file-ident
+
+os.loadAPI("__LIB__/huaxn/huaxn")
 
 local system_paths = {
   [huaxn.combine("__LIB__", "")] = true,
