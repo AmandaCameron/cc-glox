@@ -12,8 +12,31 @@ function Widget:init(app, w, h)
     self.background = new('kvio-bundle', app.settings:get_background())
     self.background:load()
 
+    filename = "computer"
+
+    if pocket then
+      filename = "pocket"
+    elseif turtle then
+      filename = "turtle"
+    end
+    
+    if not self.background:exists(filename) then
+      filename = "computer"
+    end
+
+    if term.isColour() and self.background:exists("adv-" .. filename) then
+      filename = "adv-" .. filename
+    end
 
     self.image = nil
+
+    if self.background:get_prop(filename, "Type") == "Image" then
+      local f = self.background:open(filename, "r")
+
+      self.image = agimages.load_string(f:all())
+      
+      f:close()
+    end
   end)
 end
 
@@ -48,22 +71,6 @@ function Widget:draw(c)
 
       f:close()
     elseif self.background:get_prop(filename, "Type") == "Image" then
-      if not self.image then
-        local f = self.background:open(filename, "r")
-
-        -- TODO: Make a better way to get this out of a bundle.
-
-        local f2 = fs.open(".tmp-background", "w")
-        f2.write(f:all())
-        f2.close()
-
-        f:close()
-
-        self.image = agimages.load(".tmp-background")
-
-        fs.delete(".tmp-background")
-      end
-
       if self.image then
         if self.background:get_prop(filename, "Mode") == "Center" then
           local w, h = self.image:size()
