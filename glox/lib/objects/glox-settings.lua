@@ -95,8 +95,6 @@ function Object:set_background(value)
   self:save()
 end
 
-end
-
 function Object:set_plugins_enabled(value)
   self.data.enable_plugins = value
   self:save()
