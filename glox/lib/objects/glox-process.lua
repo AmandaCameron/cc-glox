@@ -23,6 +23,7 @@ end
 
 function Object:init(app, cmdLine, term)
   self.app = app
+  self.icon = "__LIB__/glox/res/icons/program"
 
   self.id = app.pool:new(function()
     local multishell = {}
@@ -52,8 +53,6 @@ function Object:init(app, cmdLine, term)
 
     -- Replicate the shell API.
 
-    shell.setDir = app.shell.setDir
-    shell.dir = app.shell.dir
     shell.setPath = app.shell.setPath
     shell.path = app.shell.path
     shell.setAlias = app.shell.setAlias
@@ -63,7 +62,8 @@ function Object:init(app, cmdLine, term)
     shell.resolveProgram = app.shell.resolveProgram
     shell.resolve = app.shell.resolve
 
-    local stack = {cmd}
+    local title_stack = {cmd}
+    local program_stack = {cmd}
 
     function shell.switch()
       -- Do Nothing.
@@ -78,32 +78,44 @@ function Object:init(app, cmdLine, term)
 
       local cmd = table.remove(args, 1)
 
-      table.insert(stack, cmd) 
-      multishell.setTitle(1, cmd)
+      local res = app.highbeam:get("cos-program://" .. fs.getName(cmd))
+
+      if res and res.meta['name'] then
+        self.icon = res.meta['icon']
+
+        table.insert(title_stack, res.meta['name'])
+
+        multishell.setTitle(1, res.meta['name'])
+      else
+        self.icon = "__LIB__/glox/res/icons/program"
+
+        table.insert(title_stack, cmd)
+        
+        multishell.setTitle(1, cmd)
+      end
+      
+      table.insert(program_stack, cmd)
 
       local prog = app.shell.resolveProgram(cmd)
       local result = false
 
       local fs = fs
 
-
-      if huaxn then
-        fs = huaxn
-      end
-
       if prog then
         result = os.run({
           shell = shell,
 	        multishell = multishell,
-          fs = fs,
+          fs = huaxn,
         }, prog, unpack(args));
       else
       	printError("No such program.")
       end
 	
-      if #stack > 1 then
-      	table.remove(stack, #stack)
-      	multishell.setTitle(1, stack[#stack])
+      if #program_stack > 1 then
+        table.remove(title_stack, #title_stack)
+      	table.remove(program_stack, #program_stack)
+
+      	multishell.setTitle(1, title_stack[#title_stack])
       else
       	multishell.setTitle(1, "Process Done.")
       end
@@ -114,11 +126,21 @@ function Object:init(app, cmdLine, term)
 
 
     function shell.getRunningProgram()
-      return stack[#stack]
+      return program_stack[#program_stack][1]
     end
 
     function shell.exit()
       -- TODO.
+    end
+
+    local dir = ''
+
+    function shell.setDir(new)
+      dir = new
+    end
+
+    function shell.dir()
+      return dir
     end
 
     local ok, err = pcall(
