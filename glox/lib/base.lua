@@ -4,8 +4,6 @@ os.loadAPI("__LIB__/kvutils/kvutils")
 os.loadAPI("__LIB__/ciiah/ciiah")
 os.loadAPI("__LIB__/huaxn/huaxn")
 
-local old_fs = fs
-
 rawset(_G, "fs", huaxn)
 
 for _, fname in ipairs(huaxn.list("__LIB__/glox/widgets/")) do
@@ -37,5 +35,3 @@ for type, dir in pairs(plugin_dirs) do
         huaxn.combine(dir, fname))
   end
 end
-
-rawset(_G, "fs", old_fs)

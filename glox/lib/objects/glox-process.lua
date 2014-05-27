@@ -22,7 +22,7 @@ function Object:init(app, cmdLine, term)
   self.env = {
     term = {
       native = function() return term end,
-    }
+    },
   }
 
   -- TODO: Should these be reloadable seperate?
@@ -33,7 +33,6 @@ function Object:init(app, cmdLine, term)
   self:prepare_env()
 
   self.id = app.pool:new(function()
-
     local ok, err = pcall(function()
       self.env.shell.run(cmdLine)
     end)
@@ -53,22 +52,26 @@ end
 function Object:prepare_env()
   self.env._G = self.env
 
+  self.env.huaxn = huaxn
+  self.env.deun = deun
+
+  self.env.fs = fs
+
   for _, api in ipairs(lua_apis) do
     self.env[api] = _G[api]
   end
 
   function self.env.loadfile(path)
     local f = huaxn.open(path, "r")
-    local func = loadstring(f.readAll(), huaxn.getName(path))
-    f.close()
+    if f then
+      local func = loadstring(f.readAll(), huaxn.getName(path))
+      f.close()
 
-    setfenv(func, self.env)
+      setfenv(func, self.env)
 
-    return func
+      return func
+    end
   end
-
-  -- Install more APIs
-  self.env.fs = huaxn
 
   -- Install plugin-specified APIs.
   for _, plugin in ipairs(self.plugins) do
