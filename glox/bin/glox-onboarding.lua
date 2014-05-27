@@ -94,7 +94,7 @@ local tutorial = {
 
 So, let's get started. Press the "Next" button below. If you are on a normal computer, press tab until the Next button has {}s around it, instead of []s.]] },
   { title = "Launch Menu",
-    body = [[Clicking the % (KB: Alt) in the top-left corner opens the Launch Menu. 
+    body = [[Clicking the % (KB: Alt) in the top-left corner opens the Launch Menu.
 
 You can use the Launch Menu to launch your apps, as well as shutdown / restart your ComputerCraft device.]] },
   { title = "The Drawer",
@@ -113,7 +113,7 @@ A spinning line next to it means that it is currently indexing your device.]] },
     body = [[Next, we're going to ask you some questions to help you get your device setup.]] },
   { title = "Computer Settings",
     content = make_settings },
-  { title = "That's it!", 
+  { title = "That's it!",
     body = [[If at any time you wish to re-run this setup, just select "Run..." in the Launch Menu and type "glox-onboarding"
 
 Have fun with Glox, and please remember to report any bugs you find!
@@ -141,12 +141,14 @@ function update_gooey()
     verify = nil
     pane = kidven.new('agui-textbox', 1, 1, 1, 1)
 
-    pane.agui_widget.fg = 'black'
-    pane.agui_widget.bg = 'lightGrey'
+    if term.isColour() then
+      pane.agui_widget.fg = 'black'
+      pane.agui_widget.bg = 'lightGrey'
+    end
 
     pane:set_text(tutorial[pos].body)
   end
-  
+
   layout:add(pane)
 
   layout:add_anchor(pane, 'left', 'left', -1, 1)

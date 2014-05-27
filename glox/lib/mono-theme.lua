@@ -34,5 +34,29 @@
     -- Menu Plugins.
     ['glox-search-indexing-fg'] = 'glox-menubar-fg',
     ['glox-search-indexing-bg'] = 'glox-menubar-bg',
+
+    -- Search Thing.
+
+    ['glox-highbeam-results-fg'] = 'white',
+    ['glox-highbeam-results-bg'] = 'black',
+
+    ['glox-highbeam-result-fg'] = 'white',
+    ['glox-highbeam-result-bg'] = 'black',
+
+    ['glox-highbeam-result-disabled-fg'] = 'white',
+    ['glox-highbeam-result-disabled-bg'] = 'black',
+
+    ['glox-highbeam-result-focused-fg'] = 'black',
+    ['glox-highbeam-result-focused-bg'] = 'white',
+
+    ['glox-highbeam-category-fg'] = 'white',
+    ['glox-highbeam-category-bg'] = 'black',
+
+    ['glox-highbeam-category-disabled-fg'] = 'white',
+    ['glox-highbeam-category-disabled-bg'] = 'black',
+
+    ['glox-highbeam-category-focused-fg'] = 'black',
+    ['glox-highbeam-category-focused-bg'] = 'white',
+
   }
 }
