@@ -1,0 +1,4 @@
+Name: CraftOS Shell Program
+Mime: application/craftos
+Protocol: cos-program
+Format: shell %h

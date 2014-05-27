@@ -1,4 +1,5 @@
 Description: A bunch of shims to make CraftOS programs work with the various stuff I've stacked ontop of it.
 Config: help-page.manifest => file-handlers/cos-shim-help
-Config: edit.manifest => file-handlers/edit
-Config: paint.manifest => file-handlers/paint
+Config: edit.manifest => file-handlers/cos-shim-edit
+Config: paint.manifest => file-handlers/cos-shim-paint
+Config: program.manifest => file-handlers/cos-shim-program
