@@ -28,19 +28,22 @@ function Plugin:search()
 
 		self.mb_plugin.app:add(self.search_dialog)
 		self.mb_plugin.app:select(self.search_dialog)
+
+		self.mb_plugin.app:draw()
 	end)
 end
 
 function Plugin:build_search()
-	self.search_dialog = new('agui-container', self.mb_plugin.menubar.agui_widget.width - 19, 2,
-		20, self.mb_plugin.app.agui_app.main_window.gooey.agui_widget.height - 1)
+	self.search_dialog = new('agui-container', self.mb_plugin.menubar.agui_widget.width - 25, 2,
+		26, self.mb_plugin.app.agui_app.main_window.gooey.agui_widget.height - 1)
 
-	local search = new('glox-hb-search', 20, self.mb_plugin.app.agui_app.main_window.gooey.agui_widget.height - 1)
+	local search = new('glox-hb-search', 26, self.mb_plugin.app.agui_app.main_window.gooey.agui_widget.height - 1)
 
 	if not pocket then
 		search.agui_widget.x = 2
 
-		self.search_dialog.agui_widget.width = 21
+		self.search_dialog.agui_widget.x = self.mb_plugin.menubar.agui_widget.width - 26
+		self.search_dialog.agui_widget.width = 27
 		self.search_dialog:add(new('agui-virt-seperator', 1, 1, self.search_dialog.agui_widget.height))
 	end
 

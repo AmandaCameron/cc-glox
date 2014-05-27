@@ -38,7 +38,7 @@
     ['glox-drawer-handle-bg'] = 'grey',
 
     -- Search Plugin.
-    ['glox-highbeam-input-fg'] = 'grey',
+    ['glox-highbeam-input-fg'] = 'black',
     ['glox-highbeam-input-bg'] = 'lightGrey',
 
     ['glox-highbeam-input-focused-fg'] = 'grey',
