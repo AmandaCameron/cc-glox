@@ -31,48 +31,52 @@ function Object:init(disp, shell)
     self.agui_app.pool:stop()
   end
 
-  self.agui_app.pool:new(
-  function()
+  self.agui_app.pool:new(function()
     self.event_loop:main()
   end, hooks)
-  
+
   self.minimised = {}
   self.processes = {}
   self.window_procs = {}
   self.windows = {}
 
-  self.event_loop:subscribe("glox.process.exit",
-  function(_, id)
+  self.event_loop:subscribe("glox.process.exit", function(_, id)
     for i, proc in ipairs(self.processes) do
       if proc.id == id then
         table.remove(self.processes, i)
+
+        for _, win in ipairs(proc.windows) do
+          if self.window == win then
+            self.window = nil
+            self.menu:set_embiggened(nil)
+          end
+        end
+
         return
       end
     end
   end)
 
-  self.event_loop:subscribe('event.glox-ipc',
-  function(_, call)
+  self.event_loop:subscribe('event.glox-ipc', function(_, call)
     if call == "settings_changed" then
       self.settings:load()
     end
   end)
 
-  self.event_loop:subscribe("event.*",
-  function(evt, ...)
+  self.event_loop:subscribe("event.*", function(evt, ...)
     -- Pass through all (Well, most.) non-gooey events.
     local evt = evt:sub(7)
-    if evt ~= "key" and evt ~= "char" and evt:sub(1, 5) ~= "mouse" and evt ~= "modem_message" 
+    if evt ~= "key" and evt ~= "char" and evt:sub(1, 5) ~= "mouse" and evt ~= "modem_message"
     and evt ~= "rednet_message" and evt ~= "terminate" then
       for _, proc in ipairs(self.processes) do
       	proc:queue_event(evt, ...)
       end
     end
   end)
-  
+
   -- Clear out the agui event loop killer, replace it with something sane for a multitasking "OS"
   self.event_loop["event.terminate"] = {}
-  
+
   self.event_loop:subscribe("event.terminate", function(evt)
     local active = self.agui_app.main_window.gooey:get_focus()
 
@@ -89,7 +93,7 @@ function Object:init(disp, shell)
       if self.ctrl_count == 1 then
         self.pool:new(function()
           sleep(0.75)
-          
+
           self.ctrl_count = 0
         end)
       end
@@ -106,6 +110,12 @@ function Object:init(disp, shell)
         if focus and focus:is_a('app-window') then
           self:close(focus.screen.proc, focus)
         end
+      elseif key == keys.m then
+        local focus = self.agui_app.main_window.gooey:get_focus()
+
+        if focus and focus:is_a('app-window') then
+          self:minimise(focus)
+        end
       elseif key == keys.tab then
         self.agui_app.main_window.gooey:focus_next()
       end
@@ -119,14 +129,14 @@ function Object:init(disp, shell)
   self.highbeam = new('hb-connection')
 
   self.menu = new('glox-menubar',
-  self,
-  self.agui_app.main_window.gooey.agui_widget.width, 
-  self.agui_app.main_window.gooey.agui_widget.height)
+    self,
+    self.agui_app.main_window.gooey.agui_widget.width,
+    self.agui_app.main_window.gooey.agui_widget.height)
 
   self.desktop = new('glox-desktop',
-  self,
-  self.agui_app.main_window.gooey.agui_widget.width,
-  self.agui_app.main_window.gooey.agui_widget.height - 1)
+    self,
+    self.agui_app.main_window.gooey.agui_widget.width,
+    self.agui_app.main_window.gooey.agui_widget.height - 1)
 
   self.settings:load()
 
@@ -134,22 +144,26 @@ function Object:init(disp, shell)
   self:add(self.desktop)
 
   self:init_picker()
+
+  if self.settings:is_first_run() then
+    self:launch('glox-onboarding')
+  end
 end
 
 function Object:init_picker()
-  self.picker_window = new('agui-window', "Select App", 14, 16)
+  self.picker_window = new('agui-window', "Select App", 20, 16)
 
-  local label = new("agui-textbox", 2, 2, 12, 2, "Select the program to open this with.")
+  local label = new("agui-textbox", 2, 2, 18, 2, "Select the program to open this with.")
 
   self.picker_window:add(label)
 
-  self.picker_list = new('agui-list', 2, 6, 12, 10)
+  self.picker_list = new('agui-list', 2, 6, 18, 10)
 
   self.picker_window:add(self.picker_list)
 
   self.picker_window.flags.closable = true
 
-  local ok = new('agui-button', 8, 15, "Ok")
+  local ok = new('agui-button', 5, 15, "Ok", 10)
 
   self.picker_window:add(ok)
 
@@ -161,14 +175,13 @@ function Object:init_picker()
 
   self:subscribe('gui.button.clicked', function(_, id)
     if id == ok.agui_widget.id then
-      if self.picker_list:get_selected() then 
+      if self.picker_list:get_selected() then
         self:launch(self.picker_list:get_selected().command)
         self:remove(self.picker_window)
       end
     end
   end)
 end
-
 
 function Object:open(uri, mime)
   local programs = self.app_db:resolve(uri, mime)
@@ -189,7 +202,45 @@ function Object:open(uri, mime)
     self:add(self.picker_window)
     self:select(self.picker_window)
   else
-    -- TODO: Show something proper here.""
+    local window = new('agui-window', "Error", 20, 5)
+
+    window.agui_widget.x = math.floor(self.desktop.agui_widget.width / 2 - 10)
+    window.agui_widget.y = math.floor(self.desktop.agui_widget.height / 2 - 2)
+
+    local label = new('agui-label', 2, 2, "No application to handle " .. uri, 18)
+
+    window:add(label)
+
+    local ok_btn = new('agui-label', 7, 4, "Ok", 6)
+
+    window:add(ok_btn)
+    window:select(ok_btn)
+
+    window.flags.closable = true
+
+    self:add(window)
+    self:select(window)
+
+    local close_evt_id
+    local btn_evt_id
+
+    close_evt_id = self:subscribe('gui.window.closed', function(_, id)
+      if id == window.agui_widget.id then
+        self:remove(window)
+
+        self:unsubscribe('gui.window.closed', close_evt_id)
+        self:unsubscribe('gui.button.pressed', ok_evt_id)
+      end
+    end)
+
+    btn_evt_id = self:subscribe('gui.button.pressed', function(_, id)
+      if id == ok_btn.agui_widget.id then
+        self:remove(window)
+
+        self:unsubscribe('gui.window.closed', close_evt_id)
+        self:unsubscribe('gui.button.pressed', btn_evt_id)
+      end
+    end)
   end
 end
 
@@ -199,14 +250,14 @@ function Object:launch(cmdLine)
   window.agui_widget.y = 3
 
   window.screen.proc.windows = { window }
-  
+
   self:add(window)
   self:select(window)
 
   if pocket then
     self:embiggen(window)
   else
-    -- Standard fl.
+    -- Standard flags.
     window:add_flag("closable")
     window:add_flag("minimisable")
     window:add_flag("maximisable")
@@ -217,7 +268,6 @@ function Object:launch(cmdLine)
 end
 
 function Object:new_process(cmdLine, term)
-
   local proc = new('glox-process', self, cmdLine, term)
 
   -- Insert the newWindow additions to the term API
@@ -228,6 +278,31 @@ function Object:new_process(cmdLine, term)
 
   function term.activeWindow()
     return self:active_window()
+  end
+
+  function term.setFlags(flags)
+    local old = proc.windows[1]:cast('agui-window').flags
+    proc.windows[1]:cast('agui-window').flags = {}
+
+    for _, flag in ipairs(flags) do
+      proc.windows[1]:cast('agui-window').flags[flag] = true
+
+      if flag == "glox.fullscreen" and not pocket then
+        self:embiggen(proc.windows[1])
+      end
+    end
+  end
+
+  function term.getFlags()
+    local flags = {}
+
+    for flag, _ in pairs(proc.windows[1]:cast('agui-window').flags) do
+      table.insert(flags, flag)
+    end
+
+    table.insert(flags, 'glox.identifier')
+
+    return flags
   end
 
   function term.newWindow(title, width, height)
@@ -269,7 +344,7 @@ function Object:new_process(cmdLine, term)
     function screen.term.setFlags(flags)
       local old = window.agui_window.flags
       window.agui_window.flags = {}
-      
+
       for _, flag in ipairs(flags) do
         window.agui_window.flags[flag] = true
       end
@@ -335,6 +410,11 @@ function Object:embiggen(window)
 end
 
 function Object:minimise(window)
+  if self.window == window then
+    self.window = nil
+    self.menu:set_embiggened(nil)
+  end
+
   table.insert(self.minimised, window)
 
   window:add_flag('minimised')
