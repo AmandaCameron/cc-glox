@@ -1,6 +1,7 @@
 -- Imports user-files and identifies them using lib-file-ident
 
 os.loadAPI("__LIB__/huaxn/huaxn")
+os.loadAPI("__LIB__/file-ident/file_ident")
 
 local system_paths = {
   [huaxn.combine("__LIB__", "")] = true,
@@ -15,13 +16,11 @@ end
 
 _parent = "hb-importer"
 
-os.loadAPI("__LIB__/file-ident/file_ident")
-
 function Importer:init(db)
   self.hb_importer:init(db)
 end
 
-function Importer:scan_fof(trans, fof)
+function Importer:scan_fs(trans, fof)
   if fof == huaxn.combine("__LIB__/state", "highbeam") then
     -- Skip the database!
 
@@ -50,7 +49,7 @@ function Importer:scan_fof(trans, fof)
   end
 
   if huaxn.getName(fof):sub(1,1) == "." then
-    trans:add_metadata(id, "huaxn.hidden", true)
+    trans:add_metadata(id, "fs.hidden", true)
   end
 
   local size = huaxn.getSize(fof)
@@ -70,7 +69,7 @@ function Importer:scan_fof(trans, fof)
         trans:add_metadata(id, "icon", huaxn.combine(fof, fof2))
         size = size + huaxn.getSize(huaxn.combine(fof, fof2))
       else
-        size = size + self:scan_fof(trans, huaxn.combine(fof, fof2))
+        size = size + self:scan_fs(trans, huaxn.combine(fof, fof2))
       end
     end
   else
@@ -105,7 +104,7 @@ end
 function Importer:import(env)
   local trans = self:transaction()
 
-  self:scan_fof(trans, "")
+  self:scan_fs(trans, "")
 
   trans:commit()
 end

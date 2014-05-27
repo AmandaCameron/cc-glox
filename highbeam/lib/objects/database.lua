@@ -134,6 +134,7 @@ end
 
 -- Do the scan
 
+-- TODO: Limited scope scans.
 function Object:scan(env)
   self.data = {}
 
