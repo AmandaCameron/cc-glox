@@ -41,8 +41,7 @@ function Object:init(disp, shell)
   self.window_procs = {}
   self.windows = {}
 
-  self.event_loop:subscribe("glox.process.exit",
-  function(_, id)
+  self.event_loop:subscribe("glox.process.exit", function(_, id)
     for i, proc in ipairs(self.processes) do
       if proc.id == id then
         table.remove(self.processes, i)
@@ -134,6 +133,10 @@ function Object:init(disp, shell)
   self:add(self.desktop)
 
   self:init_picker()
+
+  if self.settings:is_first_run() then
+    self:launch('glox-onboarding')
+  end
 end
 
 function Object:init_picker()
@@ -168,7 +171,6 @@ function Object:init_picker()
     end
   end)
 end
-
 
 function Object:open(uri, mime)
   local programs = self.app_db:resolve(uri, mime)
@@ -228,6 +230,31 @@ function Object:new_process(cmdLine, term)
 
   function term.activeWindow()
     return self:active_window()
+  end
+
+  function term.setFlags(flags)
+    local old = proc.windows[1]:cast('agui-window').flags
+    proc.windows[1]:cast('agui-window').flags = {}
+    
+    for _, flag in ipairs(flags) do
+      proc.windows[1]:cast('agui-window').flags[flag] = true
+
+      if flag == "glox.fullscreen" and not pocket then
+        self:embiggen(proc.windows[1])
+      end
+    end
+  end
+
+  function term.getFlags()
+    local flags = {}
+
+    for flag, _ in pairs(proc.windows[1]:cast('agui-window').flags) do
+      table.insert(flags, flag)
+    end
+
+    table.insert(flags, 'glox.identifier')
+
+    return flags
   end
 
   function term.newWindow(title, width, height)
