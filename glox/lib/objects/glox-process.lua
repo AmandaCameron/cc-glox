@@ -16,6 +16,7 @@ local lua_apis = {
 
 function Object:init(app, cmdLine, term)
   self.app = app
+  self.icon = "__LIB__/glox/res/icons/program"
 
   self.plugins = {}
 

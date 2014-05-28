@@ -9,9 +9,10 @@ function Object:init(app)
     },
     favourites = {
       { 'Shell', 'shell' },
-      { 'Settings', 'glox-settings' }
+      { 'Settings', 'glox-settings' },
     },
     background = "__LIB__/glox/res/backgrounds/cats.background",
+    first_run = true,
   }
 
   self.app = app
@@ -25,7 +26,7 @@ function Object:load()
 
     for k, v in pairs(data) do
       if self.data[k] ~= nil then
-	self.data[k] = v
+      	self.data[k] = v
       end
     end
 
@@ -74,19 +75,23 @@ function Object:get_favourites()
   return self.data.favourites
 end
 
+function Object:is_first_run()
+  return self.data.first_run
+end
+
 function Object:get_background()
   return self.data.background
 end
 
 -- Setters
 
-function Object:set_background(value)
-  self.data.background = value
+function Object:set_onboarded(value)
+  self.data.first_run = not value
   self:save()
 end
 
-function Object:set_lob(value)
-  self.data.enable_lob = value
+function Object:set_background(value)
+  self.data.background = value
   self:save()
 end
 

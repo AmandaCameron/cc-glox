@@ -1,0 +1,5 @@
+=== 3 ===
+* Highbeam search integration prettification.
+* Onboarding process for new users.
+* Normal computer optimisations.
+* Keyboard shortcuts (Ctrl-ctrl).

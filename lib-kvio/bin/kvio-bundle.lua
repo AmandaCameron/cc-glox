@@ -1,4 +1,9 @@
--- Bundle maker/ extractor
+-- @Name: Bundle Utility
+-- @Desscription: Allows extraction / creation of KVIO bundle files.
+-- @Author: Amanda Cameron
+-- @Usage: kvio-bundle extract <bundle-file> <dest>
+-- @Usage: kvio-bundle create <bundle-file> <source>
+-- @Usage: kvio-bundle list <bundle-file>
 
 os.loadAPI("__LIB__/kvio/kvio")
 

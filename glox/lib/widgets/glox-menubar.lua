@@ -165,17 +165,7 @@ function Widget:draw_collapsed(c)
   c:set_bg('glox-menubar-launcher-bg')
   c:write("%")
 
-  if #self.app.minimised > 0 then
-    c:set_fg('glox-menubar-expand-drawer-fg')
-    c:set_bg('glox-menubar-expand-drawer-bg')
-  else
-    c:set_fg('glox-menubar-drawer-fg')
-    c:set_bg('glox-menubar-drawer-bg')
-  end
-
-  c:write("v")
-
-  if self.window then
+  if self.window and not self.window.agui_window.flags["glox.fullscreen"] then
     offset = offset - 4
 
     c:set_fg('glox-menubar-controls-fg')
@@ -193,7 +183,7 @@ function Widget:draw_collapsed(c)
       -- On !Pocket, show the un-embiggen button
       c:move(self.agui_widget.width - 1, 1)
       c:set_fg('window-maximise-bg')
-      c:set_bg('age-menubar-controls-bg')
+      c:set_bg('glox-menubar-controls-bg')
       c:write("-")
     end
   end
@@ -228,7 +218,7 @@ function Widget:draw_collapsed(c)
       txt = txt:sub(1, offset - 6) .. "..."
     end
 
-    c:move(4, 1)
+    c:move(3, 1)
     c:write(txt)
   end
 end
@@ -253,8 +243,7 @@ function Widget:show_menu()
 
   self.launcher_menu:add_seperator()
 
-  self.launcher_menu:add("Run...",
-  function()
+  self.launcher_menu:add("Run...", function()
     local window = new('glox-rundialog', self.app)
 
     window.agui_widget.x = 1
@@ -264,13 +253,12 @@ function Widget:show_menu()
     self.app:select(window)
   end)
 
-  self.launcher_menu:add("Restart",
-  function()
+
+  self.launcher_menu:add("Restart", function()
     os.reboot()
   end)
 
-  self.launcher_menu:add("Shutdown",
-  function()
+  self.launcher_menu:add("Shutdown", function()
     os.shutdown()
   end)
 
@@ -299,22 +287,20 @@ function Widget:clicked(x, y, btn)
       self.plugin_offsets:clicked(btn)
     elseif self.minimised_offset > 0 and y > self.minimised_offset then
       if self.app.minimised[y - self.minimised_offset] then
-	self.app:restore(self.app.minimised[y - self.minimised_offset])
+	     self.app:restore(self.app.minimised[y - self.minimised_offset])
       end
     end
   else
     if x == 1 then
       self:show_menu()
-    elseif x == 2 then
-      self:expand()
     elseif self.window then
       if x == self.agui_widget.width - 1 then
-	-- Acts as a close button when on Pocket
-	if pocket then
-	  self.app:close(self.window.screen.proc, self.window)
-	else
-	  self.app:unembiggen(self.window)
-	end
+      	-- Acts as a close button when on Pocket
+      	if pocket then
+      	  self.app:close(self.window.screen.proc, self.window)
+      	else
+      	  self.app:unembiggen(self.window)
+      	end
       elseif x > self.agui_widget.width - 3 - #self.plugins and x < self.agui_widget.width - 3 then
 	self.plugins[self.agui_widget.width - 2 - x]:clicked(btn)
       end

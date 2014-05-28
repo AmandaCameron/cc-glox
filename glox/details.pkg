@@ -9,6 +9,7 @@ Dependency: craftos-shims
 Dependency: deun
 Dependency: agui-images
 Executable: glox-settings
+Executable: glox-onboarding
 Library: glox/
 Library: theme => glox/theme
 Library: mono-theme => glox/mono-theme
@@ -28,6 +29,8 @@ Library: widgets/app-screen => glox/widgets/app-screen
 Library: widgets/glox-menubar => glox/widgets/glox-menubar
 Library: widgets/glox-rundialog => glox/widgets/glox-rundialog
 Library: widgets/glox-hb-result => glox/widgets/glox-hb-result
+Library: widgets/glox-hb-category => glox/widgets/glox-hb-category
+Library: widgets/glox-hb-search => glox/widgets/glox-hb-search
 Library: widgets/glox-program-picker => glox/widgets/glox-program-picker
 Library: glox/menu-plugins/
 Library: menu-plugins/search => glox/menu-plugins/search

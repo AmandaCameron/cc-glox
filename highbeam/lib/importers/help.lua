@@ -13,7 +13,6 @@ function Importer:import(env)
     local tid = trans:add_object("help://" .. topic)
 
     trans:add_metadata(tid, "type", "help-page")
-    trans:add_metadata(tid, "location", 'file://localhost/' .. help.lookup(topic))
 
     trans:add_metadata(tid, "name", topic)
 
