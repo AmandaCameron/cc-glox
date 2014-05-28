@@ -38,5 +38,8 @@ Library: menu-plugins/highbeam-status => glox/menu-plugins/highbeam-status
 Library: glox/res/
 Library: glox/res/backgrounds/
 Library: res/backgrounds/cats.background => glox/res/backgrounds/cats.background
+Library: glox/res/icons/
+Library: res/icons/program => glox/res/icons/program
+Library: res/icons/glox-settings => glox/res/icons/glox-settings
 Startup: 90-glox-service
 Docs: glox

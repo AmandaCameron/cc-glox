@@ -1,6 +1,7 @@
 -- @Name: Glox Settings
 -- @Description: Settings program for Glox.
 -- @Author: Amanda Cameron
+-- @Icon[4x3]: __LIB__/glox/res/icons/glox-settings
 
 -- Settings program for agui-shell
 
@@ -242,7 +243,7 @@ add_window:add(prog_search)
 add_window:add(prog_ok)
 add_window:add(prog_cancel)
 
-app:subscribe('gui.list.changed', 
+app:subscribe('gui.list.changed',
 function(_, id, num, item)
   if id == favourites_list.agui_widget.id then
     fav_label.text = item.name
@@ -251,7 +252,7 @@ function(_, id, num, item)
 end)
 
 
-app:subscribe('gui.button.pressed', 
+app:subscribe('gui.button.pressed',
 function(_, id)
   local ok, err = pcall(
   function()
@@ -317,4 +318,3 @@ end)
 settings:load()
 
 app:main()
-

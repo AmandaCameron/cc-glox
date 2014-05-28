@@ -20,7 +20,7 @@ function Widget:init(app, width, height)
 
   self.min_selected = 0
 
-  self.app.event_loop:subscribe('glox.settings.commit', 
+  self.app.event_loop:subscribe('glox.settings.commit',
   function()
     self.plugins = {}
 
@@ -59,7 +59,7 @@ function Widget:draw_expanded(c)
       self.plugin_offsets[offset + 2] = plugin
 
       local p = plugin:cast('mb-plugin')
-      
+
       c:move(1, offset)
       c:set_fg(p.colour_fg)
       c:set_bg(p.colour_bg)
@@ -68,7 +68,7 @@ function Widget:draw_expanded(c)
       c:write(" " .. p.text:sub(1, 1) .. " ")
       c:move(1, offset + 2)
       c:write("   ")
-      
+
       local sub = c:sub(5, offset, c.width - 5, 3)
 
       sub:set_bg('glox-drawer-plugin-bg')
@@ -87,9 +87,9 @@ function Widget:draw_expanded(c)
       	end
 
       	term.redirect(sub:as_redirect())
-      	
+
       	print(plugin:details())
-      	
+
       	if term.current then
       	  term.redirect(old)
       	else
@@ -108,7 +108,7 @@ function Widget:draw_expanded(c)
     c:write(" ")
     c:write(("-"):rep(c.width - 2))
     c:write(" ")
-    
+
     if pocket then
       msg = " Running Programs "
     else
@@ -122,11 +122,11 @@ function Widget:draw_expanded(c)
 
     offset = offset + 1
 
-    c:set_fg('glox-drawer-minimised-fg')
-    c:set_bg('glox-drawer-minimised-bg')
-
     for i, win in ipairs(self.app.minimised) do
-      c:move(1, offset)
+      c:set_fg('glox-drawer-minimised-fg')
+      c:set_bg('glox-drawer-minimised-bg')
+
+      c:move(5, offset)
 
       if i == self.min_selected then
         c:write('> ')
@@ -137,7 +137,13 @@ function Widget:draw_expanded(c)
       c:write(win:cast('agui-window').title)
       c:write(string.rep(' ', c.width - c.x))
 
-      offset = offset + 1
+      local icon = c:sub(1, offset, 4, 3)
+
+      if win.screen.proc.icon then
+        win.screen.proc.icon:render(icon, 'glox-drawer-minimised-bg')
+      end
+
+      offset = offset + 3
     end
   else
     self.minimised_offset = -1
@@ -164,7 +170,7 @@ function Widget:draw_collapsed(c)
   c:set_fg('glox-menubar-launcher-fg')
   c:set_bg('glox-menubar-launcher-bg')
   c:write("%")
-  
+
   if self.window and not self.window.agui_window.flags["glox.fullscreen"] then
     offset = offset - 4
 
@@ -187,7 +193,7 @@ function Widget:draw_collapsed(c)
       c:write("-")
     end
   end
-  
+
   self.plugin_offsets = {}
 
   for _, plugin in ipairs(self.plugins) do
@@ -209,7 +215,7 @@ function Widget:draw_collapsed(c)
   end
 
   if self.window then
-    c:set_fg('glox-menubar-window-title-fg') 
+    c:set_fg('glox-menubar-window-title-fg')
     c:set_bg('glox-menubar-window-title-bg')
 
     local txt = self.window.agui_window.title
@@ -231,7 +237,7 @@ function Widget:show_menu()
   self.launcher_menu:clear()
 
   for _, fav in ipairs(self.app.settings:get_favourites()) do
-    self.launcher_menu:add(fav[1], 
+    self.launcher_menu:add(fav[1],
     function()
       self.app:launch(fav[2])
     end)
@@ -258,7 +264,7 @@ function Widget:show_menu()
     os.shutdown()
   end)
 
-  
+
   self.launcher_menu:show(1, 2)
 end
 
@@ -282,8 +288,10 @@ function Widget:clicked(x, y, btn)
     if self.plugin_offsets[y] then
       self.plugin_offsets:clicked(btn)
     elseif self.minimised_offset > 0 and y > self.minimised_offset then
-      if self.app.minimised[y - self.minimised_offset] then
-	     self.app:restore(self.app.minimised[y - self.minimised_offset])
+      local offs = math.ceil((y - self.minimised_offset) / 3)
+
+      if self.app.minimised[offs] then
+	     self.app:restore(self.app.minimised[offs])
       end
     end
   else
@@ -291,12 +299,12 @@ function Widget:clicked(x, y, btn)
       self:show_menu()
     elseif self.window then
       if x == self.agui_widget.width - 1 then
-	-- Acts as a close button when on Pocket
-	if pocket then
-	  self.app:close(self.window.screen.proc, self.window)
-	else
-	  self.app:unembiggen(self.window)
-	end
+      	-- Acts as a close button when on Pocket
+      	if pocket then
+      	  self.app:close(self.window.screen.proc, self.window)
+      	else
+      	  self.app:unembiggen(self.window)
+      	end
       elseif x > self.agui_widget.width - 3 - #self.plugins and x < self.agui_widget.width - 3 then
 	self.plugins[self.agui_widget.width - 2 - x]:clicked(btn)
       end

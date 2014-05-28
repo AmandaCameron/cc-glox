@@ -23,7 +23,6 @@ end
 
 function Object:init(app, cmdLine, term)
   self.app = app
-  self.icon = "__LIB__/glox/res/icons/program"
 
   self.id = app.pool:new(function()
     local multishell = {}
@@ -81,20 +80,24 @@ function Object:init(app, cmdLine, term)
       local res = app.highbeam:get("cos-program://" .. fs.getName(cmd))
 
       if res and res.meta['name'] then
-        self.icon = res.meta['icon']
-
         table.insert(title_stack, res.meta['name'])
 
         multishell.setTitle(1, res.meta['name'])
       else
-        self.icon = "__LIB__/glox/res/icons/program"
-
         table.insert(title_stack, cmd)
-        
+
         multishell.setTitle(1, cmd)
       end
-      
+
       table.insert(program_stack, cmd)
+
+      if res and res.meta['icon-4x3'] then
+        self.icon = agimages.load(res.meta['icon-4x3'])
+      elseif res and res.meta['icon-3x3'] then
+        self.icon = agimages.load(res.meta['icon-3x3'])
+      else
+        self.icon = agimages.load('__LIB__/glox/res/icons/program')
+      end
 
       local prog = app.shell.resolveProgram(cmd)
       local result = false
@@ -110,7 +113,7 @@ function Object:init(app, cmdLine, term)
       else
       	printError("No such program.")
       end
-	
+
       if #program_stack > 1 then
         table.remove(title_stack, #title_stack)
       	table.remove(program_stack, #program_stack)
@@ -169,7 +172,7 @@ end
 function Object:die()
   -- TODO: Error reporting somewhere?
   self.app.event_loop:trigger("glox.process.exit", self.id)
-  
+
   for _, win in ipairs(self.windows) do
     self.app:remove(win)
   end
