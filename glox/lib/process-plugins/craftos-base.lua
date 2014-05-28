@@ -150,16 +150,37 @@ function Plugin:env(env)
     self:app():launch(cmdLine)
   end
 
+  local cmd_stack = {}
+  local title_stack = {}
+
+
   function shell.run(cmdLine)
     local args = tokenise(cmdLine)
 
     local cmd = table.remove(args, 1)
 
-    table.insert(stack, cmd)
-    multishell.setTitle(1, cmd)
+    table.insert(cmd_stack, cmd)
 
     local prog = shell.resolveProgram(cmd)
     local result = false
+
+    local res = self:app().highbeam:get('cos-program://' .. fs.getName(prog))
+
+    if res and res.meta['name'] then
+      table.insert(title_stack, res.meta['name'])
+
+      multishell.setTitle(1, res.meta['name'])
+    else
+      table.insert(title_stack, cmd)
+
+      multishell.setTitle(1, cmd)
+    end
+
+    if res and res.meta['icon-4x3'] then
+      self:proc().icon = res.meta['icon-4x3']
+    else
+      self:proc().icon = '__LIB__/glox/res/icons/program'
+    end
 
     if prog then
       local func = env.loadfile(prog)
@@ -191,15 +212,19 @@ function Plugin:env(env)
       printError("No such program.")
     end
 
-    if #stack > 1 then
-      table.remove(stack, #stack)
-      multishell.setTitle(1, stack[#stack])
+    if #cmd_stack > 1 then
+      table.remove(title_stack, #title_stack)
+      table.remove(cmd_stack, #cmd_stack)
+
+      multishell.setTitle(1, title_stack[#title_stack])
     else
       multishell.setTitle(1, "Process Done.")
     end
 
     return result
   end
+
+
 
   function shell.getRunningProgram()
     return stack[#stack]

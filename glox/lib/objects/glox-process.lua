@@ -31,6 +31,8 @@ function Object:init(app, cmdLine, term)
     table.insert(self.plugins, new('glox-process-plugin-' .. plug, app, self))
   end
 
+  self.cmdLine = cmdLine
+
   self:prepare_env()
 
   self.id = app.pool:new(function()
@@ -44,8 +46,6 @@ function Object:init(app, cmdLine, term)
       printError(err)
     end
   end, self, { terminal = term, has_queue = true })
-
-  self.cmdLine = cmdLine
 
   self.windows = {}
 end
