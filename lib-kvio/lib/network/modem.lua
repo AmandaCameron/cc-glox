@@ -1,3 +1,5 @@
+-- lint-mode: kidven
+
 -- Modem wrapper object for lib-kvio
 
 _parent = 'object'
@@ -24,12 +26,12 @@ function Object:init(pump, side)
   end
 
   self.peripheral = peripheral.wrap(self.side)
-  
+
   self.id = os.getComputerID() .. '-' .. self.side
 
   self.open_ports = new('kvu-set')
 
-  self.pump:subscribe('event.modem_message', 
+  self.pump:subscribe('event.modem_message',
   function(_, side, dest, sender, msg, dist)
     if side == self.side then
       pump:trigger('network.modem.recv', self.id, sender, dest, msg, dist)

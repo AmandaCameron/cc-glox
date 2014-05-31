@@ -1,3 +1,5 @@
+-- lint-mode: glox-highbeam
+
 -- Indexes based on type of entry.
 
 _parent = "hb-indexer"
@@ -10,7 +12,7 @@ function Indexer:init(db)
 end
 
 function Indexer:filters()
-  return { 
+  return {
     "type",
     "name",
   }
@@ -19,7 +21,7 @@ end
 function Indexer:lookup(filter, query)
   local results = {}
 
-  if filter == "type" then    
+  if filter == "type" then
     if self.types[query] then
       for k, _ in pairs(self.types[query]) do
         table.insert(results, k)
@@ -48,7 +50,7 @@ function Indexer:index(id, entry)
     if not self.types[entry.meta.type] then
       self.types[entry.meta.type] = {}
     end
-    
+
     self.types[entry.meta.type][id] = true
   end
 

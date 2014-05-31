@@ -1,3 +1,5 @@
+-- lint-mode: glox
+
 _parent = 'object'
 
 function Object:init(app)

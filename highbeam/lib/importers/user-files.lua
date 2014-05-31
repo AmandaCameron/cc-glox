@@ -1,3 +1,5 @@
+-- lint-mode: glox-highbeam
+
 -- Imports user-files and identifies them using lib-file-ident
 
 os.loadAPI("__LIB__/huaxn/huaxn")
@@ -29,10 +31,8 @@ function Importer:scan_fs(trans, fof)
 
   local id = trans:add_object("file://localhost/" .. fof)
 
-  if fof == "" and os.getComputerLabel() ~= nil then
-    trans:add_metadata(id, "name", os.getComputerLabel() .. " HD")
-  elseif disk.isPresent(huaxn.getDrive(fof)) and disk.getLabel(huaxn.getDrive(fof)) then
-    trans:add_metadata(id, "name", disk.getLabel(huaxn.getDrive(fof)))
+  if huaxn.getLabel(fof) then
+    trans:add_metadata(id, "name", huaxn.getLabel(fof))
   else
     trans:add_metadata(id, "name", huaxn.getName(fof))
   end
@@ -66,7 +66,6 @@ function Importer:scan_fs(trans, fof)
 
     for _, fof2 in ipairs(huaxn.list(fof)) do
       if fof2 == ".icon" then
-        trans:add_metadata(id, "icon", huaxn.combine(fof, fof2))
         size = size + huaxn.getSize(huaxn.combine(fof, fof2))
       else
         size = size + self:scan_fs(trans, huaxn.combine(fof, fof2))

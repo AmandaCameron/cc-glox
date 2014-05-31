@@ -1,3 +1,5 @@
+-- lint-mode: kidven
+
 -- Service Object.
 -- Listens to stuff and does fun things.
 
@@ -5,7 +7,7 @@ _parent = "event-loop"
 
 function Object:init(name, desc)
   self.event_loop:init()
-  
+
   self.name = name
   self.desc = desc
   self.errored = false

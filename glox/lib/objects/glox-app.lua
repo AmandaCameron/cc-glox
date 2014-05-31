@@ -1,5 +1,4 @@
--- AGUI Shell app.
--- Sub-classes agui-app and adds more stuff we need.
+-- lint-mode: glox
 
 _parent = "agui-app"
 

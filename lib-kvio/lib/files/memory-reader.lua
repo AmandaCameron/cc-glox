@@ -1,3 +1,5 @@
+-- lint-mode: kidven
+
 
 _parent = "object"
 
@@ -28,7 +30,7 @@ end
 
 function Object:lines()
   local line = 0
-  
+
   local function ret()
     line = line + 1
 

@@ -1,3 +1,5 @@
+-- lint-mode: glox
+
 _parent = 'mb-plugin'
 
 function Plugin:init(app, menubar)

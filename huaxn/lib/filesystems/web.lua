@@ -1,3 +1,5 @@
+-- lint-mode: huaxn-fs
+
 -- Web FileSystem for Huaxn.
 -- Allows reading from HTTP Hosts like local files.
 
@@ -18,7 +20,7 @@ function new(base)
 
   function vfs.exists(path)
     local f = http.get(base .. "/" .. path, "r")
-    
+
     if f ~= nil then
       f.close()
       return true

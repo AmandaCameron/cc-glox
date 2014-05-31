@@ -1,3 +1,5 @@
+-- lint-mode: glox
+
 -- Glox HighBeam Search widget.
 
 _parent = 'agui-search'

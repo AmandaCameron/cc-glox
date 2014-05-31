@@ -1,3 +1,5 @@
+-- lint-mode: kidven
+
 -- TROR Source Class.
 
 function Object:init(channel)
@@ -55,7 +57,7 @@ function Object:on_recv(source, msg)
 			self.x = x
 			self.y = y
 
-			self.state = 3	
+			self.state = 3
 		end
 	end
 end

@@ -1,3 +1,5 @@
+-- lint-mode: glox
+
 _parent = 'agui-window'
 
 function Widget:init(app)

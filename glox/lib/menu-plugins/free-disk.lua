@@ -1,3 +1,5 @@
+-- lint-mode: glox
+
 -- Shows the free disk space in the menubar panel.
 
 _parent = "mb-plugin"

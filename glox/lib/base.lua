@@ -1,4 +1,4 @@
--- agui Shell Windowing "OS"
+-- lint-mode: api
 
 os.loadAPI("__LIB__/agui/agui")
 os.loadAPI("__LIB__/agui-images/agimages")

@@ -1,3 +1,5 @@
+-- lint-mode: glox
+
 -- HighBeam Status spinner.
 
 _parent = 'mb-plugin'
@@ -57,5 +59,5 @@ function Plugin:details()
 end
 
 function Plugin:is_visible()
-  return self.timer_id >= 0 
+  return self.timer_id >= 0
 end

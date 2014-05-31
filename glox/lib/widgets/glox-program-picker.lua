@@ -1,3 +1,5 @@
+-- lint-mode: glox
+
 _parent = 'agui-search'
 
 function Widget:init(app, w, h)

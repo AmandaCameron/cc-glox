@@ -1,3 +1,5 @@
+-- lint-mode: glox-highbeam
+
 -- Help Indexer
 
 _parent = "hb-importer"

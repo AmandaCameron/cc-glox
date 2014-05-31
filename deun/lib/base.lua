@@ -1,3 +1,7 @@
+-- lint-mode: api
+
+-- lint-ignore-global-get: deun
+
 -- Deun Base Library.
 
 os.loadAPI("__LIB__/kidven/kidven")
@@ -104,4 +108,3 @@ function get(svc)
     end
   end
 end
-

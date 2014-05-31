@@ -1,3 +1,5 @@
+-- lint-mode: glox
+
 -- A Re-iomplementation of lib-thread's thread pool with
 -- additional stuff bolted on.
 
@@ -38,7 +40,7 @@ function Object:new(func, hdlr, opts)
     co = coroutine.create(func),
     filter = nil,
     handler = hdlr or {},
-    
+
     -- Terminal output state
     redir = opts.terminal or t,
     term_hist = {},
@@ -73,7 +75,6 @@ function Object:main()
   local peripheral_call = peripheral.call
   local rednet_open = rednet.open
   local rednet_close = rednet.close
-  local old_printError = printError
 
   local modem_open = {}
 
@@ -92,7 +93,7 @@ function Object:main()
   else
     function term.restore()
       t_restore()
-      self.threads[self.active].redir = table.remove(self.threads[self.active].term_hist, 1)    
+      self.threads[self.active].redir = table.remove(self.threads[self.active].term_hist, 1)
       t_redirect(self.threads[self.active].redir)
     end
   end
@@ -102,7 +103,7 @@ function Object:main()
       if not self.threads[self.active] then
         return nil
       end
-      
+
       local old = self.threads[self.active].redir
       self.threads[self.active].redir = target
 
@@ -132,7 +133,7 @@ function Object:main()
 
     if evt[1] == "rednet_message" or evt[1]:sub(-3) == "ipc" then
       -- Short-circuit in the case of an IPC event and rednet.
-      
+
       os_queueEvent(...)
     end
 
@@ -140,7 +141,7 @@ function Object:main()
       -- Broken state.
       return
     end
-    
+
     if self.threads[self.active].has_queue then
       self:queue_event(self.active, ...)
     else
@@ -158,7 +159,7 @@ function Object:main()
     self.threads[self.active].timers[tid] = true
 
     return tid
-  end      
+  end
 
   function peripheral.call(side, method, ...)
     if peripheral.getType(side) == "modem" then
@@ -235,14 +236,6 @@ function Object:main()
   end
 
   -- Error logging.
-
-  function printError(err)
-    if cclite then
-      cclite.message("Error: " .. err)
-    end
-
-    old_printError(err)
-  end
 
   local ok, err = pcall(function()
     while true do
@@ -328,8 +321,6 @@ function Object:main()
   rednet.open = rednet_open
   rednet.close = rednet_close
 
-  printError = old_printError
-
   if not ok then
     -- Pass the error up the stack, now that we've cleaned up the environment.
     error(err)
@@ -348,7 +339,7 @@ function Object:run_thread(t, evt, ...)
       if t.handler.yield then
         t.handler:yield(res)
       end
-      
+
       t.filter = res
     end
   end

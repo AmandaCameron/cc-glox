@@ -1,3 +1,5 @@
+-- lint-mode: glox-highbeam
+
 -- Indexes photos by size
 
 _parent = "hb-indexer"
@@ -34,7 +36,7 @@ function Indexer:lookup(filter, value)
     local width, height = value:match("^([%d]+),([%d]+)$")
     width = tonumber(width)
     height = tonumber(height)
-    
+
     return self.filter(function(dimens)
       return dimens.width > width and dimens.height > height
     end)
@@ -42,7 +44,7 @@ function Indexer:lookup(filter, value)
     local width, height = value:match("^([%d]+),([%d]+)$")
     width = tonumber(width)
     height = tonumber(height)
-    
+
     return self.filter(function(dimens)
       return dimens.width < width and dimens.height < height
     end)
@@ -63,7 +65,7 @@ function Indexer:index(id, entry)
     local width, height = entry.meta.dimensions:match("^([%d]+),([%d]+)$")
 
     self.data[id] = {
-      width = tonumber(width), 
+      width = tonumber(width),
       height = tonumber(height),
     }
   end

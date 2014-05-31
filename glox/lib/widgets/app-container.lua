@@ -1,3 +1,5 @@
+-- lint-mode: glox
+
 _parent = "app-screen"
 
 function Widget:init(app, cmdLine, w, h)

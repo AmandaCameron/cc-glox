@@ -1,3 +1,5 @@
+-- lint-mode: kidven
+
 -- Chat Protocol, using Dan200's CC1.6 protocol
 
 _parent = "object"

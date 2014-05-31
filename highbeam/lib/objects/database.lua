@@ -1,5 +1,6 @@
--- HighBeam Database Object.
+-- lint-mode: glox-highbeam
 
+-- HighBeam Database Object.
 
 -- Shamelessly stolen from the 'shell' program:
 

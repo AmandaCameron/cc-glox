@@ -1,3 +1,5 @@
+-- lint-mode: glox
+
 _parent = "agui-list-item"
 
 local types = {

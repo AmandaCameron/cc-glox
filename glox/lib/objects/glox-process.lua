@@ -1,3 +1,5 @@
+-- lint-mode: glox
+
 _parent = "object"
 
 -- Shamelessly stolen from the 'shell' program:
@@ -90,10 +92,10 @@ function Object:init(app, cmdLine, term)
         self.icon = "__LIB__/glox/res/icons/program"
 
         table.insert(title_stack, cmd)
-        
+
         multishell.setTitle(1, cmd)
       end
-      
+
       table.insert(program_stack, cmd)
 
       local prog = app.shell.resolveProgram(cmd)
@@ -110,7 +112,7 @@ function Object:init(app, cmdLine, term)
       else
       	printError("No such program.")
       end
-	
+
       if #program_stack > 1 then
         table.remove(title_stack, #title_stack)
       	table.remove(program_stack, #program_stack)
@@ -169,7 +171,7 @@ end
 function Object:die()
   -- TODO: Error reporting somewhere?
   self.app.event_loop:trigger("glox.process.exit", self.id)
-  
+
   for _, win in ipairs(self.windows) do
     self.app:remove(win)
   end

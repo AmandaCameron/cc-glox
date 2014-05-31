@@ -1,3 +1,5 @@
+-- lint-mode: glox-highbeam
+
 -- Highbeam Importer meta-class
 
 -- Banned words for automatic keyword-ing
