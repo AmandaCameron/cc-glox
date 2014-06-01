@@ -1,7 +1,8 @@
 -- MultiShell API shim for glox-process
 
-_parent = "glox-process-plugin"
+-- lint-mode: glox-plugin
 
+_parent = "glox-process-plugin"
 
 -- Shamelessly stolen from the 'shell' program:
 
@@ -106,6 +107,10 @@ function Plugin:env(env)
   end
 
   function multishell.setTitle(proc, title)
+    if proc ~= 1 then
+      return
+    end
+
     self:proc().windows[1].agui_window.title = title
   end
 
@@ -121,6 +126,10 @@ function Plugin:env(env)
     return 1
   end
 
+  function multishell.setIcon(icon)
+    self:proc().icon = agimages.load(icon)
+  end
+
   env.multishell = multishell
 
   -- Shell API.
@@ -130,8 +139,6 @@ function Plugin:env(env)
   for name, func in pairs(self:app().shell) do
     shell[name] = func
   end
-
-  local stack = {cmd}
 
   function shell.setDir(dir)
     self:proc().cwd = dir
@@ -153,70 +160,23 @@ function Plugin:env(env)
   local cmd_stack = {}
   local title_stack = {}
 
-
   function shell.run(cmdLine)
     local args = tokenise(cmdLine)
 
     local cmd = table.remove(args, 1)
-
     table.insert(cmd_stack, cmd)
 
     local prog = shell.resolveProgram(cmd)
     local result = false
 
-    local res = self:app().highbeam:get('cos-program://' .. fs.getName(prog))
-
-    if res and res.meta['name'] then
-      table.insert(title_stack, res.meta['name'])
-
-      multishell.setTitle(1, res.meta['name'])
-    else
-      table.insert(title_stack, cmd)
-
-      multishell.setTitle(1, cmd)
-    end
-
-    if res and res.meta['icon-4x3'] then
-      self:proc().icon = res.meta['icon-4x3']
-    else
-      self:proc().icon = '__LIB__/glox/res/icons/program'
-    end
-
     if prog then
-      local func = env.loadfile(prog)
-
-      if func then
-        local old_term
-
-        if term.current then
-          old_term = term.current()
-        end
-
-        local ok, err = pcall(function()
-          func(unpack(args))
-        end)
-
-        if old_term then
-          term.redirect(old_term)
-        end
-
-        result = ok
-
-        if not ok then
-          printError(err)
-        end
-      else
-        result = false
-      end
+      result = env.os.run({}, prog, unpack(args))
     else
       printError("No such program.")
     end
 
     if #cmd_stack > 1 then
-      table.remove(title_stack, #title_stack)
       table.remove(cmd_stack, #cmd_stack)
-
-      multishell.setTitle(1, title_stack[#title_stack])
     else
       multishell.setTitle(1, "Process Done.")
     end
@@ -224,14 +184,46 @@ function Plugin:env(env)
     return result
   end
 
-
-
   function shell.getRunningProgram()
     return stack[#stack]
   end
 
   function shell.exit()
     -- TODO.
+  end
+
+  function env.os.run(child_env, path, ...)
+    local func = env.loadfile(path)
+    local args = { ... }
+
+    if not func then
+      return false
+    end
+
+    setmetatable(child_env, { __index = env })
+    setfenv(func, child_env)
+
+    local res = self:app().highbeam:get('cos-program://' .. fs.getName(path))
+
+    if res and res.meta['name'] then
+       env.multishell.setTitle(1, res.meta['name'])
+    end
+
+    local prev_icon = self:proc().icon
+
+    if res and res.meta['icon-4x3'] then
+      self:proc().icon = agimages.load(res.meta['icon-4x3'])
+    elseif res then
+      self:proc().icon = agimages.load('__LIB__/glox/res/icons/program')
+    end
+
+    local ok, err = pcall(function()
+      func(unpack(args))
+    end)
+
+    self:proc().icon = prev_icon
+
+    return true
   end
 
   env.shell = shell

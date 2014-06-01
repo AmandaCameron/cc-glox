@@ -1,3 +1,5 @@
+-- lint-mode: glox-object
+
 _parent = "object"
 
 local lua_apis = {
@@ -8,15 +10,21 @@ local lua_apis = {
   'math',
   -- Functions.
   'pairs', 'ipairs', 'unpack',
-  'error', 'pcall',
+  'error', 'pcall', 'assert',
   'type',
   'getfenv', 'setfenv',
   'getmetatable', 'setmetatable',
+  'rawset', 'rawget',
+
+  'loadstring', 'dofile',
+  'tonumber', 'tostring',
+
+  'sleep',
 }
 
 function Object:init(app, cmdLine, term)
   self.app = app
-  self.icon = "__LIB__/glox/res/icons/program"
+  self.icon = agimages.load("__LIB__/glox/res/icons/program")
 
   self.plugins = {}
 
@@ -57,6 +65,7 @@ function Object:prepare_env()
   self.env.deun = deun
 
   self.env.fs = fs
+  self.env.http = http
 
   for _, api in ipairs(lua_apis) do
     self.env[api] = _G[api]

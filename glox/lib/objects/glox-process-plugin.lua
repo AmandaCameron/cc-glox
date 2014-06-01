@@ -1,3 +1,5 @@
+-- lint-mode: glox-object
+
 -- Process plugin API.
 
 function Object:init(app, process)

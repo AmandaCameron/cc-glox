@@ -1,4 +1,4 @@
--- lint-mode: glox
+-- lint-mode: glox-plugin
 
 -- Shows the free disk space in the menubar panel.
 

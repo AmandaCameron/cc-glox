@@ -1,7 +1,7 @@
 -- This has been made to maintain compatability with old code.
 -- It should be nuked from orbit ASAP
 
--- lint-mode: glox
+-- lint-mode: glox-widget
 
 _parent = 'agui-window'
 
