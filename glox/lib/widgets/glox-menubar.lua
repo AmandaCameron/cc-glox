@@ -28,7 +28,7 @@ function Widget:init(app, width, height)
 
     if self.app.settings:get_plugins_enabled() then
       for _, plug in ipairs(self.app.settings:get_plugins('menubar')) do
-        table.insert(self.plugins, new('mb-plugin-' .. plug, app, self))
+        table.insert(self.plugins, new('glox-menubar-plugin-' .. plug, app, self))
       end
     end
   end)
@@ -237,6 +237,10 @@ function Widget:set_embiggened(window)
 end
 
 function Widget:show_menu()
+  if self.launcher_menu.visible then
+    return
+  end
+
   self.launcher_menu:clear()
 
   for _, fav in ipairs(self.app.settings:get_favourites()) do
@@ -275,8 +279,8 @@ end
 -- Widget hooks.
 
 function Widget:draw(c, theme)
-  c:move(1, 1)
   c:clear()
+  c:move(1, 1)
 
   if self:is_expanded() then
     self:draw_expanded(c)
