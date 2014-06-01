@@ -64,7 +64,7 @@ general_settings:add_anchor(background, 'top', 'top', background_label, 0)
 
 general_settings:reflow()
 
-function update_general()
+local function update_general()
   local bg_file = kidven.new('kvio-bundle', settings:get_background())
   bg_file:load()
 
@@ -133,7 +133,7 @@ function(_, id)
 end)
 
 
-function update_plugins()
+local function update_plugins()
   local plugins_enabled = settings:get_plugins_enabled()
 
   plugs_disabled:set_enabled(plugins_enabled)
@@ -210,7 +210,7 @@ app_settings:add_anchor(fav_command, 'top', 'bottom', fav_label, 2)
 
 app_settings:reflow()
 
-function update_app()
+local function update_app()
   favourites_list:clear()
 
   local favs = settings:get_favourites()
@@ -294,8 +294,6 @@ app:subscribe('glox.settings.commit', function(_)
 app:subscribe("gui.input.changed", function(_, id, value)
   if id == enable_plugins.agui_widget.id then
     settings:set_plugins_enabled(value)
-  elseif id == show_tips.agui_widget.id then
-    settings:set_show_tips(value)
   end
 end)
 
