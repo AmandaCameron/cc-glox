@@ -1,3 +1,5 @@
+-- lint-mode: kidven
+
 -- Kidven-based rednet networking!
 -- Back-ports 1.6 compatable stuff!
 
@@ -39,10 +41,10 @@ function Object:close()
 end
 
 function Object:subscribe(cback, proto)
-  self.modem.pump:subscribe('network.modem.recv', 
+  self.modem.pump:subscribe('network.modem.recv',
   function(_, id, sender, dest, msg, dist)
     if id == self.modem.id then
-      if dest == self.bcast_id or dest == self.id 
+      if dest == self.bcast_id or dest == self.id
       or (msg.nRecipient and msg.nRecipient == self.id) then
 	if msg.sProtocol == proto then
 	  cback(sender, msg.message)
@@ -56,7 +58,7 @@ function Object:send(dest, msg, proto)
   local msg_id = math.random( 1, 2147483647 )
 
   local message = {
-    nMessageID = msg_id, 
+    nMessageID = msg_id,
     nRecipient = dest,
     message = msg,
     sProtocol = proto
@@ -70,7 +72,7 @@ function Object:host(proto, host)
   if type(host) ~= "string" or type(proto) ~= "string" then
     error("Expected: String, string", 2)
   end
-  
+
   if host == "localhost" then
     error("Reserved hostname", 2)
   end

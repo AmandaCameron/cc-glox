@@ -1,3 +1,5 @@
+-- lint-mode: kidven
+
 -- Acts as a kvio-channel for rednet comms.
 
 _parent = 'kvio-channel'
@@ -24,4 +26,3 @@ end
 function Object:send(msg)
   self.rednet:send(self.target, msg, self.proto)
 end
-    

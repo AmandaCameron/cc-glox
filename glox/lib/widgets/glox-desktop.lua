@@ -1,3 +1,5 @@
+-- lint-mode: glox
+
 _parent = "agui-widget"
 
 function Widget:init(app, w, h)
@@ -12,14 +14,14 @@ function Widget:init(app, w, h)
     self.background = new('kvio-bundle', app.settings:get_background())
     self.background:load()
 
-    filename = "computer"
+    local filename = "computer"
 
     if pocket then
       filename = "pocket"
     elseif turtle then
       filename = "turtle"
     end
-    
+
     if not self.background:exists(filename) then
       filename = "computer"
     end
@@ -34,7 +36,7 @@ function Widget:init(app, w, h)
       local f = self.background:open(filename, "r")
 
       self.image = agimages.load_string(f:all())
-      
+
       f:close()
     end
   end)
@@ -44,14 +46,14 @@ function Widget:draw(c)
 	c:clear()
 
   if self.background then
-    filename = "computer"
+    local filename = "computer"
 
     if pocket then
       filename = "pocket"
     elseif turtle then
       filename = "turtle"
     end
-    
+
     if not self.background:exists(filename) then
       filename = "computer"
     end

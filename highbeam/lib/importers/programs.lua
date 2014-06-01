@@ -1,4 +1,10 @@
+-- lint-mode: glox-highbeam
+
 -- Program Indexer
+
+local blist = {
+  'startup',
+}
 
 _parent = "hb-importer"
 
@@ -16,18 +22,20 @@ function Importer:import(env)
   local trans = self:transaction()
 
   for _, program in ipairs(shell.programs()) do
-    -- Make sure it's a valid program first.
+    -- Make sure it's a valid and non-blacklisted program first.
 
-    if loadfile(shell.resolveProgram(program)) ~= nil then
+    local file = shell.resolveProgram(program)
+
+    if not blist[program] and loadfile(file) ~= nil then
       local pid = trans:add_object('cos-program://' .. program)
 
       trans:add_metadata(pid, "type", "program")
       trans:add_metadata(pid, "name", program)
-      trans:add_metadata(pid, "location", 'file://localhost/' .. shell.resolveProgram(program))
+      trans:add_metadata(pid, "location", 'file://localhost/' .. file)
 
       -- Extract pretty-ness from the comments on the top of
       -- the file.
-      local f = io.open(shell.resolveProgram(program), "r")
+      local f = io.open(file, "r")
 
       for line in f:lines() do
         if line:match("^-- (@[A-Z].+: .+)$") then
@@ -51,11 +59,11 @@ function Importer:import(env)
 
             self:scan(trans, pid, value)
           elseif name == "Icon" and argument then
-            if not arguement:match("%dx%d") then
+            if not argument:match("%dx%d") then
               argument = argument .. "x" .. argument
             end
 
-            trans:add_metadata("pid", "icon-" .. argument, value)
+            trans:add_metadata(pid, "icon-" .. argument, value)
           end
         else
           break

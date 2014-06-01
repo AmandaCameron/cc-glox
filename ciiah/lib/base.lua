@@ -1,5 +1,7 @@
 -- Base Library for Ciiah, the program launch database.
 
+-- lint-mode: api
+
 os.loadAPI("__LIB__/kidven/kidven")
 
 local Object = {}

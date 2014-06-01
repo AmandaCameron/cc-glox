@@ -1,3 +1,5 @@
+-- lint-mode: kidven
+
 -- Bundle File object for CC
 
 _parent = 'object'
@@ -118,7 +120,7 @@ function Object:open(path, mode)
       table.insert(lines, contents:sub(pos)) -- Haaaack
 
       local file = { name = path, contents = lines, props = {} }
-      
+
       if self.index[path] then
         self.data[self.index[path]] = file
       else
@@ -164,7 +166,7 @@ function Object:exists(path)
 end
 
 function Object:get_prop(path, prop)
-  if self:exists(path) then 
+  if self:exists(path) then
     return self.data[self.index[path]].props[prop]
   end
 end

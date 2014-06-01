@@ -1,3 +1,5 @@
+-- lint-mode: glox-highbeam
+
 -- Database Transaction.
 
 _parent = "object"

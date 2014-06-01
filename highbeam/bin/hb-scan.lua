@@ -18,12 +18,12 @@ db:scan()
 
 if args[1] == "--wait" and db.remote then
   print("Waiting for scan to complete.")
-  
+
   while true do
     local _, cmd, arg = os.pullEvent("hb-ipc")
 
     if cmd == "status" then
-      if state == "idle" then
+      if arg == "idle" then
         print("Done.")
         return
       end

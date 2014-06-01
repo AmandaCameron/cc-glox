@@ -1,9 +1,10 @@
+-- lint-mode: glox
+
 _parent = "agui-widget"
 
 function Widget:init(width, height)
   local width = width or 10
   local height = height or 10
-  local colour = term.isColour()
 
   self.agui_widget:init(1, 1, width, height)
 
@@ -19,7 +20,7 @@ function Widget:init(width, height)
   end
 
   function fakeTerm.isColour()
-    return colour
+    return term.isColour()
   end
 
   self.canvas = canvas.new(fakeTerm, nil, width, height, true)
@@ -35,9 +36,7 @@ function Widget:draw(c, theme)
   self.canvas.width = c.width
   self.canvas.height = c.height
 
-  self.canvas.ctx = c:as_redirect()
-
-  self.canvas:blit(1, 1, nil, nil)
+  self.canvas:blit(1, 1, c.width, c.height, c:as_redirect())
 end
 
 function Widget:resize(w, h)

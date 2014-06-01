@@ -1,3 +1,5 @@
+-- lint-mode: glox
+
 -- Lights up if there's a program using the modem.
 -- Uses Private thread APIs.
 
@@ -5,7 +7,7 @@ _parent = "mb-plugin"
 
 function Plugin:init(app, menubar)
   self.mb_plugin:init("*", app, menubar)
-   
+
   self.mb_plugin.colour_fg = 'glox-menubar-fg'
   self.mb_pluign.colour_bg = 'glox-menubar-bg'
 
@@ -20,7 +22,7 @@ function Plugin:init(app, menubar)
 
   self.menu = new('agui-menu', app)
 
-  app:subscribe("event.glox_ipc", function(_, msg, p1, p2) 
+  app:subscribe("event.glox_ipc", function(_, msg, p1, p2)
     if msg == "modem" then
        if p1 == "open" then
 	  self.num_active[p2] = self.num_active[p2] + 1

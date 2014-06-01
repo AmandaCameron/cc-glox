@@ -26,7 +26,7 @@ layout:reflow()
 
 -- Settings pane, where we set the computer's label
 
-function make_settings()
+local function make_settings()
   local pane = kidven.new('agui-container', 1, 1, 1, 1)
   local layout = kidven.new('agui-layout', pane)
 
@@ -125,7 +125,7 @@ local pos = 1
 local pane = nil
 local verify = nil
 
-function update_gooey()
+local function update_gooey()
   app.main_window:set_title(tutorial[pos].title)
 
   if pane then

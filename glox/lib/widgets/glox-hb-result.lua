@@ -1,7 +1,9 @@
+-- lint-mode: glox
+
 _parent = 'agui-list-item'
 
 function Widget:init(result)
-	self.agui_list_item:init(name)
+	self.agui_list_item:init()
 
 	self.agui_widget.fg = 'glox-highbeam-result--fg'
 	self.agui_widget.bg = 'glox-highbeam-result--bg'

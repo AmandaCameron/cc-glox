@@ -1,3 +1,5 @@
+-- lint-mode: glox-highbeam
+
 -- Environment for indexers and the HB program itself.
 
 _parent = "object"

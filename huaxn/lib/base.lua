@@ -1,5 +1,8 @@
 -- Huaxn Library Basepoint
 
+-- lint-mode: api
+-- lint-ignore-global-get: huaxn
+
 os.loadAPI("__LIB__/huaxn/filesystems/bind")
 
 local mounts = {}
@@ -31,7 +34,7 @@ end
 function mount(path, fs)
   mounts[path] = fs
 
-  os.queueEvent("huaxn-mount", path)
+  os.queueEvent("huaxn-ipc", "mount", path)
 end
 
 function unmount(path)
@@ -43,9 +46,17 @@ function unmount(path)
     end
   end
 
-  os.queueEvent("huaxn-unmount", path)
+  os.queueEvent("huaxn-ipc", "unmount", path)
 
   mounts[path] = nil
+end
+
+function getLabel(path)
+  local best, path = find_best(path)
+
+  if best and mounts[best].drive_label then
+    return mounts[best].drive_label()
+  end
 end
 
 -- FS API
@@ -64,10 +75,18 @@ function open(path, mode)
 
   local orig_close = obj.close
 
-  function obj.close()
-    orig_close()
+  if mode == "w" or mode == "wb" or mode == "a" or mode == "ab" then
+    function obj.close()
+      orig_close()
 
-    os.queueEvent("huaxn-ipc", "file-close", fs.combine(best, path))
+      os.queueEvent('huaxn-ipc', 'file-save', fs.combine(best, path))
+    end
+  else
+    function obj.close()
+      orig_close()
+
+      os.queueEvent("huaxn-ipc", "file-close", fs.combine(best, path))
+    end
   end
 
   return obj
@@ -75,7 +94,7 @@ end
 
 function list(path)
   local best, path = find_best(path)
-  
+
   local entries = mounts[best].list(path:sub(#best + 1))
 
   for m_path, _ in pairs(mounts) do
@@ -90,17 +109,17 @@ end
 
 function exists(path)
   local best, path = find_best(path)
-  
+
   return mounts[best].exists(path:sub(#best + 1))
 end
 
 function delete(path)
   local best, path = find_best(path)
-  
+
   if mounts[best].is_read_only(path:sub(#best + 1)) then
     error("FileSystem is read-only", 2)
   end
-  
+
   if mounts[best].delete then
     mounts[best].delete(path:sub(#best + 1))
   end
@@ -114,19 +133,19 @@ end
 
 function getDrive(path)
   local best, path = find_best(path)
-  
+
   return mounts[best].drive_name(path:sub(#best + 1))
 end
 
 function isDir(path)
   local best, path = find_best(path)
-  
+
   return mounts[best].is_dir(path:sub(#best + 1))
 end
 
 function getSize(path)
   local best, path = find_best(path)
-  
+
   return mounts[best].size(path:sub(#best + 1))
 end
 
@@ -147,7 +166,7 @@ local function do_copy(old, new)
     if not isDir(new) then
       makeDir(new)
     end
-    
+
     for _, file in ipairs(list(old)) do
       do_copy(combine(old, file), combine(new, file))
     end
@@ -156,7 +175,7 @@ local function do_copy(old, new)
     local n = open(new, "w")
 
     n.write(o.readAll())
-    
+
     o.close()
     n.close()
   end
@@ -207,9 +226,9 @@ end
 
 function find(pattern)
   local results = {}
- 
+
   recurse_spec(results, '', pattern)
-  
+
   return results
 end
 

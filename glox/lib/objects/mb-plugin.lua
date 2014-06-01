@@ -1,6 +1,8 @@
+-- lint-mode: glox
+
 _parent = 'object'
 
-function Object:init(text, app, menubar) 
+function Object:init(text, app, menubar)
 	self.app = app
 	self.menubar = menubar
 

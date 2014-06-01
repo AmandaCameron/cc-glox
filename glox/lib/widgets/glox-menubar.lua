@@ -1,3 +1,5 @@
+-- lint-mode: glox
+
 _parent = 'agui-widget'
 
 function Widget:init(app, width, height)
@@ -49,6 +51,7 @@ end
 -- Render Functions
 function Widget:draw_expanded(c)
   local offset = 1
+  local msg = ""
 
   self.plugin_offsets = {}
 

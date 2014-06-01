@@ -1,3 +1,5 @@
+-- lint-mode: api
+
 os.loadAPI("__LIB__/kvio/kvio")
 
 function identify(file)

@@ -1,4 +1,4 @@
--- Shows an entry in the app picker display.
+-- lint-mode: glox
 
 _parent = 'agui-list-item'
 
@@ -19,7 +19,7 @@ function Widget:draw(c)
 
 
   -- TODO: An Icon would be nice.
-  
+
   c:set_fg("red")
   c:set_bg("red")
 

@@ -1,3 +1,5 @@
+-- lint-mode: glox-highbeam
+
 -- Indexer base class.
 
 _parent = "object"

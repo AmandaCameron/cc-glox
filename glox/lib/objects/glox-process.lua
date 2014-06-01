@@ -1,3 +1,5 @@
+-- lint-mode: glox
+
 _parent = "object"
 
 -- Shamelessly stolen from the 'shell' program:
@@ -61,8 +63,8 @@ function Object:init(app, cmdLine, term)
     shell.resolveProgram = app.shell.resolveProgram
     shell.resolve = app.shell.resolve
 
-    local title_stack = {cmd}
-    local program_stack = {cmd}
+    local title_stack = {}
+    local program_stack = {}
 
     function shell.switch()
       -- Do Nothing.

@@ -1,3 +1,5 @@
+-- lint-mode: glox-highbeam
+
 -- HighBeam Connection Shim.
 
 function Object:init()
@@ -9,7 +11,7 @@ function Object:init()
   if not self.database then
     self.database = new('hb-database')
     self.database:load()
-    
+
     self.remote = false
   end
 end

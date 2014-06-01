@@ -1,3 +1,5 @@
+-- lint-mode: kidven
+
 -- TRoR Sink class.
 
 function Object:init(channel, term)

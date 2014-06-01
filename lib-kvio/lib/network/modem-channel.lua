@@ -1,3 +1,5 @@
+-- lint-mode: kidven
+
 -- Channel object for communicating over the modem API.
 
 _parent = 'kvio-channel'
@@ -16,7 +18,7 @@ function Object:init(modem, dest, port)
 end
 
 function Object:subscribe(func)
-  self.modem.pump:subscribe('network.modem.recv', 
+  self.modem.pump:subscribe('network.modem.recv',
   function(_, id, sender, dest, msg, dist)
     if id == self.modem.id then
       if dest == self.port then

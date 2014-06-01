@@ -1,3 +1,5 @@
+-- lint-mode: api
+
 os.loadAPI("__LIB__/kidven/kidven")
 os.loadAPI("__LIB__/kvutils/kvutils")
 

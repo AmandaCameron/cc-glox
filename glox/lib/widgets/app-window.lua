@@ -1,17 +1,19 @@
 -- This has been made to maintain compatability with old code.
 -- It should be nuked from orbit ASAP
 
+-- lint-mode: glox
+
 _parent = 'agui-window'
 
 function Widget:init(app, cmdLine, width, height)
   self.agui_window:init(cmdLine, width, height)
-  
+
   self.screen = new('app-container', app, cmdLine, width, height)
-  
+
   self:add(self.screen)
-  
+
   self.app = app
-  
+
   app:subscribe('gui.window.closed', function(_, id)
     if id == self.agui_widget.id then
       app:close(self.screen.proc, self)
@@ -37,7 +39,7 @@ function Widget:init(app, cmdLine, width, height)
   app:subscribe('gui.window.maximised', function(_, id)
     if id == self.agui_widget.id then
       app:embiggen(self)
-      
+
       self.screen:resize(self.agui_widget.width, self.agui_widget.height)
     end
   end)
