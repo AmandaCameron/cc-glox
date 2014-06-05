@@ -26,9 +26,11 @@ function Object:load()
   if f then
     local data = textutils.unserialize(f.readAll())
 
-    for k, v in pairs(data) do
-      if self.data[k] ~= nil then
-      	self.data[k] = v
+    if data then
+      for k, v in pairs(data) do
+        if self.data[k] ~= nil then
+        	self.data[k] = v
+        end
       end
     end
 

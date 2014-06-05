@@ -31,7 +31,18 @@ function Object:init(disp, shell)
   end
 
   self.agui_app.pool:new(function()
-    self.event_loop:main()
+    os.queueEvent("glox-ipc", "start-up")
+
+    self.event_loop.running = true
+
+    while self.event_loop.running do
+      local evt = { os.pullEventRaw() }
+      local evt_name = table.remove(evt, 1)
+
+      if evt_name then
+        self.event_loop:trigger('event.' .. evt_name, unpack(evt))
+      end
+    end
   end, hooks)
 
   self.minimised = {}
