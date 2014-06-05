@@ -185,7 +185,7 @@ function Plugin:env(env)
   end
 
   function shell.getRunningProgram()
-    return stack[#stack]
+    return cmd_stack[#cmd_stack]
   end
 
   function shell.exit()
@@ -193,11 +193,11 @@ function Plugin:env(env)
   end
 
   function env.os.run(child_env, path, ...)
-    local func = env.loadfile(path)
+    local func, err = env.loadfile(path)
     local args = { ... }
 
     if not func then
-      return false
+      return false, err
     end
 
     setmetatable(child_env, { __index = env })
@@ -206,7 +206,7 @@ function Plugin:env(env)
     local res = self:app().highbeam:get('cos-program://' .. fs.getName(path))
 
     if res and res.meta['name'] then
-       env.multishell.setTitle(1, res.meta['name'])
+      multishell.setTitle(1, res.meta['name'])
     end
 
     local prev_icon = self:proc().icon
@@ -223,7 +223,7 @@ function Plugin:env(env)
 
     self:proc().icon = prev_icon
 
-    return true
+    return ok, err
   end
 
   env.shell = shell

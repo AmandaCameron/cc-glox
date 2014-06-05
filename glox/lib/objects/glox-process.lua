@@ -9,14 +9,14 @@ local lua_apis = {
   'string',
   'math',
   -- Functions.
-  'pairs', 'ipairs', 'unpack',
+  'pairs', 'ipairs', 'unpack', 'next', 'select',
   'error', 'pcall', 'assert',
   'type',
   'getfenv', 'setfenv',
   'getmetatable', 'setmetatable',
   'rawset', 'rawget',
 
-  'loadstring', 'dofile',
+  'loadstring',
   'tonumber', 'tostring',
 
   'sleep',
@@ -67,6 +67,10 @@ function Object:prepare_env()
   self.env.fs = fs
   self.env.http = http
 
+  self.env.rs = rs
+  self.env.redstone = rs
+  self.env.peripheral = peripheral -- TODO: This should probably be sandboxed.
+
   for _, api in ipairs(lua_apis) do
     self.env[api] = _G[api]
   end
@@ -74,12 +78,27 @@ function Object:prepare_env()
   function self.env.loadfile(path)
     local f = huaxn.open(path, "r")
     if f then
-      local func = loadstring(f.readAll(), huaxn.getName(path))
+      local func, err = loadstring(f.readAll(), huaxn.getName(path))
       f.close()
 
-      setfenv(func, self.env)
+      if func then
+        setfenv(func, self.env)
+      end
 
-      return func
+      return func, err
+    end
+
+    return nil, "No such file."
+  end
+
+  function self.env.dofile(path, ...)
+    local func, err = self.env.loadfile(path)
+
+    if func then
+      setfenv(func, getfenv(2))
+      return func()
+    else
+      error(err, 2)
     end
   end
 
