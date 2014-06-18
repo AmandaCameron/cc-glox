@@ -1,6 +1,7 @@
 -- @Name: Glox Settings
 -- @Description: Settings program for Glox.
 -- @Author: Amanda Cameron
+-- @Icon[4x3]: __LIB__/glox/res/icons/glox-settings
 
 -- Settings program for agui-shell
 
@@ -52,7 +53,6 @@ general_settings:add_anchor(background_label, 'left', 'left', -1, 1)
 general_settings:add_anchor(background_label, 'top', 'bottom', -1, -1)
 general_settings:add_anchor(background_label, 'right', 'right', -1, 4)
 
---[[
 -- TODO: Implement a pop-up dialog for this.
 
 local background = kidven.new('agui-button', 1, 1, '=', 3)
@@ -60,27 +60,49 @@ local background = kidven.new('agui-button', 1, 1, '=', 3)
 general_settings:add(background)
 general_settings:add_anchor(background, 'left', 'right', background_label, 1)
 general_settings:add_anchor(background, 'top', 'top', background_label, 0)
-]]--
 
 general_settings:reflow()
 
-local function update_general()
-  local bg_file = kidven.new('kvio-bundle', settings:get_background())
+local function bg_get_label(file)
+  local bg_file = kidven.new('kvio-bundle', file)
   bg_file:load()
 
   local meta = bg_file:open("metadata", "r")
-  background_label.text = 'BG: ' .. fs.getName(settings:get_background())
 
   for line in meta:lines() do
     local name, value = line:match("^([^:]+): (.+)$")
 
     if name == "Name" then
-      background_label.text = 'BG: ' .. value
+      meta:close()
+
+      return value
     end
   end
 
   meta:close()
+
+  return fs.getName(file)
 end
+
+local function update_general()
+  background_label.text = 'BG: ' .. bg_get_label(settings:get_background())
+end
+
+app:subscribe('gui.button.pressed', function(_, id)
+  if id == background.agui_widget.id then
+    local menu = kidven.new('agui-menu', app)
+
+    for _, file in ipairs(fs.list("__LIB__/glox/res/backgrounds")) do
+      menu:add(bg_get_label(file), function()
+        settings:set_background(file)
+
+        menu:hide()
+      end)
+    end
+
+    menu:show(background.agui_widget.x, background.agui_widget.y + 1)
+  end
+end)
 
 -- Plugins!
 
@@ -123,8 +145,7 @@ plugin_settings:add_anchor(plugs_disabled, 'bottom', 'bottom', -1, 0)
 
 plugin_settings:reflow()
 
-app:subscribe('gui.button.pressed',
-function(_, id)
+app:subscribe('gui.button.pressed', function(_, id)
   if id == plug_enable.agui_widget.id then
     settings:enable_plugin('menubar', plugs_disabled:get_current().label)
   elseif id == plug_disable.agui_widget.id then
@@ -161,9 +182,9 @@ local function update_plugins()
 
     for plug, enabl in pairs(plugins) do
       if enabl then
-	      plugs_enabled:add(kidven.new('agui-list-item', plug))
+        plugs_enabled:add(kidven.new('agui-list-item', plug))
       else
-      	plugs_disabled:add(kidven.new('agui-list-item', plug))
+        plugs_disabled:add(kidven.new('agui-list-item', plug))
       end
     end
   end
@@ -216,7 +237,10 @@ local function update_app()
   local favs = settings:get_favourites()
 
   for _, fav in ipairs(favs) do
-    favourites_list:add(kidven.new('glox-hb-result', fav[1], '', fav[2]))
+    local item = kidven.new('agui-list-item', fav[1])
+    item.command = fav[2]
+
+    favourites_list:add(item)
   end
 
   rem_button:set_enabled(#favs > 0)
@@ -224,7 +248,7 @@ end
 
 -- New Favourite pane.
 
-local add_window = kidven.new('agui-window', 'Add Favourite', math.floor(main_window.agui_widget.width / 3 * 2), 8)
+local add_window = app:open_window('Add Favourite', math.floor(main_window.agui_widget.width / 3 * 2), 8)
 
 local prog_label = kidven.new('agui-input', 2, 2, add_window.agui_widget.width - 2)
 
@@ -242,17 +266,15 @@ add_window:add(prog_search)
 add_window:add(prog_ok)
 add_window:add(prog_cancel)
 
-app:subscribe('gui.list.changed',
-function(_, id, num, item)
+app:subscribe('gui.list.changed', function(_, id, num, item)
   if id == favourites_list.agui_widget.id then
-    fav_label.text = item.name
+    fav_label.text = item.text
     fav_command.text = item.command
   end
 end)
 
 
-app:subscribe('gui.button.pressed',
-function(_, id)
+app:subscribe('gui.button.pressed', function(_, id)
   local ok, err = pcall(
   function()
     if id == add_button.agui_widget.id then
@@ -289,7 +311,7 @@ app:subscribe('glox.settings.commit', function(_)
   update_general()
   update_plugins()
   update_app()
- end)
+end)
 
 app:subscribe("gui.input.changed", function(_, id, value)
   if id == enable_plugins.agui_widget.id then
