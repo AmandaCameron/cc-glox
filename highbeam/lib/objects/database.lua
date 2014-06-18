@@ -1,5 +1,7 @@
 -- lint-mode: glox-highbeam
 
+-- lint-ignore-global-get: highbeam
+
 -- HighBeam Database Object.
 
 -- Shamelessly stolen from the 'shell' program:
@@ -38,7 +40,7 @@ function Object:init()
   self.importers = {}
   self.filters = {}
 
-  for _, name in ipairs(fs.list("__LIB__/highbeam/indexers")) do
+  for _, name in ipairs(highbeam.get_indexers()) do
     local indexer = new("hb-indexer-" .. name, self)
     self.indexers[name] = indexer
 
@@ -47,7 +49,7 @@ function Object:init()
     end
   end
 
-  for _, name in ipairs(fs.list("__LIB__/highbeam/importers")) do
+  for _, name in ipairs(highbeam.get_importers()) do
     table.insert(self.importers, new('hb-importer-' .. name, self))
   end
 end
@@ -154,6 +156,8 @@ end
 
 function Object:query(input)
   local matches = {}
+
+  input = input:lower()
 
   local query = tokenise(input)
 
