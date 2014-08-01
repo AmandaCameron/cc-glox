@@ -36,6 +36,10 @@ end
 -- Helpers for scanning common formats.
 
 function Object:scan(trans, id, all)
+  if type(all) ~= "string" then
+    error("Expected trans, id, string", 2)
+  end
+
   for word in all:gmatch("[^\n \t]+") do
     if not banned_words[word:lower()] then
       trans:add_keyword(id, word:lower())

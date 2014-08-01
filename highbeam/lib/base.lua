@@ -37,13 +37,24 @@ for _, file in ipairs(fs.list("__LIB__")) do
   if fs.isDir(file) then
     if fs.isDir(fs.combine(file, "highbeam")) then
       if fs.exists(fs.combine(file, "highbeam/importer")) then
-        kidven.load("Indexer", "hb-importer-" .. fs.getName(file), fs.combine(file, "highbeam/importer"))
-        importers[#importers + 1] = fs.getName(file)
+        local ok, err = pcall(function() kidven.load("Importer", "hb-importer-" .. fs.getName(file), fs.combine(file, "highbeam/importer")) end)
+        
+        if ok then
+          importers[#importers + 1] = fs.getName(file)
+        else
+          printError("Error loading highbeam extension: " .. file .. "\n" .. err)
+        end
       end
 
         if fs.exists(fs.combine(file, "highbeam/indexer")) then
-          kidven.load("Indexer", "hb-indexer-" .. fs.getName(file), fs.combine(file, "highbeam/indexer"))
-          indexers[#indexers + 1] = fs.getName(file)
+          local ok, err = pcall(function()
+            kidven.load("Indexer", "hb-indexer-" .. fs.getName(file), fs.combine(file, "highbeam/indexer"))
+          end)
+          if ok then
+            indexers[#indexers + 1] = fs.getName(file)
+          else
+            printError("Error loading highbeam extension: " .. file .. "\n" .. err)
+          end
         end
     end
   end

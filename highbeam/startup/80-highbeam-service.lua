@@ -29,22 +29,34 @@ function Service:init()
     if cmd == "scan" then
       os.queueEvent("hb-ipc", "status", "scanning")
 
+      local start = os.clock()
+
       self.deun_service.details = "Scanning..."
       self.database:scan(self.env, arg)
       self.deun_service.details = "Ready."
 
       os.queueEvent("hb-ipc", "status", "idle")
+
+      os.queueEvent("hb-ipc", "scan-time", os.clock() - start)
     end
   end)
 
   -- Disk auto-indexing.
 
   self:subscribe('event.disk', function(_, side)
-    self:scan(disk.getMountPath(side))
+    self:scan('disk://' .. disk.getID(side))
   end)
 
   self:subscribe('event.disk_eject', function(_, side)
     self:scan()
+  end)
+
+  -- Huaxn Auto-indexing.
+
+  self:subscribe('event.huaxn-ipc', function(_, cmd, arg)
+    if cmd == 'mount' or cmd == 'unmount' or cmd == 'save-file' then
+      self:scan('file://localhost/' .. arg)
+    end
   end)
 end
 

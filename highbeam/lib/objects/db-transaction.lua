@@ -12,6 +12,10 @@ end
 
 -- Objects!
 
+function Object:plugins(meth, ...)
+  self.db:plugins("trans_" .. meth, self, ...)
+end
+
 function Object:add_object(uri)
   local id = ""
 

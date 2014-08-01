@@ -39,7 +39,7 @@ function Plugin:build_search()
 	self.search_dialog = new('agui-container', self.mb_plugin.menubar.agui_widget.width - 25, 2,
 		26, self.mb_plugin.app.agui_app.main_window.gooey.agui_widget.height - 1)
 
-	local search = new('glox-hb-search', 26, self.mb_plugin.app.agui_app.main_window.gooey.agui_widget.height - 1)
+	local search = new('glox-hb-search', self.mb_plugin.app.highbeam, 26, self.mb_plugin.app.agui_app.main_window.gooey.agui_widget.height - 1)
 
 	if not pocket then
 		search.agui_widget.x = 2

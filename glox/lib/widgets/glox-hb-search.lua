@@ -4,7 +4,7 @@
 
 _parent = 'agui-search'
 
-function Widget:init(...)
+function Widget:init(hb, ...)
   self.agui_search:init(...)
 
   self.agui_search.input_box.agui_widget.fg = 'glox-highbeam-input--fg'
@@ -14,6 +14,7 @@ function Widget:init(...)
   self.agui_search.results.agui_widget.bg = 'glox-highbeam-results--bg'
 
   self.results = {}
+  self.hb = hb
 end
 
 function Widget:clear()
@@ -79,8 +80,15 @@ function Widget:reflow()
   for _, name in ipairs(order) do
     local category = categories[name]
 
+    local data = self.hb:get('hb-type://' .. name)
+    local title = name
+
+    if data then
+      title = data.meta['name']
+    end
+
     if category and #category > 0 then
-      self.agui_search.results:add(new('glox-hb-category', name))
+      self.agui_search.results:add(new('glox-hb-category', name, title))
 
       for _, res in ipairs(category) do
         self.agui_search.results:add(new('glox-hb-result', res))

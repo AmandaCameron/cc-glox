@@ -131,6 +131,15 @@ end
 
 -- Operate on the in-memory data.
 
+
+function Object:plugins(meth, ...)
+  for plugin in ipairs(self.indexers) do
+    if plugin[meth] then
+      plugin[meth](plugin, ...)
+    end
+  end
+end
+
 function Object:transaction()
   return new('hb-db-transaction', self)
 end
@@ -145,8 +154,16 @@ function Object:scan(env)
     idx:clear_data()
   end
 
-  for _, imp in pairs(self.importers) do
-    imp:import(env)
+  for name, imp in pairs(self.importers) do
+    local ok, err = pcall(function()
+      imp:import(env)
+    end)
+
+    if not ok then
+      printError("Error scanning using " .. name .. " -- " .. err)
+
+      sleep(2)
+    end
   end
 
   self:save()
