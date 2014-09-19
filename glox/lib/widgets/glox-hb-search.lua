@@ -88,11 +88,7 @@ function Widget:reflow()
     end
 
     if category and #category > 0 then
-<<<<<<< HEAD
-      self.veek_search.results:add(new('glox-hb-category', name))
-=======
       self.veek_search.results:add(new('glox-hb-category', name, title))
->>>>>>> feature/program-icons
 
       for _, res in ipairs(category) do
         self.veek_search.results:add(new('glox-hb-result', res))

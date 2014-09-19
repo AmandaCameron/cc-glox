@@ -127,7 +127,7 @@ function Plugin:env(env)
   end
 
   function multishell.setIcon(icon)
-    self:proc().icon = agimages.load(icon)
+    self:proc().icon = new('veek-image', new('veek-file', icon):read())
   end
 
   env.multishell = multishell
@@ -212,9 +212,9 @@ function Plugin:env(env)
     local prev_icon = self:proc().icon
 
     if res and res.meta['icon-4x3'] then
-      self:proc().icon = agimages.load(res.meta['icon-4x3'])
+      self:proc().icon = new('veek-image', new('veek-file', res.meta['icon-4x3']):read())
     elseif res then
-      self:proc().icon = agimages.load('__LIB__/glox/res/icons/program')
+      self:proc().icon = new('veek-image', new('veek-file', '__LIB__/glox/res/icons/program'):read())
     end
 
     local ok, err = pcall(function()

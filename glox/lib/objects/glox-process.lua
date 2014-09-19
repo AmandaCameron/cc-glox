@@ -24,7 +24,7 @@ local lua_apis = {
 
 function Object:init(app, cmdLine, term)
   self.app = app
-  self.icon = agimages.load("__LIB__/glox/res/icons/program")
+  self.icon = new('veek-image', new('veek-file', "__LIB__/glox/res/icons/program"):read())
 
   self.plugins = {}
 
