@@ -1,6 +1,4 @@
 -- lint-mode: kidven
-
-
 _parent = "object"
 
 function Object:init(contents)

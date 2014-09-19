@@ -300,7 +300,7 @@ function Widget:clicked(x, y, btn)
 	else
 	  self.app:unembiggen(self.window)
 	end
-      elseif x > self.veek_widget.width - 3 - #self.plugins and x < self.agui_widget.width - 3 then
+      elseif x > self.veek_widget.width - 3 - #self.plugins and x < self.veek_widget.width - 3 then
 	self.plugins[self.veek_widget.width - 2 - x]:clicked(btn)
       end
     elseif self.plugin_offsets[x] then

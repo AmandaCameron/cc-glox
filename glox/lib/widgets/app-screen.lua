@@ -16,7 +16,7 @@ function Widget:init(width, height)
   -- These only get called once, on the canvas' init.
 
   function fakeTerm.getSize()
-    return self.veek_widget.width, self.agui_widget.height
+    return self.veek_widget.width, self.veek_widget.height
   end
 
   function fakeTerm.isColour()

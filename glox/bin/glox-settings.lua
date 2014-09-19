@@ -16,7 +16,7 @@ local main_window = kidven.new('veek-tab-bar', 1, 1, term.getSize())
 -- Functions!
 
 local function new_tab(name)
-  local cont = kidven.new('veek-container', 1, 1, main_window.agui_widget.width, main_window.agui_widget.height - 1)
+  local cont = kidven.new('veek-container', 1, 1, main_window.veek_widget.width, main_window.veek_widget.height - 1)
 
   main_window:add_tab(name, cont)
 
@@ -100,7 +100,7 @@ app:subscribe('gui.button.pressed', function(_, id)
       end)
     end
 
-    menu:show(background.veek_widget.x, background.agui_widget.y + 1)
+    menu:show(background.veek_widget.x, background.veek_widget.y + 1)
   end
 end)
 
@@ -204,8 +204,8 @@ app_settings:add(favourites_list)
 app_settings:add(add_button)
 app_settings:add(rem_button)
 
-local fav_label = kidven.new('veek-label', favourites_list.agui_widget.width + 3, 4, 'Label', 10 - favourites_list.agui_widget.width - 5)
-local fav_command = kidven.new('veek-label', favourites_list.agui_widget.width + 3, 6, 'Command', fav_label.agui_widget.width)
+local fav_label = kidven.new('veek-label', favourites_list.veek_widget.width + 3, 4, 'Label', 10 - favourites_list.veek_widget.width - 5)
+local fav_command = kidven.new('veek-label', favourites_list.veek_widget.width + 3, 6, 'Command', fav_label.veek_widget.width)
 
 app_settings:add(fav_label)
 app_settings:add(fav_command)
@@ -248,9 +248,9 @@ end
 
 -- New Favourite pane.
 
-local add_window = app:open_window('Add Favourite', math.floor(main_window.veek_widget.width / 3 * 2), 8)
+local add_window = app:new_window('Add Favourite', math.floor(main_window.veek_widget.width / 3 * 2), 8)
 
-local prog_label = kidven.new('veek-input', 2, 2, add_window.agui_widget.width - 2)
+local prog_label = kidven.new('veek-input', 2, 2, add_window.veek_widget.width - 2)
 
 app.shell = shell
 
@@ -322,9 +322,9 @@ end)
 app:subscribe('gui.resized', function()
   main_window:resize(term.getSize())
 
-  general_settings.container:resize(main_window.veek_widget.width, main_window.agui_widget.height - 1)
-  plugin_settings.container:resize(main_window.veek_widget.width, main_window.agui_widget.height - 1)
-  app_settings.container:resize(main_window.veek_widget.width, main_window.agui_widget.height - 1)
+  general_settings.container:resize(main_window.veek_widget.width, main_window.veek_widget.height - 1)
+  plugin_settings.container:resize(main_window.veek_widget.width, main_window.veek_widget.height - 1)
+  app_settings.container:resize(main_window.veek_widget.width, main_window.veek_widget.height - 1)
 
   -- Re-flow the panes.
 

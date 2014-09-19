@@ -7,7 +7,7 @@ Dependency: highbeam
 Dependency: ciiah
 Dependency: craftos-shims
 Dependency: deun
-Dependency: agui-images
+Dependency: lib-veek-images
 Executable: glox-settings
 Executable: glox-onboarding
 Library: glox/

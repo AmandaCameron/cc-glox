@@ -23,9 +23,9 @@ function Widget:init(app, cmdLine, width, height)
   app:subscribe('gui.window.resize', function(_, id)
     if id == self.veek_widget.id then
       if self.fullscreen then
-      	self.screen:resize(self.veek_widget.width, self.agui_widget.height)
+      	self.screen:resize(self.veek_widget.width, self.veek_widget.height)
       else
-      	self.screen:resize(self.veek_widget.width - 2, self.agui_widget.height - 2)
+      	self.screen:resize(self.veek_widget.width - 2, self.veek_widget.height - 2)
       end
     end
   end)
@@ -40,7 +40,7 @@ function Widget:init(app, cmdLine, width, height)
     if id == self.veek_widget.id then
       app:embiggen(self)
 
-      self.screen:resize(self.veek_widget.width, self.agui_widget.height)
+      self.screen:resize(self.veek_widget.width, self.veek_widget.height)
     end
   end)
 

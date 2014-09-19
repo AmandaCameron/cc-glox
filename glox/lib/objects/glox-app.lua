@@ -129,13 +129,13 @@ function Object:init(disp, shell)
 
   self.menu = new('glox-menubar',
     self,
-    self.veek_app.main_window.gooey.agui_widget.width,
-    self.veek_app.main_window.gooey.agui_widget.height)
+    self.veek_app.main_window.gooey.veek_widget.width,
+    self.veek_app.main_window.gooey.veek_widget.height)
 
   self.desktop = new('glox-desktop',
     self,
-    self.veek_app.main_window.gooey.agui_widget.width,
-    self.veek_app.main_window.gooey.agui_widget.height - 1)
+    self.veek_app.main_window.gooey.veek_widget.width,
+    self.veek_app.main_window.gooey.veek_widget.height - 1)
 
   self.settings:load()
 
@@ -203,8 +203,8 @@ function Object:open(uri, mime)
   else
     local window = new('veek-window', "Error", 20, 5)
 
-    window.veek_widget.x = math.floor(self.desktop.agui_widget.width / 2 - 10)
-    window.veek_widget.y = math.floor(self.desktop.agui_widget.height / 2 - 2)
+    window.veek_widget.x = math.floor(self.desktop.veek_widget.width / 2 - 10)
+    window.veek_widget.y = math.floor(self.desktop.veek_widget.height / 2 - 2)
 
     local label = new('veek-label', 2, 2, "No application to handle " .. uri, 18)
 
@@ -398,13 +398,13 @@ function Object:embiggen(window)
   window:add_flag('maximised')
 
   -- Store the previous domensions & location.
-  window.prev_x, window.prev_y = window.veek_widget.x, window.agui_widget.y
+  window.prev_x, window.prev_y = window.veek_widget.x, window.veek_widget.y
   window.prev_w = window.veek_widget.width
   window.prev_h = window.veek_widget.height
 
   self.window = window
   self.window.fullscreen = true
-  self.window:resize(self.desktop.veek_widget.width, self.desktop.agui_widget.height)
+  self.window:resize(self.desktop.veek_widget.width, self.desktop.veek_widget.height)
   self.window:move(1, 2)
 end
 
@@ -429,7 +429,7 @@ function Object:restore(window)
   self.minimised = {}
 
   for _, win in ipairs(old) do
-    if win.veek_widget.id ~= window.agui_widget.id then
+    if win.veek_widget.id ~= window.veek_widget.id then
       table.insert(self.minimised, win)
     end
   end
@@ -450,7 +450,7 @@ function Object:close(process, window)
 
   -- Handle sub-window case.
   if self.window_procs[window.veek_widget.id] then
-    self.window_procs[window.veek_widget.id]:queue_event('window_close', 'glox-' .. window.agui_widget.id)
+    self.window_procs[window.veek_widget.id]:queue_event('window_close', 'glox-' .. window.veek_widget.id)
 
     return
   end

@@ -1,9 +1,12 @@
 -- lint-mode: api
 
-os.loadAPI("__LIB__/veek/agui")
-os.loadAPI("__LIB__/veek-images/agimages")
+os.loadAPI("__LIB__/veek/veek")
+
 os.loadAPI("__LIB__/kvutils/kvutils")
 os.loadAPI("__LIB__/ciiah/ciiah")
+
+veek.load_api("__LIB__/veek/gui")
+veek.load_api("__LIB__/veek/images")
 
 for _, fname in ipairs(fs.list("__LIB__/glox/widgets/")) do
   kidven.load("Widget", fname, "__LIB__/glox/widgets/" .. fname)

@@ -36,17 +36,17 @@ function Plugin:search()
 end
 
 function Plugin:build_search()
-	self.search_dialog = new('veek-container', self.mb_plugin.menubar.agui_widget.width - 25, 2,
-		26, self.mb_plugin.app.veek_app.main_window.gooey.agui_widget.height - 1)
+	self.search_dialog = new('veek-container', self.mb_plugin.menubar.veek_widget.width - 25, 2,
+		26, self.mb_plugin.app.veek_app.main_window.gooey.veek_widget.height - 1)
 
-	local search = new('glox-hb-search', 26, self.mb_plugin.app.veek_app.main_window.gooey.agui_widget.height - 1)
+	local search = new('glox-hb-search', 26, self.mb_plugin.app.veek_app.main_window.gooey.veek_widget.height - 1)
 
 	if not pocket then
 		search.veek_widget.x = 2
 
-		self.search_dialog.veek_widget.x = self.mb_plugin.menubar.agui_widget.width - 26
+		self.search_dialog.veek_widget.x = self.mb_plugin.menubar.veek_widget.width - 26
 		self.search_dialog.veek_widget.width = 27
-		self.search_dialog:add(new('veek-virt-seperator', 1, 1, self.search_dialog.agui_widget.height))
+		self.search_dialog:add(new('veek-virt-seperator', 1, 1, self.search_dialog.veek_widget.height))
 	end
 
 	self.mb_plugin.app:subscribe('gui.search.selected', function(_, id, selection)

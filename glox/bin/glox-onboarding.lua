@@ -1,6 +1,6 @@
 -- Tips program for Glox
 
-if not os.loadAPI("__LIB__/veek/agui") then
+if not os.loadAPI("__LIB__/veek/veek") then
   printError("Couldn't load lib-veek")
   return
 end

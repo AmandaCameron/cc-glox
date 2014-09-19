@@ -17,11 +17,11 @@ function Widget:init(app, w, h)
 		if idx then
 			self.ready_go = true
 
-			self.veek_search.results:add(new('agui-list-item', 'Launch ' .. value:sub(1, idx)))
+			self.veek_search.results:add(new('veek-list-item', 'Launch ' .. value:sub(1, idx)))
 		else
 			for _, prog in ipairs(self.app.shell.programs()) do
 				if prog:match(value) then
-					self.veek_search.results:add(new('agui-list-item', prog))
+					self.veek_search.results:add(new('veek-list-item', prog))
 				end
 			end
 		end

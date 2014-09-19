@@ -7,11 +7,11 @@ _parent = 'veek-search'
 function Widget:init(...)
   self.veek_search:init(...)
 
-  self.veek_search.input_box.agui_widget.fg = 'glox-highbeam-input--fg'
-  self.veek_search.input_box.agui_widget.bg = 'glox-highbeam-input--bg'
+  self.veek_search.input_box.veek_widget.fg = 'glox-highbeam-input--fg'
+  self.veek_search.input_box.veek_widget.bg = 'glox-highbeam-input--bg'
 
-  self.veek_search.results.agui_widget.fg = 'glox-highbeam-results--fg'
-  self.veek_search.results.agui_widget.bg = 'glox-highbeam-results--bg'
+  self.veek_search.results.veek_widget.fg = 'glox-highbeam-results--fg'
+  self.veek_search.results.veek_widget.bg = 'glox-highbeam-results--bg'
 
   self.results = {}
 end
