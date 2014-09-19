@@ -37,6 +37,10 @@ function new(base)
     error("Invalid Operation", 3)
   end
 
+  function vfs.drive_label()
+    return base
+  end
+
   function vfs.list(path)
     return {}
   end

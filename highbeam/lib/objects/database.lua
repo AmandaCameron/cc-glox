@@ -154,13 +154,13 @@ function Object:scan(env)
     idx:clear_data()
   end
 
-  for name, imp in pairs(self.importers) do
+  for i, imp in pairs(self.importers) do
     local ok, err = pcall(function()
       imp:import(env)
     end)
 
     if not ok then
-      printError("Error scanning using " .. name .. " -- " .. err)
+      printError("Error scanning using " .. highbeam.get_importers()[i] .. " -- " .. err)
 
       sleep(2)
     end

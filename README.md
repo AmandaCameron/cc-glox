@@ -1,4 +1,7 @@
-/Glox/ is a CraftOS Graphical Shell and series of libraries for ComputerCraft that enables a richer UX. It is formerly known as agui-shell with it's dependencies and newer stuff ripped out of my personal repo into a repo of it's own.
+/Glox/ is a CraftOS Graphical Shell and series of libraries for ComputerCraft that enables a richer UX. It is formerly known as agui-shell with it's
+dependencies and newer stuff ripped out of my personal repo into a repo of it's own, with the intention of external contributers. It is built on top of
+[Project Veek](http://www.computercraft.info/forums2/index.php?/topic/17640-). And distributed using 
+[ac-get](http://www.computercraft.info/forums2/index.php?/topic/13821-).
 
 You can install glox with: 
 	> ac-get run-manifest https://raw.github.com/AmandaCameron/cc-glox/master/install.manifest

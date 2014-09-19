@@ -2,3 +2,5 @@ Description: My implementation of a default program manager.
 Config: file-handlers/
 Library: ciiah/
 Library: base => ciiah/ciiah
+Library: ciiah/highbeam/
+Library: highbeam-importer => ciiah/highbeam/importer
