@@ -91,7 +91,7 @@ function Widget:reflow()
 <<<<<<< HEAD
       self.veek_search.results:add(new('glox-hb-category', name))
 =======
-      self.agui_search.results:add(new('glox-hb-category', name, title))
+      self.veek_search.results:add(new('glox-hb-category', name, title))
 >>>>>>> feature/program-icons
 
       for _, res in ipairs(category) do

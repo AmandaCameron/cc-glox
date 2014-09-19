@@ -111,7 +111,7 @@ function Plugin:env(env)
       return
     end
 
-    self:proc().windows[1].agui_window.title = title
+    self:proc().windows[1].veek_window.title = title
   end
 
   function multishell.getCurrent()
@@ -119,7 +119,7 @@ function Plugin:env(env)
   end
 
   function multishell.getTitle()
-    return self:proc().windows[1].agui_window.title
+    return self:proc().windows[1].veek_window.title
   end
 
   function multishell.getCount()
