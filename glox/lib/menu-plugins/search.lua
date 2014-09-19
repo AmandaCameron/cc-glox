@@ -1,4 +1,4 @@
--- lint-mode: glox
+-- lint-mode: glox-plugin
 
 _parent = 'mb-plugin'
 

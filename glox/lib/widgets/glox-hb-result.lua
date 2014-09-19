@@ -1,4 +1,4 @@
--- lint-mode: glox
+-- lint-mode: glox-widget
 
 _parent = 'veek-list-item'
 

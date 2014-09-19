@@ -1,153 +1,50 @@
--- lint-mode: glox
+-- lint-mode: glox-object
 
 _parent = "object"
 
--- Shamelessly stolen from the 'shell' program:
+local lua_apis = {
+  -- APIs.
+  'coroutine',
+  'table',
+  'string',
+  'math',
+  -- Functions.
+  'pairs', 'ipairs', 'unpack', 'next', 'select',
+  'error', 'pcall', 'assert',
+  'type',
+  'getfenv', 'setfenv',
+  'getmetatable', 'setmetatable',
+  'rawset', 'rawget',
 
-local function tokenise( ... )
-  local sLine = table.concat( { ... }, " " )
-  local tWords = {}
-  local bQuoted = false
-  for match in string.gmatch( sLine .. "\"", "(.-)\"" ) do
-    if bQuoted then
-      table.insert( tWords, match )
-    else
-      for m in string.gmatch( match, "[^ \t]+" ) do
-	table.insert( tWords, m )
-      end
-    end
-    bQuoted = not bQuoted
-  end
-  return tWords
-end
+  'loadstring',
+  'tonumber', 'tostring',
 
-
+  'sleep',
+}
 
 function Object:init(app, cmdLine, term)
   self.app = app
-  self.icon = "__LIB__/glox/res/icons/program"
+  self.icon = agimages.load("__LIB__/glox/res/icons/program")
+
+  self.plugins = {}
+
+  self.env = {
+    term = {
+      native = function() return term end,
+    },
+  }
+  -- TODO: Should these be reloadable seperate?
+  for _, plug in ipairs(glox.get_plugins("process")) do
+    table.insert(self.plugins, new('glox-process-plugin-' .. plug, app, self))
+  end
+
+  self.cmdLine = cmdLine
+
+  self:prepare_env()
 
   self.id = app.pool:new(function()
-    local multishell = {}
-    local shell = {}
-
-    -- Replicate the multishell API.
-
-    function multishell.launch(env, ...)
-      app:launch(table.concat({...}, " "))
-    end
-
-    function multishell.setTitle(proc, title)
-      self.windows[1].veek_window.title = title
-    end
-
-    function multishell.getCurrent()
-      return 1
-    end
-
-    function multishell.getTitle()
-      return self.windows[1].veek_window.title
-    end
-
-    function multishell.getCount()
-      return 1
-    end
-
-    -- Replicate the shell API.
-
-    shell.setPath = app.shell.setPath
-    shell.path = app.shell.path
-    shell.setAlias = app.shell.setAlias
-    shell.clearAlias = app.shell.clearAlias
-    shell.aliases = app.shell.aliases
-    shell.programs = app.shell.programs
-    shell.resolveProgram = app.shell.resolveProgram
-    shell.resolve = app.shell.resolve
-
-    local title_stack = {}
-    local program_stack = {}
-
-    function shell.switch()
-      -- Do Nothing.
-    end
-
-    function shell.launch(cmdLine)
-      app:launch(cmdLine)
-    end
-
-    function shell.run(cmdLine)
-      local args = tokenise(cmdLine)
-
-      local cmd = table.remove(args, 1)
-
-      local res = app.highbeam:get("cos-program://" .. fs.getName(cmd))
-
-      if res and res.meta['name'] then
-        self.icon = res.meta['icon']
-
-        table.insert(title_stack, res.meta['name'])
-
-        multishell.setTitle(1, res.meta['name'])
-      else
-        self.icon = "__LIB__/glox/res/icons/program"
-
-        table.insert(title_stack, cmd)
-
-        multishell.setTitle(1, cmd)
-      end
-
-      table.insert(program_stack, cmd)
-
-      local prog = app.shell.resolveProgram(cmd)
-      local result = false
-
-      local fs = fs
-
-      if prog then
-        result = os.run({
-          shell = shell,
-	        multishell = multishell,
-          fs = huaxn,
-        }, prog, unpack(args));
-      else
-      	printError("No such program.")
-      end
-
-      if #program_stack > 1 then
-        table.remove(title_stack, #title_stack)
-      	table.remove(program_stack, #program_stack)
-
-      	multishell.setTitle(1, title_stack[#title_stack])
-      else
-      	multishell.setTitle(1, "Process Done.")
-      end
-
-
-      return result
-    end
-
-
-    function shell.getRunningProgram()
-      return program_stack[#program_stack][1]
-    end
-
-    function shell.exit()
-      -- TODO.
-    end
-
-    local dir = ''
-
-    function shell.setDir(new)
-      dir = new
-    end
-
-    function shell.dir()
-      return dir
-    end
-
-    local ok, err = pcall(
-    function()
-      shell.run(cmdLine)
+    local ok, err = pcall(function()
+      self.env.shell.run(cmdLine)
     end)
 
     if not ok then
@@ -157,15 +54,67 @@ function Object:init(app, cmdLine, term)
     end
   end, self, { terminal = term, has_queue = true })
 
-  self.cmdLine = cmdLine
-
   self.windows = {}
+end
+
+function Object:prepare_env()
+  self.env._G = self.env
+
+  self.env.huaxn = huaxn
+  self.env.deun = deun
+
+  self.env.fs = fs
+  self.env.http = http
+
+  self.env.rs = rs
+  self.env.redstone = rs
+  self.env.peripheral = peripheral -- TODO: This should probably be sandboxed.
+
+  for _, api in ipairs(lua_apis) do
+    self.env[api] = _G[api]
+  end
+
+  function self.env.loadfile(path)
+    local f = huaxn.open(path, "r")
+    if f then
+      local func, err = loadstring(f.readAll(), huaxn.getName(path))
+      f.close()
+
+      if func then
+        setfenv(func, self.env)
+      end
+
+      return func, err
+    end
+
+    return nil, "No such file."
+  end
+
+  function self.env.dofile(path, ...)
+    local func, err = self.env.loadfile(path)
+
+    if func then
+      setfenv(func, getfenv(2))
+      return func()
+    else
+      error(err, 2)
+    end
+  end
+
+  -- Install plugin-specified APIs.
+  for _, plugin in ipairs(self.plugins) do
+    plugin:env(self.env)
+  end
 end
 
 -- thread-pool hooks.
 
 function Object:started()
   self.running = true
+
+  for _, plugin in ipairs(self.plugins) do
+    plugin:started()
+  end
 end
 
 function Object:die()
@@ -177,9 +126,17 @@ function Object:die()
   end
 
   self.running = false
+
+  for _, plugin in ipairs(self.plugins) do
+    plugin:stopped()
+  end
 end
 
 function Object:yield()
+  for _, plugin in ipairs(self.plugins) do
+    plugin:paused()
+  end
+
   self.app:draw()
 end
 

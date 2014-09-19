@@ -1,4 +1,4 @@
--- lint-mode: glox
+-- lint-mode: glox-object
 
 -- A Re-iomplementation of lib-thread's thread pool with
 -- additional stuff bolted on.

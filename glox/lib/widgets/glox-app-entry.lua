@@ -1,4 +1,4 @@
--- lint-mode: glox
+-- lint-mode: glox-widget
 
 _parent = 'veek-list-item'
 
@@ -9,30 +9,21 @@ function Widget:init(name, cmd)
 
   self.name = name
   self.command = cmd
+  self.icon = icon
 end
 
 function Widget:draw(c)
-  c:set_fg("black")
-  c:set_bg("white")
+  local icon = c:sub(2, 2, 3, 4)
 
-  c:clear()
+  if self.icon then
+    self.icon:render(icon, 'red')
+  end
 
-
-  -- TODO: An Icon would be nice.
-
-  c:set_fg("red")
-  c:set_bg("red")
-
-  c:move(1, 1)
-  c:write("   ")
-  c:move(1, 2)
-  c:write("   ")
-  c:move(1, 3)
-  c:write("   ")
-
-  c:set_fg("black")
-  c:set_bg("white")
-
-  c:move(4, 1)
+  c:set_fg('black')
+  c:move(7, 2)
   c:write(self.name)
+
+  c:set_fg('lightGrey')
+  c:move(7, 4)
+  c:write(self.command)
 end

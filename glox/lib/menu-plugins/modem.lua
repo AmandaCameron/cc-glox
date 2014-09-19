@@ -1,4 +1,4 @@
--- lint-mode: glox
+-- lint-mode: glox-plugin
 
 -- Lights up if there's a program using the modem.
 -- Uses Private thread APIs.

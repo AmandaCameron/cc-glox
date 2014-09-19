@@ -20,6 +20,7 @@ Library: objects/glox-pool => glox/objects/glox-pool
 Library: objects/glox-process => glox/objects/glox-process
 Library: objects/mb-plugin => glox/objects/mb-plugin
 Library: objects/glox-settings => glox/objects/glox-settings
+Library: objects/glox-process-plugin => glox/objects/glox-process-plugin
 Library: glox/widgets/
 Library: widgets/glox-desktop => glox/widgets/glox-desktop
 Library: widgets/app-window => glox/widgets/app-window
@@ -35,8 +36,13 @@ Library: glox/menu-plugins/
 Library: menu-plugins/search => glox/menu-plugins/search
 Library: menu-plugins/free-disk => glox/menu-plugins/free-disk
 Library: menu-plugins/highbeam-status => glox/menu-plugins/highbeam-status
+Library: glox/process-plugins/
+Library: process-plugins/craftos-base => glox/process-plugins/craftos-base
 Library: glox/res/
 Library: glox/res/backgrounds/
 Library: res/backgrounds/cats.background => glox/res/backgrounds/cats.background
+Library: glox/res/icons/
+Library: res/icons/program => glox/res/icons/program
+Library: res/icons/glox-settings => glox/res/icons/glox-settings
 Startup: 90-glox-service
 Docs: glox

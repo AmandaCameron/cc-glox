@@ -1,4 +1,4 @@
--- lint-mode: glox
+-- lint-mode: glox-widget
 
 _parent = 'veek-widget'
 
@@ -28,7 +28,7 @@ function Widget:init(app, width, height)
 
     if self.app.settings:get_plugins_enabled() then
       for _, plug in ipairs(self.app.settings:get_plugins('menubar')) do
-        table.insert(self.plugins, new('mb-plugin-' .. plug, app, self))
+        table.insert(self.plugins, new('glox-menubar-plugin-' .. plug, app, self))
       end
     end
   end)
@@ -125,11 +125,11 @@ function Widget:draw_expanded(c)
 
     offset = offset + 1
 
-    c:set_fg('glox-drawer-minimised-fg')
-    c:set_bg('glox-drawer-minimised-bg')
-
     for i, win in ipairs(self.app.minimised) do
-      c:move(1, offset)
+      c:set_fg('glox-drawer-minimised-fg')
+      c:set_bg('glox-drawer-minimised-bg')
+
+      c:move(5, offset)
 
       if i == self.min_selected then
         c:write('> ')
@@ -140,7 +140,13 @@ function Widget:draw_expanded(c)
       c:write(win:cast('veek-window').title)
       c:write(string.rep(' ', c.width - c.x))
 
-      offset = offset + 1
+      local icon = c:sub(1, offset, 4, 3)
+
+      if win.screen.proc.icon then
+        win.screen.proc.icon:render(icon, 'glox-drawer-minimised-bg')
+      end
+
+      offset = offset + 3
     end
   else
     self.minimised_offset = -1
@@ -231,6 +237,10 @@ function Widget:set_embiggened(window)
 end
 
 function Widget:show_menu()
+  if self.launcher_menu.visible then
+    return
+  end
+
   self.launcher_menu:clear()
 
   for _, fav in ipairs(self.app.settings:get_favourites()) do
@@ -269,8 +279,8 @@ end
 -- Widget hooks.
 
 function Widget:draw(c, theme)
-  c:move(1, 1)
   c:clear()
+  c:move(1, 1)
 
   if self:is_expanded() then
     self:draw_expanded(c)
@@ -285,8 +295,10 @@ function Widget:clicked(x, y, btn)
     if self.plugin_offsets[y] then
       self.plugin_offsets:clicked(btn)
     elseif self.minimised_offset > 0 and y > self.minimised_offset then
-      if self.app.minimised[y - self.minimised_offset] then
-	     self.app:restore(self.app.minimised[y - self.minimised_offset])
+      local offs = math.ceil((y - self.minimised_offset) / 3)
+
+      if self.app.minimised[offs] then
+	     self.app:restore(self.app.minimised[offs])
       end
     end
   else
@@ -294,14 +306,14 @@ function Widget:clicked(x, y, btn)
       self:show_menu()
     elseif self.window then
       if x == self.veek_widget.width - 1 then
-	-- Acts as a close button when on Pocket
-	if pocket then
-	  self.app:close(self.window.screen.proc, self.window)
-	else
-	  self.app:unembiggen(self.window)
-	end
-      elseif x > self.veek_widget.width - 3 - #self.plugins and x < self.veek_widget.width - 3 then
-	self.plugins[self.veek_widget.width - 2 - x]:clicked(btn)
+    	-- Acts as a close button when on Pocket
+    	if pocket then
+    	  self.app:close(self.window.screen.proc, self.window)
+    	else
+    	  self.app:unembiggen(self.window)
+    	end
+          elseif x > self.veek_widget.width - 3 - #self.plugins and x < self.veek_widget.width - 3 then
+    	self.plugins[self.veek_widget.width - 2 - x]:clicked(btn)
       end
     elseif self.plugin_offsets[x] then
       self.plugin_offsets[x]:clicked(btn)

@@ -11,6 +11,9 @@ end
 function Importer:import(env)
   local trans = self:transaction()
 
+  local t = trans:add_object("hb-type://help-page")
+  trans:add_metadata(t, 'name', 'Help Pages')
+
   for _, topic in ipairs(help.topics()) do
     local tid = trans:add_object("help://" .. topic)
 
@@ -18,6 +21,7 @@ function Importer:import(env)
 
     trans:add_metadata(tid, "name", topic)
 
+    self:scan(trans, tid, topic)
     self:scan_file(trans, tid, help.lookup(topic))
     sleep(0.05)
   end

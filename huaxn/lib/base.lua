@@ -95,6 +95,10 @@ end
 function list(path)
   local best, path = find_best(path)
 
+  if not isDir(path) then
+    error("Not a directory.", 2)
+  end
+
   local entries = mounts[best].list(path:sub(#best + 1))
 
   for m_path, _ in pairs(mounts) do

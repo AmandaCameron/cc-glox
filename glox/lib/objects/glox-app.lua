@@ -1,4 +1,4 @@
--- lint-mode: glox
+-- lint-mode: glox-object
 
 _parent = "veek-app"
 
@@ -31,7 +31,18 @@ function Object:init(disp, shell)
   end
 
   self.veek_app.pool:new(function()
-    self.event_loop:main()
+    os.queueEvent("glox-ipc", "start-up")
+
+    self.event_loop.running = true
+
+    while self.event_loop.running do
+      local evt = { os.pullEventRaw() }
+      local evt_name = table.remove(evt, 1)
+
+      if evt_name then
+        self.event_loop:trigger('event.' .. evt_name, unpack(evt))
+      end
+    end
   end, hooks)
 
   self.minimised = {}
@@ -195,7 +206,24 @@ function Object:open(uri, mime)
     self.picker_list:clear()
 
     for _, program in ipairs(programs) do
-      self.picker_list:add(new('glox-app-entry', program.name, program.command))
+      local icon
+
+      local pos = program.command:find(" ")
+
+      if not pos then
+        pos = -1
+      end
+
+      local res = self.highbeam:get("cos-program://" .. program.command:sub(1, pos))
+
+      if res.meta['icon-4x3'] then
+        icon = agimages.load(res.meta['icon-4x3'])
+      else
+        icon = agimages.load("__LIB__/glox/res/icons/program")
+      end
+
+      self.picker_list:add(new('glox-app-entry',
+        program.name, program.command, icon))
     end
 
     self:add(self.picker_window)
@@ -228,7 +256,7 @@ function Object:open(uri, mime)
         self:remove(window)
 
         self:unsubscribe('gui.window.closed', close_evt_id)
-        self:unsubscribe('gui.button.pressed', ok_evt_id)
+        self:unsubscribe('gui.button.pressed', btn_evt_id)
       end
     end)
 

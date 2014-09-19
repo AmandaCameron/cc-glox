@@ -103,6 +103,12 @@ end
 function Importer:import(env)
   local trans = self:transaction()
 
+  local t = trans:add_object('hb-type://file')
+  trans:add_metadata(t, 'name', 'Files')
+
+  t = trans:add_object('hb-type://image')
+  trans:add_metadata(t, 'name', 'Images')
+
   self:scan_fs(trans, "")
 
   trans:commit()

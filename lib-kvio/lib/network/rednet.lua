@@ -46,8 +46,8 @@ function Object:subscribe(cback, proto)
     if id == self.modem.id then
       if dest == self.bcast_id or dest == self.id
       or (msg.nRecipient and msg.nRecipient == self.id) then
-	if msg.sProtocol == proto then
-	  cback(sender, msg.message)
+	if not proto or msg.sProtocol == proto then
+	  cback(sender, msg.message, proto)
 	end
       end
     end

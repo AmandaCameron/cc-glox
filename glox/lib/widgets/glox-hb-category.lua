@@ -1,4 +1,4 @@
--- lint-mode: glox
+-- lint-mode: glox-widget
 
 _parent = "veek-list-item"
 
@@ -21,14 +21,7 @@ function Widget:init(name)
   self.veek_widget.bg = 'glox-highbeam-category--bg'
 
   self.type = name
-
-  if types[self.type] then
-    self.title = types[self.type]
-  else
-    self.title = self.type
-  end
-
-
+  self.title = title
 
   self.veek_widget.height = 2
 end

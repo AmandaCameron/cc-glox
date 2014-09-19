@@ -21,6 +21,10 @@ function Importer:import(env)
 
   local trans = self:transaction()
 
+  local type = trans:add_object('hb-type://program')
+  trans:add_metadata(type, 'name', 'Programs')
+  trans:add_metadata(type, 'order', 100)
+
   for _, program in ipairs(shell.programs()) do
     -- Make sure it's a valid and non-blacklisted program first.
 
@@ -64,6 +68,8 @@ function Importer:import(env)
             end
 
             trans:add_metadata(pid, "icon-" .. argument, value)
+          else
+            trans:plugins("program_meta", pid, name, argument, value)
           end
         else
           break
