@@ -1,11 +1,11 @@
 -- lint-mode: glox
 
-_parent = 'agui-list-item'
+_parent = 'veek-list-item'
 
 function Widget:init(name, cmd)
-  self.agui_list_item:init()
+  self.veek_list_item:init()
 
-  self.agui_widget.height = 3
+  self.veek_widget.height = 3
 
   self.name = name
   self.command = cmd

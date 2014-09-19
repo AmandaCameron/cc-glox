@@ -1,7 +1,7 @@
 -- lint-mode: api
 
-os.loadAPI("__LIB__/agui/agui")
-os.loadAPI("__LIB__/agui-images/agimages")
+os.loadAPI("__LIB__/veek/agui")
+os.loadAPI("__LIB__/veek-images/agimages")
 os.loadAPI("__LIB__/kvutils/kvutils")
 os.loadAPI("__LIB__/ciiah/ciiah")
 

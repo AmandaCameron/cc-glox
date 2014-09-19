@@ -1,4 +1,4 @@
--- This is a theme file for the agui UI toolkit.
+-- This is a theme file for the veek UI toolkit.
 
 {
   colours = {

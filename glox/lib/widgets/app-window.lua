@@ -3,10 +3,10 @@
 
 -- lint-mode: glox
 
-_parent = 'agui-window'
+_parent = 'veek-window'
 
 function Widget:init(app, cmdLine, width, height)
-  self.agui_window:init(cmdLine, width, height)
+  self.veek_window:init(cmdLine, width, height)
 
   self.screen = new('app-container', app, cmdLine, width, height)
 
@@ -15,32 +15,32 @@ function Widget:init(app, cmdLine, width, height)
   self.app = app
 
   app:subscribe('gui.window.closed', function(_, id)
-    if id == self.agui_widget.id then
+    if id == self.veek_widget.id then
       app:close(self.screen.proc, self)
     end
   end)
 
   app:subscribe('gui.window.resize', function(_, id)
-    if id == self.agui_widget.id then
+    if id == self.veek_widget.id then
       if self.fullscreen then
-      	self.screen:resize(self.agui_widget.width, self.agui_widget.height)
+      	self.screen:resize(self.veek_widget.width, self.agui_widget.height)
       else
-      	self.screen:resize(self.agui_widget.width - 2, self.agui_widget.height - 2)
+      	self.screen:resize(self.veek_widget.width - 2, self.agui_widget.height - 2)
       end
     end
   end)
 
   app:subscribe('gui.window.minimised', function(_, id)
-    if id == self.agui_widget.id then
+    if id == self.veek_widget.id then
       app:minimise(self)
     end
   end)
 
   app:subscribe('gui.window.maximised', function(_, id)
-    if id == self.agui_widget.id then
+    if id == self.veek_widget.id then
       app:embiggen(self)
 
-      self.screen:resize(self.agui_widget.width, self.agui_widget.height)
+      self.screen:resize(self.veek_widget.width, self.agui_widget.height)
     end
   end)
 
@@ -51,7 +51,7 @@ function Widget:draw(canvas)
   if self.fullscreen then
     self.screen:draw(canvas)
   else
-    self.agui_window:draw(canvas)
+    self.veek_window:draw(canvas)
   end
 end
 
@@ -59,27 +59,27 @@ end
 
 function Widget:key(key)
   if self.fullscreen then
-    return self.agui_container:key(key)
+    return self.veek_container:key(key)
   end
 
-  return self.agui_window:key(key)
+  return self.veek_window:key(key)
 end
 
 -- Focused flag
 
 function Widget:focus()
-  self.agui_container:focus()
-  self.agui_widget:focus()
+  self.veek_container:focus()
+  self.veek_widget:focus()
 
   self:add_flag('focused')
 end
 
 function Widget:blur()
-  self.agui_container:blur()
-  self.agui_widget:blur()
+  self.veek_container:blur()
+  self.veek_widget:blur()
 
-  if self.agui_window.flags.modal then
-    local n_w = self.app.agui_app.main_window.gooey:get_focus()
+  if self.veek_window.flags.modal then
+    local n_w = self.app.veek_app.main_window.gooey:get_focus()
 
     if n_w.screen and n_w.screen.proc.id == self.screen.proc.id then
       self.app:select(self)
@@ -95,7 +95,7 @@ function Widget:clicked(x, y, btn)
   if self.fullscreen then
     self.screen:clicked(x, y, btn)
   else
-    self.agui_window:clicked(x, y, btn)
+    self.veek_window:clicked(x, y, btn)
   end
 end
 
@@ -103,7 +103,7 @@ function Widget:dragged(x, y, btn)
   if self.fullscreen then
     self.screen:dragged(x, y, btn)
   else
-    self.agui_window:dragged(x, y, btn)
+    self.veek_window:dragged(x, y, btn)
   end
 end
 
@@ -112,29 +112,29 @@ end
 function Widget:add_flag(flag)
   local id = 'main-window'
 
-  if self.app.window_procs[self.agui_widget.id] then
-    id = 'glox-' .. self.agui_widget.id
+  if self.app.window_procs[self.veek_widget.id] then
+    id = 'glox-' .. self.veek_widget.id
   end
 
   self.screen.proc:queue_event('window_flag_added', id, flag)
 
-  self.agui_window.flags[flag] = true
+  self.veek_window.flags[flag] = true
 end
 
 
 function Widget:rem_flag(flag)
   local id = 'main-window'
 
-  if self.app.window_procs[self.agui_widget.id] then
-    id = 'glox-' .. self.agui_widget.id
+  if self.app.window_procs[self.veek_widget.id] then
+    id = 'glox-' .. self.veek_widget.id
   end
 
   self.screen.proc:queue_event('window_flag_removed', id, flag)
 
-  self.agui_window.flags[flag] = nil
+  self.veek_window.flags[flag] = nil
 end
 
 function Widget:resize(w, h)
-  self.agui_widget:resize(w, h)
+  self.veek_widget:resize(w, h)
   self:trigger('gui.window.resize')
 end

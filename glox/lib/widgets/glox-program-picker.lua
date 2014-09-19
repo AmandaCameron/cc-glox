@@ -1,9 +1,9 @@
 -- lint-mode: glox
 
-_parent = 'agui-search'
+_parent = 'veek-search'
 
 function Widget:init(app, w, h)
-	self.agui_search:init(w, h)
+	self.veek_search:init(w, h)
 
 	self.app = app
 
@@ -17,11 +17,11 @@ function Widget:init(app, w, h)
 		if idx then
 			self.ready_go = true
 
-			self.agui_search.results:add(new('agui-list-item', 'Launch ' .. value:sub(1, idx)))
+			self.veek_search.results:add(new('agui-list-item', 'Launch ' .. value:sub(1, idx)))
 		else
 			for _, prog in ipairs(self.app.shell.programs()) do
 				if prog:match(value) then
-					self.agui_search.results:add(new('agui-list-item', prog))
+					self.veek_search.results:add(new('agui-list-item', prog))
 				end
 			end
 		end
@@ -35,8 +35,8 @@ function Widget:init(app, w, h)
 end
 
 function Widget:focus()
-	self.agui_search.input_box.value = ''
-	self.agui_search.results:clear()
+	self.veek_search.input_box.value = ''
+	self.veek_search.results:clear()
 
-	self.agui_container:focus()
+	self.veek_container:focus()
 end

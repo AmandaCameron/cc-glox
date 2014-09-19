@@ -20,7 +20,7 @@ function Plugin:init(app, menubar)
      bottom = 0
   }
 
-  self.menu = new('agui-menu', app)
+  self.menu = new('veek-menu', app)
 
   app:subscribe("event.glox_ipc", function(_, msg, p1, p2)
     if msg == "modem" then

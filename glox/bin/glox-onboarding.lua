@@ -1,18 +1,18 @@
 -- Tips program for Glox
 
-if not os.loadAPI("__LIB__/agui/agui") then
-  printError("Couldn't load lib-agui")
+if not os.loadAPI("__LIB__/veek/agui") then
+  printError("Couldn't load lib-veek")
   return
 end
 
 os.loadAPI("__LIB__/glox/glox")
 
-local app = kidven.new('agui-app')
+local app = kidven.new('veek-app')
 
-local layout = kidven.new('agui-layout', app.main_window.gooey)
+local layout = kidven.new('veek-layout', app.main_window.gooey)
 
-local next_button = kidven.new('agui-button', 1, 1, 'Next', 8)
-local prev_button = kidven.new('agui-button', 1, 1, 'Prev', 8)
+local next_button = kidven.new('veek-button', 1, 1, 'Next', 8)
+local prev_button = kidven.new('veek-button', 1, 1, 'Prev', 8)
 
 layout:add(next_button)
 layout:add_anchor(next_button, 'left', 'right', -1, -9)
@@ -27,13 +27,13 @@ layout:reflow()
 -- Settings pane, where we set the computer's label
 
 local function make_settings()
-  local pane = kidven.new('agui-container', 1, 1, 1, 1)
-  local layout = kidven.new('agui-layout', pane)
+  local pane = kidven.new('veek-container', 1, 1, 1, 1)
+  local layout = kidven.new('veek-layout', pane)
 
-  local label = kidven.new('agui-label', 1, 1, 'Computer Label:')
-  local error_lbl = kidven.new('agui-label', 1, 1, '')
+  local label = kidven.new('veek-label', 1, 1, 'Computer Label:')
+  local error_lbl = kidven.new('veek-label', 1, 1, '')
 
-  local input = kidven.new('agui-input', 1, 1, 10)
+  local input = kidven.new('veek-input', 1, 1, 10)
 
   if os.getComputerLabel() then
     input.value = os.getComputerLabel()
@@ -81,8 +81,8 @@ local function make_settings()
     return false
   end
 
-  pane.agui_widget.bg = 'window-bg'
-  pane.agui_widget.fg = 'window-fg'
+  pane.veek_widget.bg = 'window-bg'
+  pane.veek_widget.fg = 'window-fg'
 
   return pane, verify
 end
@@ -139,11 +139,11 @@ local function update_gooey()
     app:select(pane)
   else
     verify = nil
-    pane = kidven.new('agui-textbox', 1, 1, 1, 1)
+    pane = kidven.new('veek-textbox', 1, 1, 1, 1)
 
     if term.isColour() then
-      pane.agui_widget.fg = 'black'
-      pane.agui_widget.bg = 'lightGrey'
+      pane.veek_widget.fg = 'black'
+      pane.veek_widget.bg = 'lightGrey'
     end
 
     pane:set_text(tutorial[pos].body)
@@ -168,7 +168,7 @@ local function update_gooey()
 end
 
 app:subscribe('gui.button.pressed', function(_, id)
-  if id == next_button.agui_widget.id then
+  if id == next_button.veek_widget.id then
     if not verify or verify() then
       if pos < #tutorial then
         pos = pos + 1
@@ -177,7 +177,7 @@ app:subscribe('gui.button.pressed', function(_, id)
         app:quit()
       end
     end
-  elseif id == prev_button.agui_widget.id then
+  elseif id == prev_button.veek_widget.id then
     if pos > 1 then
       pos = pos - 1
       update_gooey()

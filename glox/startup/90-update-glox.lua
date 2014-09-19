@@ -1,4 +1,4 @@
--- Updates agui-shell.
+-- Updates veek-shell.
 -- TODO: Make this full-screen.
 
 os.loadAPI("__LIB__/acg/acg")
@@ -102,5 +102,5 @@ for _, repo in pairs(state.repos) do
 	repo:update()
 end
 
-check_package(state:get_package("agui-shell"))
+check_package(state:get_package("veek-shell"))
 --]]

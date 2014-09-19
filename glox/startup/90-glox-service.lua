@@ -1,4 +1,4 @@
--- Starts agui-shell!
+-- Starts veek-shell!
 
 os.loadAPI("__LIB__/huaxn/huaxn")
 os.loadAPI('__LIB__/glox/glox')

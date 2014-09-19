@@ -1,22 +1,22 @@
 -- lint-mode: glox
 
-_parent = "agui-widget"
+_parent = "veek-widget"
 
 function Widget:init(width, height)
   local width = width or 10
   local height = height or 10
 
-  self.agui_widget:init(1, 1, width, height)
+  self.veek_widget:init(1, 1, width, height)
 
-  self.agui_widget.bg = 'black'
-  self.agui_widget.fg = 'white'
+  self.veek_widget.bg = 'black'
+  self.veek_widget.fg = 'white'
 
   local fakeTerm = {}
 
   -- These only get called once, on the canvas' init.
 
   function fakeTerm.getSize()
-    return self.agui_widget.width, self.agui_widget.height
+    return self.veek_widget.width, self.agui_widget.height
   end
 
   function fakeTerm.isColour()
@@ -46,7 +46,7 @@ function Widget:resize(w, h)
   self.term.width = w
   self.term.height = h
 
-  self.agui_widget:resize(w, h)
+  self.veek_widget:resize(w, h)
 
-  self:cast('agui-widget'):trigger("glox.screen.resize")
+  self:cast('veek-widget'):trigger("glox.screen.resize")
 end

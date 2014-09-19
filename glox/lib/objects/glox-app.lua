@@ -1,9 +1,9 @@
 -- lint-mode: glox
 
-_parent = "agui-app"
+_parent = "veek-app"
 
 function Object:init(disp, shell)
-  self.agui_app:init(disp)
+  self.veek_app:init(disp)
 
   self.shell = shell
 
@@ -11,26 +11,26 @@ function Object:init(disp, shell)
 
   -- Load in our spedeshal theme.
   if disp.isColour() then
-    self.agui_app:load_theme("__LIB__/glox/theme")
+    self.veek_app:load_theme("__LIB__/glox/theme")
   else
-    self.agui_app:load_theme("__LIB__/glox/mono-theme")
+    self.veek_app:load_theme("__LIB__/glox/mono-theme")
   end
 
-  self.agui_app.pool = new('glox-pool')
+  self.veek_app.pool = new('glox-pool')
 
-  self.pool = self.agui_app.pool
+  self.pool = self.veek_app.pool
 
   local hooks = {}
 
   function hooks.error(_, err)
-    self.agui_app.main_err = err
+    self.veek_app.main_err = err
   end
 
   function hooks.die(_)
-    self.agui_app.pool:stop()
+    self.veek_app.pool:stop()
   end
 
-  self.agui_app.pool:new(function()
+  self.veek_app.pool:new(function()
     self.event_loop:main()
   end, hooks)
 
@@ -73,11 +73,11 @@ function Object:init(disp, shell)
     end
   end)
 
-  -- Clear out the agui event loop killer, replace it with something sane for a multitasking "OS"
+  -- Clear out the veek event loop killer, replace it with something sane for a multitasking "OS"
   self.event_loop["event.terminate"] = {}
 
   self.event_loop:subscribe("event.terminate", function(evt)
-    local active = self.agui_app.main_window.gooey:get_focus()
+    local active = self.veek_app.main_window.gooey:get_focus()
 
     if active:is_a("app-window") then
       active.screen.proc:queue_event("terminate")
@@ -104,19 +104,19 @@ function Object:init(disp, shell)
       if self.menu:ctrl_macro(key) then
         -- Menu handled it.
       elseif key == keys.x then
-        local focus = self.agui_app.main_window.gooey:get_focus()
+        local focus = self.veek_app.main_window.gooey:get_focus()
 
         if focus and focus:is_a('app-window') then
           self:close(focus.screen.proc, focus)
         end
       elseif key == keys.m then
-        local focus = self.agui_app.main_window.gooey:get_focus()
+        local focus = self.veek_app.main_window.gooey:get_focus()
 
         if focus and focus:is_a('app-window') then
           self:minimise(focus)
         end
       elseif key == keys.tab then
-        self.agui_app.main_window.gooey:focus_next()
+        self.veek_app.main_window.gooey:focus_next()
       end
     end
   end)
@@ -129,13 +129,13 @@ function Object:init(disp, shell)
 
   self.menu = new('glox-menubar',
     self,
-    self.agui_app.main_window.gooey.agui_widget.width,
-    self.agui_app.main_window.gooey.agui_widget.height)
+    self.veek_app.main_window.gooey.agui_widget.width,
+    self.veek_app.main_window.gooey.agui_widget.height)
 
   self.desktop = new('glox-desktop',
     self,
-    self.agui_app.main_window.gooey.agui_widget.width,
-    self.agui_app.main_window.gooey.agui_widget.height - 1)
+    self.veek_app.main_window.gooey.agui_widget.width,
+    self.veek_app.main_window.gooey.agui_widget.height - 1)
 
   self.settings:load()
 
@@ -150,30 +150,30 @@ function Object:init(disp, shell)
 end
 
 function Object:init_picker()
-  self.picker_window = new('agui-window', "Select App", 20, 16)
+  self.picker_window = new('veek-window', "Select App", 20, 16)
 
-  local label = new("agui-textbox", 2, 2, 18, 2, "Select the program to open this with.")
+  local label = new("veek-textbox", 2, 2, 18, 2, "Select the program to open this with.")
 
   self.picker_window:add(label)
 
-  self.picker_list = new('agui-list', 2, 6, 18, 10)
+  self.picker_list = new('veek-list', 2, 6, 18, 10)
 
   self.picker_window:add(self.picker_list)
 
   self.picker_window.flags.closable = true
 
-  local ok = new('agui-button', 5, 15, "Ok", 10)
+  local ok = new('veek-button', 5, 15, "Ok", 10)
 
   self.picker_window:add(ok)
 
   self:subscribe('gui.window.closed', function(_, id)
-    if id == self.picker_window.agui_widget.id then
+    if id == self.picker_window.veek_widget.id then
       self:remove(self.picker_window)
     end
   end)
 
   self:subscribe('gui.button.clicked', function(_, id)
-    if id == ok.agui_widget.id then
+    if id == ok.veek_widget.id then
       if self.picker_list:get_selected() then
         self:launch(self.picker_list:get_selected().command)
         self:remove(self.picker_window)
@@ -201,16 +201,16 @@ function Object:open(uri, mime)
     self:add(self.picker_window)
     self:select(self.picker_window)
   else
-    local window = new('agui-window', "Error", 20, 5)
+    local window = new('veek-window', "Error", 20, 5)
 
-    window.agui_widget.x = math.floor(self.desktop.agui_widget.width / 2 - 10)
-    window.agui_widget.y = math.floor(self.desktop.agui_widget.height / 2 - 2)
+    window.veek_widget.x = math.floor(self.desktop.agui_widget.width / 2 - 10)
+    window.veek_widget.y = math.floor(self.desktop.agui_widget.height / 2 - 2)
 
-    local label = new('agui-label', 2, 2, "No application to handle " .. uri, 18)
+    local label = new('veek-label', 2, 2, "No application to handle " .. uri, 18)
 
     window:add(label)
 
-    local ok_btn = new('agui-label', 7, 4, "Ok", 6)
+    local ok_btn = new('veek-label', 7, 4, "Ok", 6)
 
     window:add(ok_btn)
     window:select(ok_btn)
@@ -224,7 +224,7 @@ function Object:open(uri, mime)
     local btn_evt_id
 
     close_evt_id = self:subscribe('gui.window.closed', function(_, id)
-      if id == window.agui_widget.id then
+      if id == window.veek_widget.id then
         self:remove(window)
 
         self:unsubscribe('gui.window.closed', close_evt_id)
@@ -233,7 +233,7 @@ function Object:open(uri, mime)
     end)
 
     btn_evt_id = self:subscribe('gui.button.pressed', function(_, id)
-      if id == ok_btn.agui_widget.id then
+      if id == ok_btn.veek_widget.id then
         self:remove(window)
 
         self:unsubscribe('gui.window.closed', close_evt_id)
@@ -245,8 +245,8 @@ end
 
 function Object:launch(cmdLine)
   local window = new('app-window', self, cmdLine, 30, 10)
-  window.agui_widget.x = 4
-  window.agui_widget.y = 3
+  window.veek_widget.x = 4
+  window.veek_widget.y = 3
 
   window.screen.proc.windows = { window }
 
@@ -272,7 +272,7 @@ function Object:new_process(cmdLine, term)
   -- Insert the newWindow additions to the term API
 
   function term.setTitle(new_title)
-    proc.windows[1]:cast('agui-window').title = new_title
+    proc.windows[1]:cast('veek-window').title = new_title
   end
 
   function term.activeWindow()
@@ -280,11 +280,11 @@ function Object:new_process(cmdLine, term)
   end
 
   function term.setFlags(flags)
-    local old = proc.windows[1]:cast('agui-window').flags
-    proc.windows[1]:cast('agui-window').flags = {}
+    local old = proc.windows[1]:cast('veek-window').flags
+    proc.windows[1]:cast('veek-window').flags = {}
 
     for _, flag in ipairs(flags) do
-      proc.windows[1]:cast('agui-window').flags[flag] = true
+      proc.windows[1]:cast('veek-window').flags[flag] = true
 
       if flag == "glox.fullscreen" and not pocket then
         self:embiggen(proc.windows[1])
@@ -295,7 +295,7 @@ function Object:new_process(cmdLine, term)
   function term.getFlags()
     local flags = {}
 
-    for flag, _ in pairs(proc.windows[1]:cast('agui-window').flags) do
+    for flag, _ in pairs(proc.windows[1]:cast('veek-window').flags) do
       table.insert(flags, flag)
     end
 
@@ -306,11 +306,11 @@ function Object:new_process(cmdLine, term)
 
   function term.newWindow(title, width, height)
     local window = new('app-window', self, true, nil, width, height)
-    window.agui_window.title = title
+    window.veek_window.title = title
 
     local screen = window.screen.app_screen
 
-    local id ='glox-' .. window.agui_widget.id
+    local id ='glox-' .. window.veek_widget.id
 
     window.screen.proc = proc
 
@@ -320,7 +320,7 @@ function Object:new_process(cmdLine, term)
     self:select(window)
 
     function screen.term.setTitle(title)
-      window.agui_window.title = title
+      window.veek_window.title = title
     end
 
     function screen.term.setSize(width, height)
@@ -341,28 +341,28 @@ function Object:new_process(cmdLine, term)
     end
 
     function screen.term.setFlags(flags)
-      local old = window.agui_window.flags
-      window.agui_window.flags = {}
+      local old = window.veek_window.flags
+      window.veek_window.flags = {}
 
       for _, flag in ipairs(flags) do
-        window.agui_window.flags[flag] = true
+        window.veek_window.flags[flag] = true
       end
     end
 
     function screen.term.getFlags()
       local flags = {}
 
-      for flag, _ in pairs(window.agui_window.flags) do
+      for flag, _ in pairs(window.veek_window.flags) do
         table.insert(flags, flag)
       end
 
-      table.insert(flags, 'agui-shell.identifier')
+      table.insert(flags, 'veek-shell.identifier')
 
       return flags
     end
 
     table.insert(proc.windows, window)
-    self.window_procs[window.agui_widget.id] = proc
+    self.window_procs[window.veek_widget.id] = proc
     self.windows[id] = window
 
     return id, screen.term
@@ -398,13 +398,13 @@ function Object:embiggen(window)
   window:add_flag('maximised')
 
   -- Store the previous domensions & location.
-  window.prev_x, window.prev_y = window.agui_widget.x, window.agui_widget.y
-  window.prev_w = window.agui_widget.width
-  window.prev_h = window.agui_widget.height
+  window.prev_x, window.prev_y = window.veek_widget.x, window.agui_widget.y
+  window.prev_w = window.veek_widget.width
+  window.prev_h = window.veek_widget.height
 
   self.window = window
   self.window.fullscreen = true
-  self.window:resize(self.desktop.agui_widget.width, self.desktop.agui_widget.height)
+  self.window:resize(self.desktop.veek_widget.width, self.desktop.agui_widget.height)
   self.window:move(1, 2)
 end
 
@@ -429,7 +429,7 @@ function Object:restore(window)
   self.minimised = {}
 
   for _, win in ipairs(old) do
-    if win.agui_widget.id ~= window.agui_widget.id then
+    if win.veek_widget.id ~= window.agui_widget.id then
       table.insert(self.minimised, win)
     end
   end
@@ -449,8 +449,8 @@ function Object:close(process, window)
   end
 
   -- Handle sub-window case.
-  if self.window_procs[window.agui_widget.id] then
-    self.window_procs[window.agui_widget.id]:queue_event('window_close', 'glox-' .. window.agui_widget.id)
+  if self.window_procs[window.veek_widget.id] then
+    self.window_procs[window.veek_widget.id]:queue_event('window_close', 'glox-' .. window.agui_widget.id)
 
     return
   end
@@ -461,11 +461,11 @@ function Object:close(process, window)
 end
 
 function Object:active_window()
-  local focused = self.agui_app.main_window.gooey:get_focus()
+  local focused = self.veek_app.main_window.gooey:get_focus()
 
   if focused and focused:is_a('app-window') then
-    if self.window_procs[focused.agui_widget.id] then
-      return 'glox-' .. focused.agui_widget.id
+    if self.window_procs[focused.veek_widget.id] then
+      return 'glox-' .. focused.veek_widget.id
     else
       return 'main-window'
     end

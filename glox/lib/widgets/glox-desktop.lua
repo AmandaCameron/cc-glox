@@ -1,12 +1,12 @@
 -- lint-mode: glox
 
-_parent = "agui-widget"
+_parent = "veek-widget"
 
 function Widget:init(app, w, h)
-  self.agui_widget:init(1, 2, w, h)
+  self.veek_widget:init(1, 2, w, h)
 
-  self.agui_widget.fg = 'glox-desktop-fg'
-  self.agui_widget.bg = 'glox-desktop-bg'
+  self.veek_widget.fg = 'glox-desktop-fg'
+  self.veek_widget.bg = 'glox-desktop-bg'
 
   self.app = app
 

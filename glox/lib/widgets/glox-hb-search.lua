@@ -2,16 +2,16 @@
 
 -- Glox HighBeam Search widget.
 
-_parent = 'agui-search'
+_parent = 'veek-search'
 
 function Widget:init(...)
-  self.agui_search:init(...)
+  self.veek_search:init(...)
 
-  self.agui_search.input_box.agui_widget.fg = 'glox-highbeam-input--fg'
-  self.agui_search.input_box.agui_widget.bg = 'glox-highbeam-input--bg'
+  self.veek_search.input_box.agui_widget.fg = 'glox-highbeam-input--fg'
+  self.veek_search.input_box.agui_widget.bg = 'glox-highbeam-input--bg'
 
-  self.agui_search.results.agui_widget.fg = 'glox-highbeam-results--fg'
-  self.agui_search.results.agui_widget.bg = 'glox-highbeam-results--bg'
+  self.veek_search.results.agui_widget.fg = 'glox-highbeam-results--fg'
+  self.veek_search.results.agui_widget.bg = 'glox-highbeam-results--bg'
 
   self.results = {}
 end
@@ -30,7 +30,7 @@ end
 
 
 function Widget:reflow()
-  self.agui_search.results:clear()
+  self.veek_search.results:clear()
 
   local categories = {
     other = {}
@@ -80,10 +80,10 @@ function Widget:reflow()
     local category = categories[name]
 
     if category and #category > 0 then
-      self.agui_search.results:add(new('glox-hb-category', name))
+      self.veek_search.results:add(new('glox-hb-category', name))
 
       for _, res in ipairs(category) do
-        self.agui_search.results:add(new('glox-hb-result', res))
+        self.veek_search.results:add(new('glox-hb-result', res))
       end
     end
   end

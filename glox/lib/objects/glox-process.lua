@@ -38,7 +38,7 @@ function Object:init(app, cmdLine, term)
     end
 
     function multishell.setTitle(proc, title)
-      self.windows[1].agui_window.title = title
+      self.windows[1].veek_window.title = title
     end
 
     function multishell.getCurrent()
@@ -46,7 +46,7 @@ function Object:init(app, cmdLine, term)
     end
 
     function multishell.getTitle()
-      return self.windows[1].agui_window.title
+      return self.windows[1].veek_window.title
     end
 
     function multishell.getCount()

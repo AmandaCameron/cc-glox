@@ -1,20 +1,20 @@
 -- lint-mode: glox
 
-_parent = 'agui-widget'
+_parent = 'veek-widget'
 
 function Widget:init(app, width, height)
-  self.agui_widget:init(1, 1, width, 1)
+  self.veek_widget:init(1, 1, width, 1)
 
-  self.agui_widget:add_flag('active')
+  self.veek_widget:add_flag('active')
 
   self.drawer_height = height
 
   self.app = app
 
-  self.agui_widget.fg = 'glox-menubar-fg'
-  self.agui_widget.bg = 'glox-menubar-bg'
+  self.veek_widget.fg = 'glox-menubar-fg'
+  self.veek_widget.bg = 'glox-menubar-bg'
 
-  self.launcher_menu = new('agui-menu', app)
+  self.launcher_menu = new('veek-menu', app)
 
   self.plugins = {}
   self.plugin_offsets = {}
@@ -35,17 +35,17 @@ function Widget:init(app, width, height)
 end
 
 function Widget:is_expanded()
-  return self.agui_widget.height > 1
+  return self.veek_widget.height > 1
 end
 
 -- TODO: These should animate
 function Widget:collapse()
-  self:resize(self.agui_widget.width, 1)
+  self:resize(self.veek_widget.width, 1)
 end
 
 function Widget:expand()
   self.app:select(self)
-  self:resize(self.agui_widget.width, self.drawer_height)
+  self:resize(self.veek_widget.width, self.drawer_height)
 end
 
 -- Render Functions
@@ -137,7 +137,7 @@ function Widget:draw_expanded(c)
         c:write('  ')
       end
 
-      c:write(win:cast('agui-window').title)
+      c:write(win:cast('veek-window').title)
       c:write(string.rep(' ', c.width - c.x))
 
       offset = offset + 1
@@ -168,23 +168,23 @@ function Widget:draw_collapsed(c)
   c:set_bg('glox-menubar-launcher-bg')
   c:write("%")
 
-  if self.window and not self.window.agui_window.flags["glox.fullscreen"] then
+  if self.window and not self.window.veek_window.flags["glox.fullscreen"] then
     offset = offset - 4
 
     c:set_fg('glox-menubar-controls-fg')
     c:set_bg('glox-menubar-controls-bg')
-    c:move(self.agui_widget.width - 2, 1)
+    c:move(self.veek_widget.width - 2, 1)
     c:write("[ ]")
 
     if pocket then
       -- on Pocket, show the close button in the bar.
-      c:move(self.agui_widget.width - 1, 1)
+      c:move(self.veek_widget.width - 1, 1)
       c:set_fg('window-close-bg')
       c:set_bg('glox-menubar-controls-bg')
       c:write('x')
     else
       -- On !Pocket, show the un-embiggen button
-      c:move(self.agui_widget.width - 1, 1)
+      c:move(self.veek_widget.width - 1, 1)
       c:set_fg('window-maximise-bg')
       c:set_bg('glox-menubar-controls-bg')
       c:write("-")
@@ -215,7 +215,7 @@ function Widget:draw_collapsed(c)
     c:set_fg('glox-menubar-window-title-fg')
     c:set_bg('glox-menubar-window-title-bg')
 
-    local txt = self.window.agui_window.title
+    local txt = self.window.veek_window.title
 
     if #txt > offset - 3 then
       txt = txt:sub(1, offset - 6) .. "..."
@@ -245,8 +245,8 @@ function Widget:show_menu()
   self.launcher_menu:add("Run...", function()
     local window = new('glox-rundialog', self.app)
 
-    window.agui_widget.x = 1
-    window.agui_widget.y = 2
+    window.veek_widget.x = 1
+    window.veek_widget.y = 2
 
     self.app:add(window)
     self.app:select(window)
@@ -293,15 +293,15 @@ function Widget:clicked(x, y, btn)
     if x == 1 then
       self:show_menu()
     elseif self.window then
-      if x == self.agui_widget.width - 1 then
+      if x == self.veek_widget.width - 1 then
 	-- Acts as a close button when on Pocket
 	if pocket then
 	  self.app:close(self.window.screen.proc, self.window)
 	else
 	  self.app:unembiggen(self.window)
 	end
-      elseif x > self.agui_widget.width - 3 - #self.plugins and x < self.agui_widget.width - 3 then
-	self.plugins[self.agui_widget.width - 2 - x]:clicked(btn)
+      elseif x > self.veek_widget.width - 3 - #self.plugins and x < self.agui_widget.width - 3 then
+	self.plugins[self.veek_widget.width - 2 - x]:clicked(btn)
       end
     elseif self.plugin_offsets[x] then
       self.plugin_offsets[x]:clicked(btn)
@@ -311,14 +311,14 @@ end
 
 function Widget:dragged(x_del, y_del, btn)
   if btn == 1 then
-    local new_h = self.agui_widget.height + y_del
+    local new_h = self.veek_widget.height + y_del
     if new_h > self.drawer_height then
       new_h = self.drawer_height
     elseif new_h < 1 then
       new_h = 1
     end
 
-    self:resize(self.agui_widget.width, new_h)
+    self:resize(self.veek_widget.width, new_h)
   end
 end
 

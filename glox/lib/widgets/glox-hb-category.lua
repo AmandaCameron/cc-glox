@@ -1,6 +1,6 @@
 -- lint-mode: glox
 
-_parent = "agui-list-item"
+_parent = "veek-list-item"
 
 local types = {
   -- Bucket of others.
@@ -15,10 +15,10 @@ local types = {
 }
 
 function Widget:init(name)
-  self.agui_list_item:init()
+  self.veek_list_item:init()
 
-  self.agui_widget.fg = 'glox-highbeam-category--fg'
-  self.agui_widget.bg = 'glox-highbeam-category--bg'
+  self.veek_widget.fg = 'glox-highbeam-category--fg'
+  self.veek_widget.bg = 'glox-highbeam-category--bg'
 
   self.type = name
 
@@ -30,7 +30,7 @@ function Widget:init(name)
 
 
 
-  self.agui_widget.height = 2
+  self.veek_widget.height = 2
 end
 
 function Widget:draw(c)

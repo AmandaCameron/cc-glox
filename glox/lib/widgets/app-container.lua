@@ -5,9 +5,9 @@ _parent = "app-screen"
 function Widget:init(app, cmdLine, w, h)
   self.app_screen:init(w, h)
 
-  self.agui_widget.main = app
+  self.veek_widget.main = app
 
-  self.agui_widget:add_flag('active')
+  self.veek_widget:add_flag('active')
 
   self.mouse_x = 1
   self.mouse_y = 1

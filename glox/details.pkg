@@ -1,7 +1,7 @@
 Name: glox
 Description: A Windowing shell system for Computer Craft.
 Dependency: huaxn
-Dependency: lib-agui
+Dependency: lib-veek-gui
 Dependency: lib-kvutils
 Dependency: highbeam
 Dependency: ciiah

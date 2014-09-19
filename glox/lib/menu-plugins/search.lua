@@ -36,36 +36,36 @@ function Plugin:search()
 end
 
 function Plugin:build_search()
-	self.search_dialog = new('agui-container', self.mb_plugin.menubar.agui_widget.width - 25, 2,
-		26, self.mb_plugin.app.agui_app.main_window.gooey.agui_widget.height - 1)
+	self.search_dialog = new('veek-container', self.mb_plugin.menubar.agui_widget.width - 25, 2,
+		26, self.mb_plugin.app.veek_app.main_window.gooey.agui_widget.height - 1)
 
-	local search = new('glox-hb-search', 26, self.mb_plugin.app.agui_app.main_window.gooey.agui_widget.height - 1)
+	local search = new('glox-hb-search', 26, self.mb_plugin.app.veek_app.main_window.gooey.agui_widget.height - 1)
 
 	if not pocket then
-		search.agui_widget.x = 2
+		search.veek_widget.x = 2
 
-		self.search_dialog.agui_widget.x = self.mb_plugin.menubar.agui_widget.width - 26
-		self.search_dialog.agui_widget.width = 27
-		self.search_dialog:add(new('agui-virt-seperator', 1, 1, self.search_dialog.agui_widget.height))
+		self.search_dialog.veek_widget.x = self.mb_plugin.menubar.agui_widget.width - 26
+		self.search_dialog.veek_widget.width = 27
+		self.search_dialog:add(new('veek-virt-seperator', 1, 1, self.search_dialog.agui_widget.height))
 	end
 
 	self.mb_plugin.app:subscribe('gui.search.selected', function(_, id, selection)
-		if id == search.agui_widget.id then
+		if id == search.veek_widget.id then
 			if selection:is_a('glox-hb-result') then
 				self.mb_plugin.app:remove(search)
 
 				self.mb_plugin.app:open(selection.result.uri,
 				 	selection.result.meta['mime-type'] or "unknown/x-unknown")
 			elseif selection:is_a('glox-hb-category') then
-				search.agui_search.input_box.value = 'type:' .. selection.type
+				search.veek_search.input_box.value = 'type:' .. selection.type
 
-				search.agui_widget:trigger('gui.search.input', 'type:' .. selection.type)
+				search.veek_widget:trigger('gui.search.input', 'type:' .. selection.type)
 			end
 		end
 	end)
 
 	self.mb_plugin.app:subscribe('gui.search.input', function(_, id, input)
-		if id == search.agui_widget.id then
+		if id == search.veek_widget.id then
 			search:clear()
 
 			if input ~= '' then
