@@ -3,7 +3,7 @@
 -- @Author: Amanda Cameron
 -- @Icon[4x3]: __LIB__/glox/res/icons/glox-settings
 
--- Settings program for veek-shell
+-- Settings program for glox
 
 os.loadAPI("__LIB__/glox/glox")
 
