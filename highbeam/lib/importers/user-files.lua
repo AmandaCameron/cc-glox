@@ -22,7 +22,7 @@ function Importer:init(db)
   self.hb_importer:init(db)
 end
 
-function Importer:scan_fs(trans, fof)
+function Importer:scan_fs(task, trans, fof)
   if fof == huaxn.combine("__LIB__/state", "highbeam") then
     -- Skip the database!
 
@@ -64,11 +64,15 @@ function Importer:scan_fs(trans, fof)
       trans:add_metadata(id, "type", "folder")
     end
 
-    for _, fof2 in ipairs(huaxn.list(fof)) do
+    local files = huaxn.list(fof)
+
+    task:add_total(#files)
+
+    for _, fof2 in ipairs(files) do
       if fof2 == ".icon" then
         size = size + huaxn.getSize(huaxn.combine(fof, fof2))
       else
-        size = size + self:scan_fs(trans, huaxn.combine(fof, fof2))
+        size = size + self:scan_fs(task, trans, huaxn.combine(fof, fof2))
       end
     end
   else
@@ -89,9 +93,9 @@ function Importer:scan_fs(trans, fof)
     end
   end
 
-  trans:add_metadata(id, "size", size)
+  task:add_progress(1)
 
-  sleep(0.10)
+  trans:add_metadata(id, "size", size)
 
   if fof == "" or huaxn.getDrive(fof) ~= huaxn.getDrive(huaxn.combine(fof, "..")) then
     return 0 -- Mount sub-paths shouldn't take up any extra space in their parent.
@@ -100,16 +104,20 @@ function Importer:scan_fs(trans, fof)
   return size
 end
 
-function Importer:import(env)
+function Importer:import(scan_task, env)
   local trans = self:transaction()
 
-  local t = trans:add_object('hb-type://file')
-  trans:add_metadata(t, 'name', 'Files')
+  local obj = trans:add_object('hb-type://file')
+  trans:add_metadata(obj, 'name', 'Files')
 
-  t = trans:add_object('hb-type://image')
-  trans:add_metadata(t, 'name', 'Images')
+  obj = trans:add_object('hb-type://image')
+  trans:add_metadata(obj, 'name', 'Images')
 
-  self:scan_fs(trans, "")
+  local task = scan_task:sub("Filesystem")
+
+  self:scan_fs(task, trans, "")
+
+  task:done()
 
   trans:commit()
 end

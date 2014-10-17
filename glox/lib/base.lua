@@ -6,6 +6,8 @@ os.loadAPI("__LIB__/kvutils/kvutils")
 os.loadAPI("__LIB__/ciiah/ciiah")
 os.loadAPI("__LIB__/huaxn/huaxn")
 
+os.loadAPI("__LIB__/kvio/kvio")
+
 veek.load_api("__LIB__/veek/gui")
 veek.load_api("__LIB__/veek/images")
 

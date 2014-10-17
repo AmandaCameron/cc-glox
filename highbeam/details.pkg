@@ -16,6 +16,7 @@ Library: objects/db-transaction => highbeam/objects/db-transaction
 Library: objects/importer => highbeam/objects/importer
 Library: objects/indexer => highbeam/objects/indexer
 Library: objects/connection => highbeam/objects/connection
+Library: objects/progress => highbeam/objects/progress
 Library: highbeam/importers/
 Library: importers/help => highbeam/importers/help
 Library: importers/programs => highbeam/importers/programs

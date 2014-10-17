@@ -21,11 +21,31 @@ function Indexer:filters()
   }
 end
 
-function Indexer:clear_data()
-  self.data = {}
+-- Indexing
+
+function Indexer:index(id, entry)
+  if entry.meta.type == "image" and entry.meta.dimensions then
+
+    local width, height = entry.meta.dimensions:match("^([%d]+),([%d]+)$")
+
+    self.data[id] = {
+      width = tonumber(width),
+      height = tonumber(height),
+    }
+  end
 end
 
--- TODO: This should be much cleaner.
+function Indexer:delete(id)
+  self.data[id] = nil
+end
+
+function Indexer:pre_scan()
+end
+
+function Indexer:post_scan()
+end
+
+-- Searching
 
 function Indexer:lookup(filter, value)
   if filter == "size" then
@@ -56,18 +76,6 @@ function Indexer:lookup(filter, value)
     return self.filter(function(dimens)
       return dimens.height == tonumber(value)
     end)
-  end
-end
-
-function Indexer:index(id, entry)
-  if entry.meta.type == "image" and entry.meta.dimensions then
-
-    local width, height = entry.meta.dimensions:match("^([%d]+),([%d]+)$")
-
-    self.data[id] = {
-      width = tonumber(width),
-      height = tonumber(height),
-    }
   end
 end
 

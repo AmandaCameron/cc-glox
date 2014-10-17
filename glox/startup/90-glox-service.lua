@@ -34,4 +34,16 @@ function()
   app:quit()
 end)
 
-deun.add_gui(svc)
+local timer = os.startTimer(0.25)
+
+while true do
+  local evt, arg = os.pullEvent()
+
+  if evt == "timer" and arg == timer then
+    deun.add_gui(svc)
+
+    break
+  elseif evt == 'key' and arg == keys.space then
+    break
+  end
+end

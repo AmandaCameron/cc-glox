@@ -249,8 +249,9 @@ end
 -- New Favourite pane.
 
 local add_window = app:new_window('Add Favourite', math.floor(main_window.veek_widget.width / 3 * 2), 8)
+add_window:hide()
 
-local prog_label = kidven.new('veek-input', 2, 2, add_window.veek_widget.width - 2)
+local prog_label = kidven.new('veek-input', 2, 2, math.floor(main_window.veek_widget.width / 3 * 2))
 
 app.shell = shell
 
@@ -308,9 +309,16 @@ end)
 app:add(main_window)
 
 app:subscribe('glox.settings.commit', function(_)
-  update_general()
-  update_plugins()
-  update_app()
+  local ok, err = pcall(function()
+    update_general()
+    update_plugins()
+    update_app()
+  end)
+
+  if not ok then
+    app.main_err = err
+    app:quit()
+  end
 end)
 
 app:subscribe("gui.input.changed", function(_, id, value)

@@ -14,7 +14,7 @@ function Widget:init(...)
   self.veek_search.results.veek_widget.bg = 'glox-highbeam-results--bg'
 
   self.results = {}
-  self.hb = hb
+  self.hb = nil
 end
 
 function Widget:clear()

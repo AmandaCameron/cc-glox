@@ -151,19 +151,32 @@ function Object:scan(env)
   self.data = {}
 
   for _, idx in pairs(self.indexers) do
-    idx:clear_data()
+    idx:pre_scan()
   end
 
+  local task = new('hb-progress', self, 'Scan')
+  local pool = new('thread-pool')
+
   for i, imp in pairs(self.importers) do
-    local ok, err = pcall(function()
-      imp:import(env)
+    pool:new(function()
+      local ok, err = pcall(function()
+        imp:import(task, env)
+      end)
+
+      if not ok then
+        printError("Error scanning using " .. highbeam.get_importers()[i] .. " -- " .. err)
+
+        sleep(2)
+      end
     end)
+  end
 
-    if not ok then
-      printError("Error scanning using " .. highbeam.get_importers()[i] .. " -- " .. err)
+  pool:main()
 
-      sleep(2)
-    end
+  task:done()
+
+  for _, idx in pairs(self.indexers) do
+    idx:post_scan()
   end
 
   self:save()
@@ -274,11 +287,37 @@ end
 -- Private Data Manupulation.
 
 function Object:_insert(id, entry)
+  old = self:get(entry.url)
+
+  if old then
+    for key, val in pairs(old.meta) do
+      if not entry.meta[key] then
+        entry.meta[key] = val
+      end
+    end
+
+    id = old.id
+  end
+
   for _, idx in pairs(self.indexers) do
     idx:index(id, entry)
   end
 
-  -- TODO: Merge data instead of over-writing it.
-
   self.data[id] = entry
+end
+
+function Object:_delete(id)
+  for _, idx in pairs(self.indexers) do
+    idx:delete(id)
+  end
+
+  self.data[id] = nil
+end
+
+-- IPC Notifications.
+
+function Object:notify(evt, ...)
+  os.queueEvent("hb-ipc", evt, ...)
+
+  sleep(0.10)
 end

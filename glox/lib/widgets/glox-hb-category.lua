@@ -14,7 +14,7 @@ local types = {
   ["mount"] = "Mount",
 }
 
-function Widget:init(name)
+function Widget:init(name, title)
   self.veek_list_item:init()
 
   self.veek_widget.fg = 'glox-highbeam-category--fg'

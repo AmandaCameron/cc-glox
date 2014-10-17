@@ -40,6 +40,7 @@ function Plugin:build_search()
 		26, self.mb_plugin.app.veek_app.main_window.gooey.veek_widget.height - 1)
 
 	local search = new('glox-hb-search', 26, self.mb_plugin.app.veek_app.main_window.gooey.veek_widget.height - 1)
+	search.hb = self.mb_plugin.app.highbeam
 
 	if not pocket then
 		search.veek_widget.x = 2

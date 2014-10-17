@@ -13,6 +13,23 @@ function Object:init(text, app, menubar)
 	self.colour_fg = 'black'
 end
 
+function Object:create_popup(w, h)
+	local popup = new('glox-popup', self.app, w, h)
+
+	local x = self.menubar:plugin_x(self) - w / 2
+
+	if x > self.menubar.veek_widget.width - w - 3 then
+		x = self.menubar.veek_widget.width - w - 3
+	end
+
+	popup:point_up(self.menubar:plugin_x(self) - x)
+
+	popup:move(x, 2)
+
+
+	return popup
+end
+
 function Object:is_visible()
   return true
 end

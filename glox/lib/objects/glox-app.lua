@@ -155,6 +155,9 @@ function Object:init(disp, shell)
 
   self:init_picker()
 
+
+  self.veek_app.main_window.canvas.buffered = false
+
   if self.settings:is_first_run() then
     self:launch('glox-onboarding')
   end
@@ -333,7 +336,7 @@ function Object:new_process(cmdLine, term)
   end
 
   function term.newWindow(title, width, height)
-    local window = new('app-window', self, true, nil, width, height)
+    local window = new('app-window', self, nil, width, height)
     window.veek_window.title = title
 
     local screen = window.screen.app_screen
@@ -344,8 +347,8 @@ function Object:new_process(cmdLine, term)
 
     window:move(4, 3)
 
-    self:add(window)
-    self:select(window)
+    -- self:add(window)
+    -- self:select(window)
 
     function screen.term.setTitle(title)
       window.veek_window.title = title

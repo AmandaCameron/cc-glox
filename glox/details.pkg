@@ -32,6 +32,7 @@ Library: widgets/glox-hb-result => glox/widgets/glox-hb-result
 Library: widgets/glox-hb-category => glox/widgets/glox-hb-category
 Library: widgets/glox-hb-search => glox/widgets/glox-hb-search
 Library: widgets/glox-program-picker => glox/widgets/glox-program-picker
+Library: widgets/glox-popup => glox/widgets/glox-popup
 Library: glox/menu-plugins/
 Library: menu-plugins/search => glox/menu-plugins/search
 Library: menu-plugins/free-disk => glox/menu-plugins/free-disk

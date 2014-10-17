@@ -12,7 +12,9 @@ function Importer:init(db)
   self.hb_importer:init(db)
 end
 
-function Importer:import(env)
+function Importer:import(scan_task, env)
+
+  local task = scan_task:sub("Programs")
   local shell = env.shell
 
   if not shell then
@@ -25,7 +27,11 @@ function Importer:import(env)
   trans:add_metadata(type, 'name', 'Programs')
   trans:add_metadata(type, 'order', 100)
 
-  for _, program in ipairs(shell.programs()) do
+  local programs = shell.programs()
+
+  task:add_total(#programs)
+
+  for _, program in ipairs(programs) do
     -- Make sure it's a valid and non-blacklisted program first.
 
     local file = shell.resolveProgram(program)
@@ -78,7 +84,11 @@ function Importer:import(env)
 
       f:close()
     end
+
+    task:add_progress(1)
   end
+
+  task:done()
 
   trans:commit()
 end

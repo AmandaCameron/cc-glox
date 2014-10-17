@@ -11,6 +11,41 @@ function Indexer:init(db)
   self.names = {}
 end
 
+-- Indexing
+
+function Indexer:pre_scan()
+  self.types = {}
+  self.names = {}
+end
+
+function Indexer:post_scan()
+  -- Does Nothing.
+end
+
+function Indexer:index(id, entry)
+  if entry.meta.type then
+    if not self.types[entry.meta.type] then
+      self.types[entry.meta.type] = {}
+    end
+
+    self.types[entry.meta.type][id] = true
+  end
+
+  if entry.meta.name then
+    if not self.names[entry.meta.name] then
+      self.names[entry.meta.name] = {}
+    end
+
+    table.insert(self.names[entry.meta.name], id)
+  end
+end
+
+function Indexer:delete(id)
+  -- TODO.
+end
+
+-- Searching
+
 function Indexer:filters()
   return {
     "type",
@@ -38,29 +73,6 @@ function Indexer:lookup(filter, query)
   end
 
   return results
-end
-
-function Indexer:clear_data()
-  self.types = {}
-  self.names = {}
-end
-
-function Indexer:index(id, entry)
-  if entry.meta.type then
-    if not self.types[entry.meta.type] then
-      self.types[entry.meta.type] = {}
-    end
-
-    self.types[entry.meta.type][id] = true
-  end
-
-  if entry.meta.name then
-    if not self.names[entry.meta.name] then
-      self.names[entry.meta.name] = {}
-    end
-
-    table.insert(self.names[entry.meta.name], id)
-  end
 end
 
 function Indexer:load(db)

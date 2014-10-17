@@ -34,6 +34,16 @@ function Widget:init(app, width, height)
   end)
 end
 
+function Widget:plugin_x(plug)
+  if self.window and not self.window.veek_window.flags["glox.fullscreen"] then
+    return self.veek_widget.width - plug.location - 4
+  elseif self.window then
+    return self.veek_widget.width - plug.location - 4
+  else
+    return self.veek_widget.width
+  end
+end
+
 function Widget:is_expanded()
   return self.veek_widget.height > 1
 end

@@ -28,6 +28,10 @@ function Object:transaction()
   return self.db:transaction()
 end
 
+function Object:begin_task(name)
+  return new('hb-progress', self.db, name)
+end
+
 function Object:import()
   error("This should be implemented", 2)
 end

@@ -4,6 +4,8 @@
 os.loadAPI("__LIB__/kidven/kidven")
 os.loadAPI("__LIB__/kvio/kvio")
 
+os.loadAPI("__LIB__/thread")
+
 -- Back-end stuff.
 
 local indexers = {}
@@ -38,7 +40,7 @@ for _, file in ipairs(fs.list("__LIB__")) do
     if fs.isDir(fs.combine(file, "highbeam")) then
       if fs.exists(fs.combine(file, "highbeam/importer")) then
         local ok, err = pcall(function() kidven.load("Importer", "hb-importer-" .. fs.getName(file), fs.combine(file, "highbeam/importer")) end)
-        
+
         if ok then
           importers[#importers + 1] = fs.getName(file)
         else

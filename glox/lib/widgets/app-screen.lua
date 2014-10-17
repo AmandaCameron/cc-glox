@@ -33,10 +33,13 @@ function Widget:draw(c, theme)
   c:set_bg(self.canvas.bg)
   c:clear()
 
+  self.canvas.cursor_x = self.canvas.x
+  self.canvas.cursor_y = self.canvas.y
+
   self.canvas.width = c.width
   self.canvas.height = c.height
 
-  self.canvas:blit(1, 1, c.width, c.height, c:as_redirect())
+  self.canvas:blit(1, 1, nil, nil, c:as_redirect())
 end
 
 function Widget:resize(w, h)
