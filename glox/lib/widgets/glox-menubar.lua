@@ -34,16 +34,6 @@ function Widget:init(app, width, height)
   end)
 end
 
-function Widget:plugin_x(plug)
-  if self.window and not self.window.veek_window.flags["glox.fullscreen"] then
-    return self.veek_widget.width - plug.location - 4
-  elseif self.window then
-    return self.veek_widget.width - plug.location - 4
-  else
-    return self.veek_widget.width
-  end
-end
-
 function Widget:is_expanded()
   return self.veek_widget.height > 1
 end
@@ -302,8 +292,11 @@ end
 function Widget:clicked(x, y, btn)
   if self:is_expanded() then
     self:collapse()
+    
     if self.plugin_offsets[y] then
-      self.plugin_offsets:clicked(btn)
+      if self.plugin_offsets[y].clicked then
+        self.plugin_offsets:clicked(btn)
+      end
     elseif self.minimised_offset > 0 and y > self.minimised_offset then
       local offs = math.ceil((y - self.minimised_offset) / 3)
 

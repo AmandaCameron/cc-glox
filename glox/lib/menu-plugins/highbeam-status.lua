@@ -60,7 +60,7 @@ end
 function Plugin:clicked()
   self:update_window()
 
-  self.popup:show()
+  self:show_popup(self.popup)
 end
 
 function Plugin:update_window()
@@ -71,7 +71,7 @@ function Plugin:update_window()
   self.popup.veek_container.children = {}
 
   if self.num_tasks > 0 then
-    self.popup:resize(20, self.num_tasks * 2)
+    self.popup:resize(20, self.num_tasks * 3)
 
     local y = 0
 
@@ -93,6 +93,8 @@ function Plugin:update_window()
       prog.progress = data[1] / data[2]
 
       self.popup:add(prog)
+
+      y = y + 1
     end
   else
     self.popup:resize(20, 5)

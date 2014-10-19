@@ -16,18 +16,23 @@ end
 function Object:create_popup(w, h)
 	local popup = new('glox-popup', self.app, w, h)
 
-	local x = self.menubar:plugin_x(self) - w / 2
-
-	if x > self.menubar.veek_widget.width - w - 3 then
-		x = self.menubar.veek_widget.width - w - 3
-	end
-
-	popup:point_up(self.menubar:plugin_x(self) - x)
-
-	popup:move(x, 2)
-
-
 	return popup
+end
+
+function Object:show_popup(popup)
+  local w = popup.base_width
+
+  local x = self.location - w / 2
+
+  if x + w > self.menubar.veek_widget.width - w - 1 then
+    x = self.menubar.veek_widget.width - w - 1
+  end
+
+  popup:point_up(self.location - x + 1)
+
+  popup:move(x, 2)
+
+  popup:show()
 end
 
 function Object:is_visible()
