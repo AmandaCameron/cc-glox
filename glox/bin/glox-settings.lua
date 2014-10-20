@@ -269,7 +269,7 @@ add_window:add(prog_cancel)
 
 app:subscribe('gui.list.changed', function(_, id, num, item)
   if id == favourites_list.veek_widget.id then
-    fav_label.text = item.text
+    fav_label.text = item.label
     fav_command.text = item.command
   end
 end)
