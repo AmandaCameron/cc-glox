@@ -33,6 +33,13 @@ function Widget:dragged(x_del, y_del, btn)
   self.proc:queue_event("mouse_drag", btn, self.mouse_x, self.mouse_y)
 end
 
+function Widget:scroll(x, y, dir)
+  self.mouse_x = x
+  self.mouse_y = y
+
+  self.proc:queue_event("mouse_scroll", dir, x, y)
+end
+
 function Widget:char(c)
   self.proc:queue_event("char", c)
 end
