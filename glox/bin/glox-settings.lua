@@ -37,7 +37,7 @@ general_settings:add_anchor(computer_id, 'right', 'right', -1, 1)
 local computer_label = kidven.new('veek-label', 1, 1, 'Label: None.')
 
 if os.getComputerLabel() then
-  computer_label.text = 'Label: ' .. os.getComputerLabel()
+  computer_label:set_text('Label: ' .. os.getComputerLabel())
 end
 
 general_settings:add(computer_label)
@@ -85,7 +85,7 @@ local function bg_get_label(file)
 end
 
 local function update_general()
-  background_label.text = 'BG: ' .. bg_get_label(settings:get_background())
+  background_label:set_text('BG: ' .. bg_get_label(settings:get_background()))
 end
 
 app:subscribe('gui.button.pressed', function(_, id)
@@ -269,8 +269,8 @@ add_window:add(prog_cancel)
 
 app:subscribe('gui.list.changed', function(_, id, num, item)
   if id == favourites_list.veek_widget.id then
-    fav_label.text = item.label
-    fav_command.text = item.command
+    fav_label:set_text(item.label)
+    fav_command:set_text(item.command)
   end
 end)
 
