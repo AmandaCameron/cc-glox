@@ -49,7 +49,13 @@ function Plugin:env(env)
 
     loading[path] = true
 
-    local func = env.loadfile(path)
+    local func, err = env.loadfile(path)
+
+    if not func then
+      printError(err)
+
+      return false
+    end
 
     local api = {}
 
@@ -127,7 +133,11 @@ function Plugin:env(env)
   end
 
   function multishell.setIcon(icon)
-    self:proc().icon = new('veek-image', new('veek-file', icon):read())
+    local file = new('veek-file', icon)
+
+    if file:exists() then
+      self:proc().icon = new('veek-image', file:read())
+    end
   end
 
   env.multishell = multishell
@@ -170,7 +180,7 @@ function Plugin:env(env)
     local result = false
 
     if prog then
-      result = env.os.run({}, prog, unpack(args))
+      result, err = env.os.run({}, prog, unpack(args))
     else
       printError("No such program.")
     end
@@ -181,7 +191,7 @@ function Plugin:env(env)
       multishell.setTitle(1, "Process Done.")
     end
 
-    return result
+    return result, err
   end
 
   function shell.getRunningProgram()
@@ -212,7 +222,11 @@ function Plugin:env(env)
     local prev_icon = self:proc().icon
 
     if res and res.meta['icon-4x3'] then
-      self:proc().icon = new('veek-image', new('veek-file', res.meta['icon-4x3']):read())
+      local file = new('veek-file', res.meta['icon-4x3'])
+
+      if file:exists() then
+        self:proc().icon = new('veek-image', file:read())
+      end
     elseif res then
       self:proc().icon = new('veek-image', new('veek-file', '__LIB__/glox/res/icons/program'):read())
     end
