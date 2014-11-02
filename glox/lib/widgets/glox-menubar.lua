@@ -72,7 +72,7 @@ function Widget:draw_expanded(c)
       c:move(1, offset + 2)
       c:write("   ")
 
-      local sub = c:sub(5, offset, c.width - 5, 3)
+      local sub = c:sub(5, offset, c.width - 4, 3)
 
       sub:set_bg('glox-drawer-plugin-bg')
       sub:set_fg('glox-drawer-plugin-fg')
@@ -295,7 +295,7 @@ function Widget:clicked(x, y, btn)
     
     if self.plugin_offsets[y] then
       if self.plugin_offsets[y].clicked then
-        self.plugin_offsets:clicked(btn)
+        self.plugin_offsets[y]:clicked(btn)
       end
     elseif self.minimised_offset > 0 and y > self.minimised_offset then
       local offs = math.ceil((y - self.minimised_offset) / 3)
