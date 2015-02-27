@@ -248,61 +248,61 @@ end
 
 -- New Favourite pane.
 
-local add_window = app:new_window('Add Favourite', math.floor(main_window.veek_widget.width / 3 * 2), 8)
---add_window:hide()
+-- local add_window = app:new_window('Add Favourite', math.floor(main_window.veek_widget.width / 3 * 2), 8)
+-- --add_window:hide()
 
-local prog_label = kidven.new('veek-input', 2, 2, math.floor(main_window.veek_widget.width / 3 * 2))
+-- local prog_label = kidven.new('veek-input', 2, 2, math.floor(main_window.veek_widget.width / 3 * 2))
 
-app.shell = shell
+-- app.shell = shell
 
-local prog_search = kidven.new('glox-program-picker', app, prog_label.veek_widget.width, 3)
+-- local prog_search = kidven.new('glox-program-picker', app, prog_label.veek_widget.width, 3)
 
-local prog_ok = kidven.new('veek-button', 2, 7, 'Ok')
-local prog_cancel = kidven.new('veek-button', 4, 7, 'Cancel')
+-- local prog_ok = kidven.new('veek-button', 2, 7, 'Ok')
+-- local prog_cancel = kidven.new('veek-button', 4, 7, 'Cancel')
 
-prog_search:move(2, 4)
+-- prog_search:move(2, 4)
 
-add_window:add(prog_label)
-add_window:add(prog_search)
-add_window:add(prog_ok)
-add_window:add(prog_cancel)
+-- add_window:add(prog_label)
+-- add_window:add(prog_search)
+-- add_window:add(prog_ok)
+-- add_window:add(prog_cancel)
 
-app:subscribe('gui.list.changed', function(_, id, num, item)
-  if id == favourites_list.veek_widget.id then
-    fav_label:set_text(item.label)
-    fav_command:set_text(item.command)
-  end
-end)
+-- app:subscribe('gui.list.changed', function(_, id, num, item)
+--   if id == favourites_list.veek_widget.id then
+--     fav_label:set_text(item.label)
+--     fav_command:set_text(item.command)
+--   end
+-- end)
 
 
-app:subscribe('gui.button.pressed', function(_, id)
-  local ok, err = pcall(
-  function()
-    if id == add_button.veek_widget.id then
+-- app:subscribe('gui.button.pressed', function(_, id)
+--   local ok, err = pcall(
+--   function()
+--     if id == add_button.veek_widget.id then
 
-      prog_search.veek_search.input_box.value = ''
-      prog_label.value = ''
+--       prog_search.veek_search.input_box.value = ''
+--       prog_label.value = ''
 
-      add_window:select(prog_label)
+--       add_window:select(prog_label)
 
-      app:add(add_window)
-      app:select(add_window)
-    elseif id == rem_button.veek_widget.id then
-      settings:remove_favourite(favourites_list:get_current().name)
-    elseif id == prog_ok.veek_widget.id then
-      settings:add_favourite(prog_label.value, prog_search.command)
+--       app:add(add_window)
+--       app:select(add_window)
+--     elseif id == rem_button.veek_widget.id then
+--       settings:remove_favourite(favourites_list:get_current().name)
+--     elseif id == prog_ok.veek_widget.id then
+--       settings:add_favourite(prog_label.value, prog_search.command)
 
-      app:remove(add_window)
-    elseif id == prog_cancel.veek_widget.id then
-      app:remove(add_window)
-    end
-  end)
+--       app:remove(add_window)
+--     elseif id == prog_cancel.veek_widget.id then
+--       app:remove(add_window)
+--     end
+--   end)
 
-  if not ok then
-    app.main_err = err
-    app:quit()
-  end
-end)
+--   if not ok then
+--     app.main_err = err
+--     app:quit()
+--   end
+-- end)
 
 -- Main Loop Stuff.
 
