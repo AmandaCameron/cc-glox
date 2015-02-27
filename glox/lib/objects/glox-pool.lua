@@ -59,7 +59,8 @@ function Object:new(func, hdlr, opts)
 end
 
 function Object:stop()
-  self.threads = {}
+  self.running = false
+
   os.queueEvent("boom")
 end
 
@@ -234,11 +235,13 @@ function Object:main()
       self.threads[self.active].rednet_open = nil
     end
   end
+  
+  self.running = true
 
   -- Error logging.
 
   local ok, err = pcall(function()
-    while true do
+    while self.running do
       for id, t in pairs(self.threads) do
         self.active = id
 
