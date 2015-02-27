@@ -156,7 +156,7 @@ function Object:init(disp, shell)
   self:init_picker()
 
 
-  self.veek_app.main_window.canvas.buffered = false
+  -- self.veek_app.main_window.canvas.buffered = true
 
   if self.settings:is_first_run() then
     self:launch('glox-onboarding')
