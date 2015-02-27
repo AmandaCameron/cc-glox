@@ -88,9 +88,11 @@ function Plugin:env(env)
   if pocket then
     env.pocket = pocket
 
-    for _, api in ipairs(huaxn.list('rom/apis/pocket')) do
-      if not huaxn.isDir(huaxn.combine('rom/apis/pocket', api)) then
-        env.os.loadAPI(huaxn.combine('rom/apis/pocket', api))
+    if huaxn.exists('/rom/apis/pocket') then
+      for _, api in ipairs(huaxn.list('rom/apis/pocket')) do
+        if not huaxn.isDir(huaxn.combine('rom/apis/pocket', api)) then
+          env.os.loadAPI(huaxn.combine('rom/apis/pocket', api))
+        end
       end
     end
   elseif turtle then
