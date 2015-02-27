@@ -117,6 +117,10 @@ function Object:started()
   end
 end
 
+function Object:error(err)
+  self.error_msg = err
+end
+
 function Object:die()
   -- TODO: Error reporting somewhere?
   self.app.event_loop:trigger("glox.process.exit", self.id)
@@ -129,6 +133,10 @@ function Object:die()
 
   for _, plugin in ipairs(self.plugins) do
     plugin:stopped()
+  end
+
+  if self.error_msg then
+    self.app.event_loop:trigger('glox.process.crash', self.id, self, self.error_msg)
   end
 end
 
