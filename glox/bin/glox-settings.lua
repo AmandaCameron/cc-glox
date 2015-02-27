@@ -249,7 +249,7 @@ end
 -- New Favourite pane.
 
 local add_window = app:new_window('Add Favourite', math.floor(main_window.veek_widget.width / 3 * 2), 8)
-add_window:hide()
+--add_window:hide()
 
 local prog_label = kidven.new('veek-input', 2, 2, math.floor(main_window.veek_widget.width / 3 * 2))
 
@@ -341,7 +341,5 @@ app:subscribe('gui.resized', function()
   app_settings:reflow()
 end)
 
-
 settings:load()
-
 app:main()
