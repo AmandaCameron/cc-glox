@@ -44,6 +44,7 @@ function()
 
     if app.main_err then
       error_screen(app.main_err)
+    end
   end)
 
   if not ok then
