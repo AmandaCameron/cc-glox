@@ -393,12 +393,12 @@ function Object:new_process(cmdLine, term)
   --     return flags
   --   end
 
-    table.insert(proc.windows, window)
-    self.window_procs[window.veek_widget.id] = proc
-    self.windows[id] = window
+  --   table.insert(proc.windows, window)
+  --   self.window_procs[window.veek_widget.id] = proc
+  --   self.windows[id] = window
 
-    return id, screen.term
-  end
+  --   return id, screen.term
+  -- end
 
   table.insert(self.processes, proc)
 
