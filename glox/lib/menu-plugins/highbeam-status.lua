@@ -115,12 +115,34 @@ function Plugin:stop_spin()
   self.timer_id = -1
 end
 
-function Plugin:is_expandable()
+function Plugin:draw(c)
+  if self.tasks['Scan'] then
+    c:move(1, 1)
+    c:write("HighBeam is scanning.")
+
+    c:move(1, 2)
+    c:write(self.num_tasks .. " Tasks.")
+
+    local prog = new('veek-progress-bar', 1, 1, c.width)
+
+    prog.progress = self.tasks['Scan'][1] / self.tasks['Scan'][2]
+
+    prog:draw(c:sub(1, 3, c.width, 1))
+  elseif self.num_tasks > 0 then
+    c:move(1, 2)
+    c:write("HighBeam is active...")
+  else
+    c:move(1, 2)
+    c:write("HighBeam is idle.")
+  end
+end
+
+function Plugin:is_graphical()
   return true
 end
 
-function Plugin:details()
-  return "HighBeam is indexing..."
+function Plugin:is_expandable()
+  return true
 end
 
 function Plugin:is_visible()
