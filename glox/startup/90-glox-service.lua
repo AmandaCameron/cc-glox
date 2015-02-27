@@ -23,11 +23,17 @@ end
 
 local app = kidven.new('glox-app', t, shell)
 
-
 function error_screen(err)
-  t.clear()
-  t.setCursorPos(1, 1)
-  t.write("Fatal error in Glox: " .. err)
+  term.redirect(t)
+
+  if term.isColour() then
+    term.setBackgroundColour(colours.pink)
+    term.setTextColour(colours.black)
+  end
+
+  term.clear()
+  term.setCursorPos(1, 1)
+  term.write("Fatal error in Glox: " .. err)
 end
 
 svc:subscribe('service.start',
