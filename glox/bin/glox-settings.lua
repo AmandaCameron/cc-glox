@@ -338,5 +338,7 @@ app:subscribe('gui.resized', function()
   app_settings:reflow()
 end)
 
---settings:load()
-app:main()
+settings:load()
+--app:main()
+
+printError("Currently Broken.")

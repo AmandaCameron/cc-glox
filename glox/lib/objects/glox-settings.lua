@@ -11,7 +11,7 @@ function Object:init(app)
     },
     favourites = {
       { 'Shell', 'shell' },
-      { 'Settings', 'glox-settings' },
+      --{ 'Settings', 'glox-settings' },
     },
     background = "__LIB__/glox/res/backgrounds/cats.background",
     first_run = true,
