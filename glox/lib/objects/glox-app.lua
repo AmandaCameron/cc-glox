@@ -20,7 +20,7 @@ function Object:init(disp, shell)
 
   self.pool = self.veek_app.pool
 
-  local hooks = {}
+  --local hooks = {}
 
   function hooks.error(_, err)
     self.veek_app.main_err = err
@@ -67,6 +67,10 @@ function Object:init(disp, shell)
     end
   end)
 
+  self.event_loop:subscribe("glox.process.crash", function(_, id)
+    -- TODO: SHow a new window?
+  end)
+
   self.event_loop:subscribe('event.glox-ipc', function(_, call)
     if call == "settings_changed" then
       self.settings:load()
@@ -85,7 +89,7 @@ function Object:init(disp, shell)
   end)
 
   -- Clear out the veek event loop killer, replace it with something sane for a multitasking "OS"
-  self.event_loop["event.terminate"] = {}
+  self.event_loop.events["event.terminate"] = {}
 
   self.event_loop:subscribe("event.terminate", function(evt)
     local active = self.veek_app.main_window.gooey:get_focus()
@@ -156,7 +160,7 @@ function Object:init(disp, shell)
   self:init_picker()
 
 
-  -- self.veek_app.main_window.canvas.buffered = true
+  -- self.veek_app.main_window.canvas.buffered = false
 
   if self.settings:is_first_run() then
     self:launch('glox-onboarding')
