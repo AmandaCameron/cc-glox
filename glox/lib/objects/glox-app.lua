@@ -20,7 +20,7 @@ function Object:init(disp, shell)
 
   self.pool = self.veek_app.pool
 
-  --local hooks = {}
+  local hooks = {}
 
   function hooks.error(_, err)
     self.veek_app.main_err = err
