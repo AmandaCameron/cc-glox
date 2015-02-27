@@ -23,17 +23,25 @@ end
 
 local app = kidven.new('glox-app', t, shell)
 
+
+function error_screen(err)
+  t.clear()
+  t.setCursorPos(1, 1)
+  t.write("Fatal error in Glox: " .. err)
+end
+
 svc:subscribe('service.start',
 function()
   local ok, err = pcall(function()
     app:draw()
     app:main()
+
+    if app.main_err then
+      error_screen(app.main_err)
   end)
 
   if not ok then
-    t.clear()
-    t.setCursorPos(1, 1)
-    t.write("Fatal error in Glox: " .. err)
+    error_screen(err)
   end
 end)
 
