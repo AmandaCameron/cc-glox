@@ -17,7 +17,6 @@ function Object:init(disp, shell)
   end
 
   self.veek_app.pool = new('glox-pool')
-
   self.pool = self.veek_app.pool
 
   local hooks = {}
@@ -32,7 +31,7 @@ function Object:init(disp, shell)
 
   self.veek_app.pool:new(function()
     os.queueEvent("glox-ipc", "start-up")
-
+    
     self.event_loop.running = true
 
     while self.event_loop.running do
@@ -339,62 +338,60 @@ function Object:new_process(cmdLine, term)
     return flags
   end
 
-  function term.newWindow(title, width, height)
-    local window = new('app-window', self, nil, width, height)
-    window.veek_window.title = title
+  -- function term.newWindow(title, width, height)
+  --   local window = new('app-window', self, nil, width, height)
+  --   window.veek_window.title = title
 
-    local screen = window.screen.app_screen
+  --   local screen = window.screen.app_screen
+  --   local id = 'glox-' .. window.veek_widget.id
 
-    local id ='glox-' .. window.veek_widget.id
+  --   window.screen.proc = proc
+  --   window:move(4, 3)
 
-    window.screen.proc = proc
+  --   -- self:add(window)
+  --   -- self:select(window)
 
-    window:move(4, 3)
+  --   function screen.term.setTitle(title)
+  --     window.veek_window.title = title
+  --   end
 
-    -- self:add(window)
-    -- self:select(window)
+  --   function screen.term.setSize(width, height)
+  --     window:resize(width, height)
+  --   end
 
-    function screen.term.setTitle(title)
-      window.veek_window.title = title
-    end
+  --   function screen.term.show()
+  --     self:add(window)
+  --     self:select(window)
 
-    function screen.term.setSize(width, height)
-      window:resize(width, height)
-    end
+  --     window:add_flag('visible')
+  --   end
 
-    function screen.term.show()
-      self:add(window)
-      self:select(window)
+  --   function screen.term.hide()
+  --     self:remove(window)
 
-      window:add_flag('visible')
-    end
+  --     window:rem_flag('visible')
+  --   end
 
-    function screen.term.hide()
-      self:remove(window)
+  --   function screen.term.setFlags(flags)
+  --     local old = window.veek_window.flags
+  --     window.veek_window.flags = {}
 
-      window:rem_flag('visible')
-    end
+  --     for _, flag in ipairs(flags) do
+  --       window.veek_window.flags[flag] = true
+  --     end
+  --   end
 
-    function screen.term.setFlags(flags)
-      local old = window.veek_window.flags
-      window.veek_window.flags = {}
+  --   function screen.term.getFlags()
+  --     local flags = {}
 
-      for _, flag in ipairs(flags) do
-        window.veek_window.flags[flag] = true
-      end
-    end
+  --     for flag, _ in pairs(window.veek_window.flags) do
+  --       table.insert(flags, flag)
+  --     end
 
-    function screen.term.getFlags()
-      local flags = {}
+  --     table.insert(flags, 'veek-shell.identifier')
 
-      for flag, _ in pairs(window.veek_window.flags) do
-        table.insert(flags, flag)
-      end
-
-      table.insert(flags, 'veek-shell.identifier')
-
-      return flags
-    end
+  --     return flags
+  --   end
 
     table.insert(proc.windows, window)
     self.window_procs[window.veek_widget.id] = proc
