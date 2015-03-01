@@ -30,6 +30,10 @@ function Object:init(modem, id, bcast, rep)
   end, "dns")
 end
 
+function Object:is_open()
+  return self.modem:is_open(self.id) and self.modem:is_open(self.bcast_id)
+end
+
 function Object:open()
   self.modem:open(self.id)
   self.modem:open(self.bcast_id)
