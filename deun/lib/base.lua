@@ -37,6 +37,12 @@ local function start(svc)
     svc:cast('event-loop'):main()
     svc:trigger('service.stop')
   end, svc:cast('deun-service'))
+
+  for service in iter() do 
+    if svc:cast('deun-service').name ~= service:cast('deun-service').name then
+      service:trigger('service.other.started', svc:cast('deun-service').name)
+    end
+  end
 end
 
 function run(shell)
