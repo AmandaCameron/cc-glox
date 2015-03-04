@@ -162,6 +162,7 @@ function Object:main()
     return tid
   end
 
+  --[[
   function peripheral.call(side, method, ...)
     if peripheral.getType(side) == "modem" then
       if not modem_open[side] then
@@ -234,7 +235,7 @@ function Object:main()
       peripheral.call(side, "close", os.getComputerID())
       self.threads[self.active].rednet_open = nil
     end
-  end
+  end ]]
   
   self.running = true
 
